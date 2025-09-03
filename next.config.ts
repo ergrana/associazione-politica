@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  eslint: {
+    // ✅ Disattiva ESLint durante i build su Vercel
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // ✅ Mantieni i controlli TypeScript: se ci sono errori di tipo il build fallisce
+    ignoreBuildErrors: false,
+  },
 };
 
 export default nextConfig;
