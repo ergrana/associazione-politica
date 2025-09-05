@@ -1,0 +1,7 @@
+id,date,category,supplier,amount,note
+e1,2025-01-25,Comunicazione,Studio Media srl,9000,
+e2,2025-02-20,Eventi & logistica,Centro Civico,4300,
+e3,2025-03-15,Servizi digitali,Piattaforma CRM,2500,
+e4,2025-04-22,Grafica & stampa,Tipografia Verde,6000,
+e5,2025-07-10,Affitti & utenze,Cowork Roma,7200,
+e6,2025-09-28,Formazione,Civica Academy,2100,

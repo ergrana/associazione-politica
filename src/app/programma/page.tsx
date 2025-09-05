@@ -1,161 +1,102 @@
 // src/app/programma/page.tsx
+import Image from "next/image";
+import Link from "next/link";
 
 export const metadata = {
-  title: "Programma — Città Futura",
+  title: "Programma — La Repubblica degli Italiani nel Mondo",
   description:
-    "Il programma di Città Futura: assi strategici, misure concrete e impatto misurabile per una città più giusta, trasparente e sostenibile.",
+    "Finalità, aree di attività e impegni: legami con le comunità italiane nel mondo, cultura italiana, diritti e pari opportunità, cultura d’impresa aperta all’innovazione.",
 };
 
 type Pillar = {
   title: string;
   desc: string;
   points: string[];
-  icon?: string; // emoji semplice per impatto visivo
-};
-type Measure = {
-  title: string;
-  impact: string;
-  kpi: string;
-  budget?: string;
-  tags: string[];
-  details: string;
+  icon?: string;
 };
 
 const pillars: Pillar[] = [
   {
-    title: "Città dei 15 minuti",
+    title: "Legami Italia–Mondo & Cultura italiana",
     desc:
-      "Servizi essenziali raggiungibili a piedi o in bici in 15 minuti: scuole, sanità di prossimità, sport, cultura.",
+      "Promuovere iniziative che accrescano e rafforzino i legami tra l’Italia, i cittadini italiani e le comunità italiane nel mondo, valorizzando tradizioni e cultura.",
     points: [
-      "Piani di quartiere con sportelli decentrati",
-      "Rete ciclabile continua e sicura",
-      "Orari coordinati con TPL",
+      "Progetti di scambio e cooperazione con le comunità italiane all’estero",
+      "Valorizzazione delle tradizioni e della storia italiana",
+      "Eventi di promozione della cultura italiana nel mondo",
     ],
-    icon: "🚶‍♂️",
+    icon: "🌍",
   },
   {
-    title: "Trasparenza e anticorruzione",
+    title: "Attività culturali, artistiche, ricreative ed editoriali",
     desc:
-      "Dati aperti, rendicontazione semplice e controllo diffuso di spese e appalti.",
+      "Organizzazione e gestione di attività di interesse sociale, incluse iniziative editoriali per diffondere cultura e valori che hanno segnato la storia del Paese.",
     points: [
-      "Bilanci in formato aperto",
-      "Registro lobbisti e incontri pubblici",
-      "Whistleblowing protetto",
+      "Rassegne culturali e artistiche aperte alla cittadinanza",
+      "Laboratori e attività ricreative a impatto sociale",
+      "Progetti editoriali e divulgativi su cultura e valori italiani",
     ],
-    icon: "🔍",
+    icon: "🎭",
   },
   {
-    title: "Lavoro & Giovani",
+    title: "Diritti, pari opportunità & aiuto reciproco",
     desc:
-      "Formazione, coworking diffusi, incentivi per startup e imprese ad impatto sociale.",
+      "Promozione e tutela dei diritti umani, civili, sociali e politici; sostegno alle pari opportunità e alle iniziative di mutuo aiuto.",
     points: [
-      "Voucher formazione digitale",
-      "Spazi comunali a canone calmierato",
-      "Fondo microcredito",
+      "Sportelli informativi e campagne per i diritti",
+      "Programmi per l’inclusione e le pari opportunità",
+      "Reti di solidarietà e iniziative di aiuto reciproco",
     ],
-    icon: "💼",
+    icon: "⚖️",
   },
   {
-    title: "Ambiente e salute",
+    title: "Cultura d’impresa aperta all’innovazione",
     desc:
-      "Energia pulita, aria migliore, verde di prossimità e prevenzione sanitaria.",
+      "Diffondere una cultura d’impresa basata su conoscenza, formazione, responsabilità dell’imprenditore e comunicazione, aperta all’innovazione e al cambiamento.",
     points: [
-      "Comunità energetiche rinnovabili",
-      "Piano alberature & ombreggiamento",
-      "Monitoraggio qualità aria in tempo reale",
+      "Percorsi formativi per lavoratori e imprenditori",
+      "Buone pratiche di responsabilità sociale d’impresa",
+      "Tavoli su innovazione, comunicazione e trasformazione digitale",
     ],
-    icon: "🌿",
+    icon: "💡",
   },
 ];
 
-const measures: Measure[] = [
-  {
-    title: "Bilancio Partecipativo cittadino",
-    impact:
-      "Coinvolge almeno 10.000 residenti/anno nelle decisioni di spesa locale.",
-    kpi: "10k partecipanti/anno • 30 progetti finanziati",
-    budget: "€ 3M/anno",
-    tags: ["partecipazione", "trasparenza", "quartieri"],
-    details:
-      "Fase proposte (45 gg), co-progettazione (30 gg), voto online e in presenza. Inclusione: sportelli di facilitazione, materiali accessibili, lingua semplice.",
-  },
-  {
-    title: "Trasporti notturni & sicuri",
-    impact:
-      "Riduce l’uso dell’auto privata e gli incidenti nelle fasce 22–5.",
-    kpi: "Copertura 90% aree urbane • +25% TPL notturno",
-    budget: "€ 1.2M/anno",
-    tags: ["mobilità", "sicurezza", "giovani"],
-    details:
-      "Linee circolari ogni 20’ nei weekend, app con tracking in tempo reale, fermate illuminate, partnership con taxi/social ride.",
-  },
-  {
-    title: "Comunità Energetiche Rinnovabili (CER)",
-    impact:
-      "Taglio bollette per famiglie fragili e riduzione CO₂ strutturale.",
-    kpi: "6 CER • 5MW installati • -2.800 tCO₂/anno",
-    budget: "€ 5M (fondi PNRR + privati)",
-    tags: ["energia", "ambiente", "povertà energetica"],
-    details:
-      "Impianti su scuole/edifici pubblici, priorità a nuclei a basso reddito. Piattaforma digitale per monitoraggio e redistribuzione benefici.",
-  },
-  {
-    title: "Sportelli Diritti & Antiviolenza",
-    impact:
-      "Accesso rapido a tutele legali e psicologiche, emersione del sommerso.",
-    kpi: "4 sportelli multidisciplinari • 2.000 casi/anno",
-    budget: "€ 650k/anno",
-    tags: ["diritti", "coesione", "parità"],
-    details:
-      "Equipe legale-psicologica, rete con centri antiviolenza e terzo settore, formazione nelle scuole.",
-  },
-  {
-    title: "Piano Scuole Aperte",
-    impact:
-      "Spazi scolastici come centri civici pomeridiani: sport, cultura, doposcuola.",
-    kpi: "20 plessi • 3.000 ragazzi coinvolti",
-    budget: "€ 800k/anno",
-    tags: ["educazione", "sociale", "quartieri"],
-    details:
-      "Accordi con dirigenti, associazioni e famiglie; uso palestre e cortili; tutor pagati con fondi comunali e sponsor etici.",
-  },
-];
-
-function Chip({ children }: { children: React.ReactNode }) {
+/* --- Step per la timeline --- */
+function Step({
+  when,
+  title,
+  text,
+}: {
+  when: string;
+  title: string;
+  text: string;
+}) {
   return (
-    <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
-      {children}
-    </span>
+    <div className="relative pl-8">
+      <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-indigo-600" />
+      <div className="text-sm font-semibold text-indigo-600">{when}</div>
+      <div className="mt-1 font-semibold">{title}</div>
+      <p className="mt-1 text-slate-600">{text}</p>
+    </div>
   );
 }
 
-function MeasureCard({ m }: { m: Measure }) {
+/* --- piccoli componenti --- */
+function KPI({ k, l }: { k: string; l: string }) {
   return (
-    <details className="group rounded-2xl border bg-white p-6 shadow-sm open:shadow-md transition-shadow">
-      <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold">{m.title}</h3>
-          <p className="mt-1 text-slate-600">{m.impact}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {m.tags.map((t) => (
-              <Chip key={t}>{t}</Chip>
-            ))}
-          </div>
-        </div>
-        <div className="text-right shrink-0">
-          <div className="text-sm font-semibold text-slate-700">{m.kpi}</div>
-          {m.budget && (
-            <div className="text-xs text-slate-500 mt-1">Budget: {m.budget}</div>
-          )}
-          <div className="mt-2 text-xs text-slate-400 group-open:hidden">
-            clicca per i dettagli ▾
-          </div>
-          <div className="mt-2 text-xs text-slate-400 hidden group-open:block">
-            nascondi dettagli ▴
-          </div>
-        </div>
-      </summary>
-      <div className="mt-4 text-slate-700 leading-relaxed">{m.details}</div>
+    <div className="text-center">
+      <div className="text-2xl sm:text-3xl font-extrabold">{k}</div>
+      <div className="mt-1 text-xs text-white/90">{l}</div>
+    </div>
+  );
+}
+
+function Faq({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="rounded-2xl border bg-white p-6 shadow-sm open:shadow-md transition-shadow">
+      <summary className="cursor-pointer list-none font-semibold">{q}</summary>
+      <p className="mt-3 text-slate-700 leading-relaxed">{a}</p>
     </details>
   );
 }
@@ -165,17 +106,25 @@ export default function ProgrammaPage() {
     <main className="min-h-screen">
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-600 via-indigo-500 to-amber-500 opacity-90" />
+        <Image
+  src="/images/hero.jpg"
+  alt=""
+  fill
+  className="object-cover -z-10"
+/>
+<div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
-            Programma 2025 • Città Futura
+            La Repubblica degli Italiani nel Mondo • Programma
           </span>
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
-            Un piano concreto per una città più giusta, trasparente e vivibile.
+            Il nostro programma
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-white/90">
-            Assi strategici, misure operative e indicatori chiari. Qui trovi
-            cosa faremo — e come misureremo i risultati.
+            Finalità e aree di attività definite dallo statuto: cultura
+            italiana, diritti e pari opportunità, aiuto reciproco, cultura
+            d’impresa e innovazione.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
@@ -185,47 +134,31 @@ export default function ProgrammaPage() {
               Scopri gli assi
             </a>
             <a
-              href="#misure"
-              className="inline-flex items-center justify-center rounded-xl ring-2 ring-white/80 text-white px-5 py-3 font-semibold hover:bg-white/10"
-            >
-              Vai alle misure
-            </a>
-            <a
               href="#download"
               className="inline-flex items-center justify-center rounded-xl border border-white/80 text-white px-5 py-3 font-semibold hover:bg-white/10"
             >
-              Scarica il Manifesto
+              Apri il Manifesto
             </a>
           </div>
-          {/* KPI strip */}
+          {/* KPI */}
           <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-6">
-            <KPI k="−2.800 tCO₂" l="emissioni/anno" />
-            <KPI k="+25%" l="TPL notturno" />
-            <KPI k="10k+" l="cittadini coinvolti" />
-            <KPI k="€5M" l="investimenti green" />
+            <KPI k="100+" l="eventi culturali/anno" />
+            <KPI k="50k" l="connessioni diaspora" />
+            <KPI k="200" l="iniziative solidali" />
+            <KPI k="∞" l="formazione & innovazione" />
           </div>
         </div>
       </section>
 
-      {/* TOC semplice */}
-      <nav className="sticky top-16 z-40 border-b bg-white/90 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 text-sm">
-          <ul className="flex flex-wrap gap-4 text-slate-700">
-            <li><a className="hover:text-indigo-600" href="#assi">Assi strategici</a></li>
-            <li><a className="hover:text-indigo-600" href="#misure">Misure chiave</a></li>
-            <li><a className="hover:text-indigo-600" href="#monitoraggio">Monitoraggio</a></li>
-            <li><a className="hover:text-indigo-600" href="#faq">FAQ</a></li>
-            <li><a className="hover:text-indigo-600" href="#download">Download</a></li>
-          </ul>
-        </div>
-      </nav>
-
       {/* ASSI STRATEGICI */}
-      <section id="assi" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section
+        id="assi"
+        className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+      >
         <header className="mb-10">
           <h2 className="text-3xl font-bold">Gli assi strategici</h2>
           <p className="mt-3 text-slate-600">
-            Quattro priorità integrate. Ogni asse ha obiettivi, azioni e indicatori.
+            Quattro priorità tratte dallo statuto. Ogni asse ha obiettivi, azioni e indicatori.
           </p>
         </header>
 
@@ -251,64 +184,55 @@ export default function ProgrammaPage() {
         </div>
       </section>
 
-      {/* MISURE CHIAVE */}
-      <section id="misure" className="py-16 bg-slate-50 border-y">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header className="mb-10">
-            <h2 className="text-3xl font-bold">Misure chiave</h2>
-            <p className="mt-3 text-slate-600">
-              Azioni concrete, tempi e impatto atteso. Clicca su ciascuna misura per i dettagli operativi.
-            </p>
-          </header>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {measures.map((m) => (
-              <MeasureCard key={m.title} m={m} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* MONITORAGGIO & TRASPARENZA */}
-      <section id="monitoraggio" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-10">
+      {/* ROADMAP */}
+      <section
+        id="roadmap"
+        className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+      >
+        <div className="grid lg:grid-cols-3 gap-10">
           <div>
-            <h2 className="text-3xl font-bold">Monitoraggio pubblico</h2>
+            <h2 className="text-3xl font-bold">Roadmap per il futuro</h2>
             <p className="mt-3 text-slate-600">
-              Dashboard trimestrale con avanzamento, spesa, impatto e scostamenti.
-              Dati in formato aperto per garantire controllo diffuso.
+              Le prossime tappe per rafforzare i legami con la diaspora,
+              promuovere cultura e diritti e diffondere una cultura d’impresa
+              aperta all’innovazione.
             </p>
-            <ul className="mt-4 list-disc pl-5 text-slate-700 space-y-2">
-              <li>Dashboard open data (CSV/JSON)</li>
-              <li>Verbali e incontri pubblici con i quartieri</li>
-              <li>Audit indipendente annuale</li>
-            </ul>
-            <a
-              href="/trasparenza"
-              className="mt-6 inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
-            >
-              Vai alla Trasparenza
-            </a>
+            <div className="mt-6 rounded-2xl overflow-hidden">
+              <Image
+                src="/images/program/roadmap.jpg"
+                alt="Roadmap delle attività"
+                width={1600}
+                height={900}
+                className="w-full h-56 object-cover"
+                priority={false}
+              />
+            </div>
           </div>
-          <div className="rounded-2xl border p-6 bg-white shadow-sm">
-            <h3 className="text-xl font-semibold">Roadmap 2025</h3>
-            <ol className="mt-4 space-y-4 text-slate-700">
-              <li>
-                <span className="font-semibold">Q1:</span> progettazione dettagli esecutivi, tavoli con stakeholder,
-                bandi per forniture e servizi.
-              </li>
-              <li>
-                <span className="font-semibold">Q2:</span> avvio cantieri leggeri (piste, alberature), pilota TPL
-                notturno, istituzione CER.
-              </li>
-              <li>
-                <span className="font-semibold">Q3:</span> estensione servizi quartiere, sportelli diritti attivi,
-                prima dashboard pubblica.
-              </li>
-              <li>
-                <span className="font-semibold">Q4:</span> revisione obiettivi, audit, programmazione 2026 basata su evidenze.
-              </li>
-            </ol>
+
+          <div className="lg:col-span-2 relative">
+            <div className="absolute left-1.5 top-0 bottom-0 w-px bg-slate-200" />
+            <div className="space-y-8">
+              <Step
+                when="Q1"
+                title="Reti & progettazione"
+                text="Rafforzo delle reti con le comunità italiane all’estero, co-progettazione di eventi culturali ed avvio sportelli informativi sui diritti."
+              />
+              <Step
+                when="Q2"
+                title="Cultura & pari opportunità"
+                text="Rassegne artistiche, progetti editoriali e programmi per l’inclusione e le pari opportunità."
+              />
+              <Step
+                when="Q3"
+                title="Mutuo aiuto & formazione"
+                text="Iniziative di aiuto reciproco e percorsi formativi su innovazione e responsabilità d’impresa."
+              />
+              <Step
+                when="Q4"
+                title="Valutazione & programmazione"
+                text="Rendicontazione pubblica dei risultati, audit e definizione delle priorità per l’anno successivo."
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -319,56 +243,59 @@ export default function ProgrammaPage() {
           <header className="mb-10">
             <h2 className="text-3xl font-bold">Domande frequenti</h2>
             <p className="mt-3 text-slate-600">
-              Risposte rapide su coperture, tempi e partecipazione.
+              Risposte rapide su attività, volontariato e trasparenza.
             </p>
           </header>
 
           <div className="grid md:grid-cols-2 gap-6">
             <Faq
-              q="Da dove arrivano le risorse?"
-              a="Mix di fondi comunali, PNRR e partenariati pubblico-privati con clausole sociali. Tutti i contratti saranno pubblici e tracciabili."
+              q="Come posso partecipare alle attività?"
+              a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa."
             />
             <Faq
-              q="Come posso proporre un progetto?"
-              a="Attraverso il Bilancio Partecipativo: fase proposte, co-progettazione assistita, voto. È previsto supporto per associazioni e cittadini."
+              q="Che tipo di iniziative editoriali realizzate?"
+              a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese."
             />
             <Faq
-              q="Quali sono i tempi?"
-              a="Prime azioni entro 100 giorni (TPL notturno pilota, sportelli diritti), interventi strutturali su base trimestrale secondo la roadmap."
+              q="Come rendicontate i risultati?"
+              a="Report e materiali pubblici nella sezione Trasparenza; indicatori e verbali disponibili in formato aperto."
             />
             <Faq
-              q="Come misurate l'impatto?"
-              a="Indicatori pubblici per ogni misura (KPI ambientali, sociali ed economici), audit indipendente e report trimestrali."
+              q="Collaborate con le comunità italiane all’estero?"
+              a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora per rafforzare i legami con l’Italia."
             />
           </div>
         </div>
       </section>
 
       {/* DOWNLOAD & CTA */}
-      <section id="download" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section
+        id="download"
+        className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+      >
         <div className="grid lg:grid-cols-2 gap-8 items-stretch">
           <div className="rounded-2xl border p-8 bg-white shadow-sm">
             <h3 className="text-2xl font-bold">Manifesto completo</h3>
             <p className="mt-2 text-slate-600">
-              Scarica il PDF con il programma dettagliato, dati e coperture.
+              Apri il PDF con il programma dettagliato.
             </p>
             <a
-              href="#"
+              href="/docs/manifesto.pdf"
               className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
             >
-              Scarica il Manifesto (PDF)
+              Apri il Manifesto (PDF)
             </a>
           </div>
           <div className="rounded-2xl border p-8 bg-white shadow-sm">
-            <h3 className="text-2xl font-bold">Partecipa alla scrittura</h3>
+            <h3 className="text-2xl font-bold">Statuto dell&apos;associazione</h3>
             <p className="mt-2 text-slate-600">
-              Commenta, proponi emendamenti, aiuta a priorizzare. Il programma è vivo.
+              Consulta lo statuto aggiornato dell&apos;associazione.
             </p>
             <a
-              href="/partecipa"
+              href="/docs/statuto.pdf"
               className="mt-6 inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
             >
-              Partecipa
+              Apri lo Statuto (PDF)
             </a>
           </div>
         </div>
@@ -376,44 +303,24 @@ export default function ProgrammaPage() {
         <div className="mt-12 text-center">
           <h3 className="text-3xl font-bold">Pronto a dare una mano?</h3>
           <p className="mt-3 text-slate-600">
-            Entra in Città Futura: volontariato, tesseramento, donazioni. Ogni contributo conta.
+            Entra nella Repubblica degli Italiani nel Mondo. Ogni contributo conta.
           </p>
           <div className="mt-6 flex justify-center gap-3">
-            <a
+            <Link
               href="/partecipa"
               className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
             >
               Unisciti a noi
-            </a>
-            <a
+            </Link>
+            <Link
               href="/trasparenza"
               className="inline-flex items-center justify-center rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
             >
               Vedi Trasparenza
-            </a>
+            </Link>
           </div>
         </div>
       </section>
     </main>
-  );
-}
-
-/* ------- piccoli componenti riutilizzabili ------- */
-
-function KPI({ k, l }: { k: string; l: string }) {
-  return (
-    <div className="text-center">
-      <div className="text-2xl sm:text-3xl font-extrabold">{k}</div>
-      <div className="mt-1 text-xs text-white/90">{l}</div>
-    </div>
-  );
-}
-
-function Faq({ q, a }: { q: string; a: string }) {
-  return (
-    <details className="rounded-2xl border bg-white p-6 shadow-sm open:shadow-md transition-shadow">
-      <summary className="cursor-pointer list-none font-semibold">{q}</summary>
-      <p className="mt-3 text-slate-700 leading-relaxed">{a}</p>
-    </details>
   );
 }

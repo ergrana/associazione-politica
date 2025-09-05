@@ -1,3 +1,4 @@
+// src/app/eventi/page.tsx
 "use client";
 
 import Link from "next/link";
@@ -19,6 +20,8 @@ export default function EventiPage() {
   const [cat, setCat] = useState<(typeof CATEGORIES)[number]>("Tutti");
   const [q, setQ] = useState("");
   const [onlyUpcoming, setOnlyUpcoming] = useState(true);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const list = useMemo(() => {
     const now = new Date();
@@ -33,17 +36,28 @@ export default function EventiPage() {
         const hay = (e.title + e.description + e.city + e.place).toLowerCase();
         return hay.includes(q.toLowerCase());
       })
+      .filter((e) => {
+        if (!selectedDay) return true;
+        return sameDay(new Date(e.date), selectedDay);
+      })
       .sort((a, b) => (a.date < b.date ? 1 : -1));
-  }, [cat, q, onlyUpcoming]);
+  }, [cat, q, onlyUpcoming, selectedDay]);
 
   return (
     <main className="min-h-screen">
-      {/* HERO identico */}
+      {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-600 via-indigo-500 to-amber-500 opacity-90" />
+        <Image
+  src="/images/hero.jpg"
+  alt=""
+  fill
+  className="object-cover -z-10"
+/>
+<div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
-            Città Futura • Eventi
+            La Repubblica degli Italiani nel Mondo • Eventi
           </span>
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             Eventi e iniziative
@@ -52,43 +66,80 @@ export default function EventiPage() {
             Assemblee pubbliche, incontri, volontariato: tutte le occasioni per partecipare.
           </p>
 
-          {/* Filtri identici (pill) + toggle “solo futuri” + search */}
-          <div className="mt-6 flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCat(c)}
-                className={`rounded-full px-3 py-1.5 text-sm font-semibold ${
-                  cat === c
-                    ? "bg-white text-slate-900"
-                    : "bg-white/15 text-white hover:bg-white/25"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
+          {/* Filtri + Ricerca + Tendina Calendario */}
+          <div className="mt-6">
+            {/* pill categorie */}
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCat(c)}
+                  className={`rounded-full px-3 py-1.5 text-sm font-semibold ${
+                    cat === c
+                      ? "bg-white text-slate-900"
+                      : "bg-white/15 text-white hover:bg-white/25"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <label className="inline-flex items-center gap-2 text-sm">
+            {/* barra ricerca + toggle “solo futuri” */}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <label className="inline-flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={onlyUpcoming}
+                  onChange={(e) => setOnlyUpcoming(e.target.checked)}
+                />
+                Mostra solo eventi futuri
+              </label>
+
               <input
-                type="checkbox"
-                checked={onlyUpcoming}
-                onChange={(e) => setOnlyUpcoming(e.target.checked)}
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Cerca titolo, luogo o città…"
+                className="rounded-xl bg-white/95 text-slate-900 px-4 py-2 text-sm w-full sm:w-80"
               />
-              Mostra solo eventi futuri
-            </label>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Cerca titolo, luogo o città…"
-              className="rounded-xl bg-white/95 text-slate-900 px-4 py-2 text-sm w-full sm:w-80"
-            />
+
+              <button
+                onClick={() => setShowCalendar((v) => !v)}
+                className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold hover:bg-white/10"
+                aria-expanded={showCalendar}
+                aria-controls="calendar-dropdown"
+                title="Filtra per data"
+              >
+                <span aria-hidden>📅</span> Calendario
+              </button>
+
+              {selectedDay && (
+                <button
+                  onClick={() => setSelectedDay(null)}
+                  className="rounded-xl border px-3 py-2 text-sm font-semibold hover:bg-white/10"
+                  title="Rimuovi filtro per giorno"
+                >
+                  Pulisci giorno
+                </button>
+              )}
+            </div>
+
+            {/* TENDINA CALENDARIO */}
+            <div
+              id="calendar-dropdown"
+              className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-out ${
+                showCalendar ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="mt-3 rounded-2xl bg-white/95 text-slate-900 p-3 shadow-sm border w-full sm:w-[360px]">
+                <MiniCalendar selected={selectedDay} onSelect={setSelectedDay} />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* LISTA — card come prima: badge data in overlay, categoria, luogo, CTA */}
+      {/* LISTA */}
       <section className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {list.length === 0 ? (
           <p className="text-slate-600">Nessun evento trovato.</p>
@@ -108,11 +159,11 @@ export default function EventiPage() {
                     className="w-full h-48 object-cover"
                     priority={false}
                   />
-                  {/* Badge data in alto a sinistra (overlay) */}
+                  {/* Badge data */}
                   <div className="absolute top-3 left-3 rounded-xl bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">
                     {fmtBadgeDate(e.date, e.end)}
                   </div>
-                  {/* Pill categoria in alto a destra (overlay) */}
+                  {/* Categoria */}
                   <div className="absolute top-3 right-3 rounded-full bg-black/40 text-white px-3 py-1 text-xs font-semibold">
                     {e.category}
                   </div>
@@ -125,12 +176,10 @@ export default function EventiPage() {
                   <h3 className="mt-1 text-lg font-semibold">{e.title}</h3>
                   <p className="mt-2 text-slate-600 line-clamp-3">{e.description}</p>
 
-                  {/* Riga luogo */}
                   <div className="mt-3 text-sm text-slate-700">
                     📍 {e.place} — {e.address}, {e.city}
                   </div>
 
-                  {/* CTA come prima: primario “Dettagli”, secondario “RSVP” se presente */}
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link
                       href={`/eventi/${e.id}`}
@@ -144,7 +193,7 @@ export default function EventiPage() {
                         className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
                         onClick={(ev) => ev.stopPropagation()}
                       >
-                        Iscriviti / RSVP
+                        Iscriviti
                       </a>
                     )}
                   </div>
@@ -155,75 +204,71 @@ export default function EventiPage() {
         )}
       </section>
 
-      {/* CTA: proponi un evento */}
+      {/* CTA: proponi un evento (solo “Contattaci”) */}
       <section className="py-16 bg-slate-50 border-t">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Vuoi proporre un evento?</h2>
           <p className="mt-2 text-slate-600">
             Invia luogo, data e descrizione: il nostro team valuterà l’inserimento nel calendario.
           </p>
-          <div className="mt-6 flex items-center justify-center gap-3">
+          <div className="mt-6 flex items-center justify-center">
             <a
               href="/contatti"
               className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
             >
               Contattaci
             </a>
-            <a
-              href="/partecipa"
-              className="inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-white"
-            >
-              Diventa volontario
-            </a>
           </div>
-        </div>
-      </section>
-
-      {/* CALENDARIO mensile (semplice, con puntini per giorni con eventi) */}
-      <section className="py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Calendar EVENTS={EVENTS} />
         </div>
       </section>
     </main>
   );
 }
 
-/* ---------- Helpers (stessi formati di prima) ---------- */
+/* ---------- Helpers ---------- */
 function startOfDay(d: Date) {
   const x = new Date(d);
   x.setHours(0, 0, 0, 0);
   return x;
 }
-
+function sameDay(a: Date, b: Date) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
 function fmtShortDate(iso: string) {
   const d = new Date(iso);
   return d.toLocaleDateString("it-IT", { year: "numeric", month: "short", day: "2-digit" });
 }
-
 function fmtCity(e: { city: string; district?: string }) {
   return e.district ? `${e.city} — ${e.district}` : e.city;
 }
-
 function fmtBadgeDate(iso: string, end?: string) {
   const s = new Date(iso);
   const e = end ? new Date(end) : undefined;
   const day = s.toLocaleDateString("it-IT", { day: "2-digit" });
   const mon = s.toLocaleDateString("it-IT", { month: "short" });
   if (!e) return `${day} ${mon}`;
-  const sameDay = s.toDateString() === e.toDateString();
+  const same = s.toDateString() === e.toDateString();
   const day2 = e.toLocaleDateString("it-IT", { day: "2-digit" });
   const mon2 = e.toLocaleDateString("it-IT", { month: "short" });
-  return sameDay ? `${day} ${mon}` : `${day} ${mon} → ${day2} ${mon2}`;
+  return same ? `${day} ${mon}` : `${day} ${mon} → ${day2} ${mon2}`;
 }
 
-/* ===================== CALENDARIO COMPONENT ===================== */
-
-function Calendar({ EVENTS }: { EVENTS: typeof import("@/lib/content").EVENTS }) {
+/* ===================== MINI CALENDAR (compatto) ===================== */
+function MiniCalendar({
+  selected,
+  onSelect,
+}: {
+  selected: Date | null;
+  onSelect: (d: Date) => void;
+}) {
   const [cursor, setCursor] = useState(startOfMonth(new Date()));
-
-  const eventsByDay = useMemo(() => groupEventsByDay(EVENTS), [EVENTS]);
+  const eventsByDay = useMemo(() => groupEventsByDay(EVENTS), []);
   const weeks = buildMonthMatrix(cursor);
+  const monthLabel = cursor.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
 
   function prevMonth() {
     const d = new Date(cursor);
@@ -236,73 +281,72 @@ function Calendar({ EVENTS }: { EVENTS: typeof import("@/lib/content").EVENTS })
     setCursor(startOfMonth(d));
   }
 
-  const monthLabel = cursor.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
-
   return (
-    <div className="rounded-2xl border bg-white p-4 sm:p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold">Calendario eventi — {capitalize(monthLabel)}</h3>
-        <div className="flex items-center gap-2">
-          <button onClick={prevMonth} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50">← Mese prec.</button>
-          <button onClick={nextMonth} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50">Mese succ. →</button>
-        </div>
+    <div aria-label="Mini calendario per filtrare gli eventi">
+      <div className="flex items-center justify-between mb-2">
+        <button
+          onClick={prevMonth}
+          className="rounded-lg border px-2 py-1 text-xs hover:bg-slate-50"
+          aria-label="Mese precedente"
+        >
+          ←
+        </button>
+        <div className="text-sm font-semibold">{capitalize(monthLabel)}</div>
+        <button
+          onClick={nextMonth}
+          className="rounded-lg border px-2 py-1 text-xs hover:bg-slate-50"
+          aria-label="Mese successivo"
+        >
+          →
+        </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-slate-600 mb-1">
-        {["Lun","Mar","Mer","Gio","Ven","Sab","Dom"].map(d => <div key={d} className="py-2">{d}</div>)}
+      <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-medium text-slate-600 mb-1">
+        {["Lun","Mar","Mer","Gio","Ven","Sab","Dom"].map((d) => (
+          <div key={d} className="py-1">{d}</div>
+        ))}
       </div>
 
       <div className="grid grid-cols-7 gap-1">
         {weeks.map((week, wi) =>
           week.map((day, di) => {
-            const isCurrentMonth = day.getMonth() === cursor.getMonth();
+            const isCurrent = day.getMonth() === cursor.getMonth();
             const key = dayKey(day);
-            const dayEvents = eventsByDay.get(key) || [];
-            return (
-              <div
-                key={`${wi}-${di}`}
-                className={`min-h-24 rounded-xl border p-2 text-sm ${isCurrentMonth ? "bg-white" : "bg-slate-50 text-slate-400"}`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold">{day.getDate()}</span>
-                  {dayEvents.length > 0 && (
-                    <span className="inline-flex items-center gap-1 text-[11px] rounded-full bg-indigo-50 text-indigo-700 px-2 py-0.5">
-                      ● {dayEvents.length}
-                    </span>
-                  )}
-                </div>
+            const hasEvents = (eventsByDay.get(key) || []).length > 0;
+            const isSelected = selected && sameDay(day, selected);
 
-                <ul className="mt-2 space-y-1">
-                  {dayEvents.slice(0, 3).map((e) => (
-                    <li key={e.id} className="truncate">
-                      <Link
-                        href={`/eventi/${e.id}`}
-                        className="inline-block truncate text-indigo-700 hover:underline"
-                        title={e.title}
-                      >
-                        {shortTime(e.date)} {e.title}
-                      </Link>
-                    </li>
-                  ))}
-                  {dayEvents.length > 3 && (
-                    <li className="text-xs text-slate-500">+ {dayEvents.length - 3} altri…</li>
-                  )}
-                </ul>
-              </div>
+            return (
+              <button
+                type="button"
+                key={`${wi}-${di}`}
+                onClick={() => onSelect(new Date(day))}
+                className={[
+                  "min-h-8 rounded-lg border text-xs py-1",
+                  isCurrent ? "bg-white" : "bg-slate-50 text-slate-400",
+                  isSelected ? "ring-2 ring-indigo-600" : "",
+                  "hover:bg-slate-100",
+                ].join(" ")}
+                title={hasEvents ? "Ci sono eventi in questo giorno" : undefined}
+              >
+                {/* Numero del giorno: rosso scuro se sono presenti eventi */}
+                <span
+                  className={[
+                    "leading-none",
+                    hasEvents ? "text-red-800 font-semibold" : "",
+                  ].join(" ")}
+                >
+                  {day.getDate()}
+                </span>
+              </button>
             );
           })
         )}
-      </div>
-
-      {/* Legend */}
-      <div className="mt-4 text-xs text-slate-600">
-        I giorni con ● indicano la presenza di uno o più eventi. Clicca sul titolo per aprire la scheda evento.
       </div>
     </div>
   );
 }
 
-/* ---- funzioni calendario ---- */
+/* ---- funzioni calendario riusate ---- */
 function startOfMonth(d: Date) {
   const x = new Date(d);
   x.setDate(1);
@@ -315,10 +359,6 @@ function dayKey(d: Date) {
   const da = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${da}`;
 }
-function shortTime(iso: string) {
-  const d = new Date(iso);
-  return d.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
-}
 function groupEventsByDay(events: typeof EVENTS) {
   const map = new Map<string, typeof EVENTS>();
   for (const e of events) {
@@ -329,10 +369,9 @@ function groupEventsByDay(events: typeof EVENTS) {
   }
   return map;
 }
-/** Costruisce la matrice settimane per il mese del cursor (inizio lunedì) */
 function buildMonthMatrix(cursor: Date) {
   const first = startOfMonth(cursor);
-  const firstWeekday = (first.getDay() + 6) % 7; // 0 = lun, ... 6 = dom
+  const firstWeekday = (first.getDay() + 6) % 7; // 0 = lun
   const start = new Date(first);
   start.setDate(first.getDate() - firstWeekday);
 

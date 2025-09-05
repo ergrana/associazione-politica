@@ -24,7 +24,7 @@ export default function Header() {
         {/* Brand */}
         <Link href="/" className="flex items-center gap-3 font-extrabold">
           <span aria-hidden className="inline-block h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-amber-500" />
-          <span className="text-base sm:text-lg tracking-tight">Città Futura</span>
+          <span className="text-base sm:text-lg tracking-tight">La Repubblica degli Italiani nel Mondo</span>
         </Link>
 
         {/* Desktop */}

@@ -34,10 +34,17 @@ export default function NotiziePage() {
     <main className="min-h-screen">
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-600 via-indigo-500 to-amber-500 opacity-90" />
+        <Image
+  src="/images/hero.jpg"
+  alt=""
+  fill
+  className="object-cover -z-10"
+/>
+<div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
-            Città Futura • Notizie
+            La Repubblica degli Italiani nel Mondo • Notizie
           </span>
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             Notizie e comunicati
@@ -104,6 +111,24 @@ export default function NotiziePage() {
             ))}
           </div>
         )}
+      </section>
+
+      {/* CTA FINALE: suggerisci una notizia */}
+      <section className="py-16 bg-slate-50 border-t">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold">Vuoi suggerire una notizia?</h2>
+          <p className="mt-2 text-slate-600">
+            Segnalaci storie dal territorio, iniziative o temi che ti stanno a cuore.
+          </p>
+          <div className="mt-6">
+            <Link
+              href="/contatti"
+              className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Contattaci
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   );
