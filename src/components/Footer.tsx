@@ -63,10 +63,26 @@ export default function Footer() {
         <div>
           <p className="font-semibold">Seguici</p>
           <ul className="mt-3 space-y-2 text-slate-600">
-            <li><a className="hover:text-indigo-600" href="#" aria-label="Instagram">Instagram</a></li>
-            <li><a className="hover:text-indigo-600" href="#" aria-label="Facebook">Facebook</a></li>
-            <li><a className="hover:text-indigo-600" href="#" aria-label="YouTube">YouTube</a></li>
-            <li><a className="hover:text-indigo-600" href="#" aria-label="Telegram">Telegram</a></li>
+            <li>
+              <a className="hover:text-indigo-600" href="#" aria-label="Instagram">
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a className="hover:text-indigo-600" href="#" aria-label="Facebook">
+                Facebook
+              </a>
+            </li>
+            <li>
+              <a className="hover:text-indigo-600" href="#" aria-label="YouTube">
+                YouTube
+              </a>
+            </li>
+            <li>
+              <a className="hover:text-indigo-600" href="#" aria-label="Telegram">
+                Telegram
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -74,11 +90,20 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-3">
-          <span>© {new Date().getFullYear()} La Repubblica degli Italiani nel Mondo — Tutti i diritti riservati</span>
+          <span>
+            © {new Date().getFullYear()} La Repubblica degli Italiani nel Mondo — Tutti i diritti
+            riservati
+          </span>
           <div className="flex gap-4">
-            <Link href="/trasparenza" className="underline">Trasparenza</Link>
-            <Link href="#" className="underline">Privacy</Link>
-            <Link href="#" className="underline">Cookie</Link>
+            <Link href="/trasparenza" className="underline">
+              Trasparenza
+            </Link>
+            <a href="/docs/privacy.pdf" target="_blank" rel="noopener noreferrer" className="underline">
+              Privacy
+            </a>
+            <Link href="#" className="underline">
+              Cookie
+            </Link>
           </div>
         </div>
       </div>
