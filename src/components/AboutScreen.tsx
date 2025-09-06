@@ -37,7 +37,7 @@ function Stat({ kpi, label }: { kpi: string; label: string }) {
   return (
     <div className="text-center">
       <div className="text-3xl sm:text-4xl font-extrabold">{kpi}</div>
-      {/* Cambiato da text-slate-600 a text-white */}
+      {/* Su hero scuro resta bianco per contrasto */}
       <div className="mt-1 text-sm text-white">{label}</div>
     </div>
   );
@@ -54,18 +54,18 @@ function ValueGhost({
   colorClass: string; // es: "from-indigo-600 to-indigo-400"
 }) {
   return (
-    <div className="group relative rounded-2xl bg-white/60 backdrop-blur-sm p-5 sm:p-6 hover:bg-white transition shadow-sm hover:shadow-md">
+    <div className="group relative rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-5 sm:p-6 hover:bg-white dark:hover:bg-slate-800 transition shadow-sm hover:shadow-md">
       {/* Linea colorata a sinistra (gradient) */}
       <span
         aria-hidden
         className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`}
       />
       <h3 className="font-semibold text-lg">{title}</h3>
-      <p className="mt-2 text-slate-600 leading-relaxed">
+      <p className="mt-2 text-slate-600 dark:text-slate-300 leading-relaxed">
         {text}
       </p>
       {/* Micro-animazione icona → */}
-      <span className="absolute right-4 top-4 text-slate-300 transition-transform group-hover:translate-x-0.5">
+      <span className="absolute right-4 top-4 text-slate-300 dark:text-slate-500 transition-transform group-hover:translate-x-0.5">
         →
       </span>
     </div>
@@ -84,9 +84,11 @@ function Step({
   return (
     <div className="relative pl-8">
       <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-indigo-600" />
-      <div className="text-sm font-semibold text-indigo-600">{year}</div>
+      <div className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+        {year}
+      </div>
       <div className="mt-1 font-semibold">{title}</div>
-      <p className="mt-1 text-slate-600">{text}</p>
+      <p className="mt-1 text-slate-600 dark:text-slate-300">{text}</p>
     </div>
   );
 }
@@ -102,7 +104,7 @@ function Person({
   img: string;
 }) {
   return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm text-center">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-sm text-center">
       <div className="mx-auto h-40 w-40 overflow-hidden rounded-2xl">
         <Image
           src={img}
@@ -114,7 +116,7 @@ function Person({
       </div>
       <div className="mt-4">
         <div className="font-semibold">{name}</div>
-        <div className="text-sm text-slate-600">{role}</div>
+        <div className="text-sm text-slate-600 dark:text-slate-400">{role}</div>
       </div>
     </div>
   );
@@ -143,13 +145,9 @@ export default function AboutScreen() {
     <main className="min-h-screen">
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <Image
-          src="/images/hero.jpg"
-          alt=""
-          fill
-          className="object-cover -z-10"
-        />
-        <div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+        <Image src="/images/hero.jpg" alt="" fill className="object-cover -z-10" />
+        {/* overlay scuro per testo leggibile */}
+        <div className="absolute inset-0 bg-black/50 -z-10" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
@@ -159,7 +157,7 @@ export default function AboutScreen() {
             La Repubblica degli Italiani nel Mondo
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-white/90">
-            Rafforziamo il legame tra l'Italia e gli italiani nel mondo.
+            Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -191,15 +189,15 @@ export default function AboutScreen() {
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <div>
             <h2 className="text-3xl font-bold">La nostra missione</h2>
-            <p className="mt-3 text-slate-600 leading-relaxed">
+            <p className="mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">
               {STATUTE_CONFIG.scopi[0]}
             </p>
-            <ul className="mt-4 list-disc pl-5 text-slate-600 space-y-2">
+            <ul className="mt-4 list-disc pl-5 text-slate-600 dark:text-slate-300 space-y-2">
               {STATUTE_CONFIG.scopi.slice(1).map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
-            <p className="mt-4 text-slate-600">{STATUTE_CONFIG.soci}</p>
+            <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
           </div>
           <div>
             <ResponsiveYouTube id="dQw4w9WgXcQ" />
@@ -235,15 +233,14 @@ export default function AboutScreen() {
       </section>
 
       {/* PRESS (loghi locali in /public/images/logos) */}
-      <section className="py-10 bg-slate-50 border-y">
+      <section className="py-10 bg-slate-50 dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-medium text-slate-500">
+          <p className="text-center text-xs font-medium text-slate-500 dark:text-slate-400">
             Hanno parlato di noi
           </p>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 items-center opacity-80">
           {[
-            // Cambiati da .svg a .jpg
             "stampa1.jpg",
             "stampa2.jpg",
             "stampa3.jpg",
@@ -263,7 +260,7 @@ export default function AboutScreen() {
         <div className="grid lg:grid-cols-3 gap-10">
           <div>
             <h2 className="text-3xl font-bold">La nostra storia</h2>
-            <p className="mt-3 text-slate-600">
+            <p className="mt-3 text-slate-600 dark:text-slate-300">
               Ripercorri le tappe principali del nostro percorso.
             </p>
             <div className="mt-6 rounded-2xl overflow-hidden">
@@ -278,7 +275,7 @@ export default function AboutScreen() {
             </div>
           </div>
           <div className="lg:col-span-2 relative">
-            <div className="absolute left-1.5 top-0 bottom-0 w-px bg-slate-200" />
+            <div className="absolute left-1.5 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-700" />
             <div className="space-y-8">
               <Step
                 year="2019"
@@ -306,18 +303,18 @@ export default function AboutScreen() {
       </section>
 
       {/* LEADERSHIP */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-16 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between">
             <div>
               <h2 className="text-3xl font-bold">Leadership e volti</h2>
-              <p className="mt-2 text-slate-600">
-                Conosci le persone che gestiscono l'associazione.
+              <p className="mt-2 text-slate-600 dark:text-slate-300">
+                Conosci le persone che gestiscono l&apos;associazione.
               </p>
             </div>
             <Link
               href="/contatti"
-              className="hidden sm:inline-flex rounded-xl border px-4 py-2 text-sm font-medium hover:bg-white"
+              className="hidden sm:inline-flex rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-white dark:hover:bg-slate-800"
             >
               Contattaci
             </Link>
@@ -351,9 +348,9 @@ export default function AboutScreen() {
       {/* STATUTO + MANIFESTO (PDF nello stesso tab) */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-          <div className="rounded-2xl border p-8 bg-white shadow-sm">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
             <h3 className="text-2xl font-bold">Il nostro Manifesto</h3>
-            <p className="mt-2 text-slate-600">
+            <p className="mt-2 text-slate-600 dark:text-slate-300">
               Una visione chiara e un percorso definito.
             </p>
             <a
@@ -364,12 +361,12 @@ export default function AboutScreen() {
             </a>
           </div>
 
-          <div className="rounded-2xl border p-8 bg-white shadow-sm">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
             <h3 className="text-2xl font-bold">Statuto e governance</h3>
-            <p className="mt-2 text-slate-600">Scarica il nostro Statuto.</p>
+            <p className="mt-2 text-slate-600 dark:text-slate-300">Scarica il nostro Statuto.</p>
             <a
               href="/docs/statuto.pdf"
-              className="mt-6 inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+              className="mt-6 inline-flex rounded-xl border border-slate-200 dark:border-slate-700 px-5 py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               Apri lo Statuto (PDF)
             </a>
@@ -378,16 +375,12 @@ export default function AboutScreen() {
       </section>
 
       {/* CTA FINALE */}
-      <section className="py-16 bg-gradient-to-br from-slate-50 to-white border-t">
+      <section className="py-16 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-900 border-t border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">
-            Unisciti alla{" "}
-            <span className="whitespace-nowrap">
-              nostra associazione
-            </span>
-            .
+            Unisciti alla <span className="whitespace-nowrap">nostra associazione</span>.
           </h2>
-          <p className="mt-3 text-slate-600 max-w-2xl mx-auto">
+          <p className="mt-3 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
             Tutti i soci hanno pari diritto di concorrere alla gestione
             dell&apos;Associazione.
           </p>
@@ -400,7 +393,7 @@ export default function AboutScreen() {
             </Link>
             <Link
               href="/contatti"
-              className="inline-flex items-center justify-center rounded-xl border px-5 py-3 font-semibold hover:bg-white"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 px-5 py-3 font-semibold hover:bg-white dark:hover:bg-slate-800"
             >
               Contattaci
             </Link>

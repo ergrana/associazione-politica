@@ -11,12 +11,34 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="it" className={inter.variable}>
-      <body className="bg-white text-slate-900 antialiased font-sans">
+      <head>
+        {/* Supporto dark/light mode su mobile */}
+        <meta name="color-scheme" content="light dark" />
+        <meta
+          name="theme-color"
+          media="(prefers-color-scheme: light)"
+          content="#ffffff"
+        />
+        <meta
+          name="theme-color"
+          media="(prefers-color-scheme: dark)"
+          content="#0a0a0a"
+        />
+      </head>
+      <body className="bg-background text-foreground antialiased font-sans">
         <Header />
         <main>{children}</main>
         <Footer />
