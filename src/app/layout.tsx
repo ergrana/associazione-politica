@@ -6,8 +6,8 @@ import Footer from "../components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Città Futura — Associazione politica",
-  description: "Città Futura: partecipazione, trasparenza, futuro.",
+  title: "La Repubblica degli Italiani nel Mondo — Associazione politica",
+  description: "La Repubblica degli Italiani nel Mondo: partecipazione, trasparenza, futuro.",
   icons: { icon: "/favicon.ico" },
 };
 

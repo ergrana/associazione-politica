@@ -1,8 +1,8 @@
 // src/app/notizie/layout.tsx
 export const metadata = {
-  title: "Notizie — Città Futura",
+  title: "Notizie — La Repubblica degli Italiani nel Mondo",
   description:
-    "Comunicati, aggiornamenti e storie dal territorio. Le notizie ufficiali di Città Futura.",
+    "Comunicati, aggiornamenti e storie dal territorio. Le notizie ufficiali dell'associazione.",
 };
 
 export default function NotizieLayout({

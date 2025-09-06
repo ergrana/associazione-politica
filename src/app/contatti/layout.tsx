@@ -1,8 +1,8 @@
 // src/app/contatti/layout.tsx
 export const metadata = {
-  title: "Contatti — Città Futura",
+  title: "Contatti — La Repubblica degli Italiani nel Mondo",
   description:
-    "Scrivici per stampa, adesioni, eventi o informazioni. Qui trovi email, PEC, telefono e la sede di Città Futura.",
+    "Scrivici per stampa, adesioni, eventi o informazioni. Qui trovi email, PEC, telefono e la sede dell'associazione.",
 };
 
 export default function ContattiLayout({ children }: { children: React.ReactNode }) {

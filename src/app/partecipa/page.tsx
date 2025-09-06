@@ -27,7 +27,7 @@ export default function PartecipaPage() {
             Partecipa, iscriviti, sostieni
           </h1>
           <p className="mt-3 max-w-2xl text-white/90">
-            Benefici, modulo di adesione e donazione. Pronta per la demo al cliente.
+            Benefici, modulo di adesione e donazioni.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="#iscrizione" className="rounded-xl bg-white text-slate-900 px-5 py-3 font-semibold hover:opacity-90">
@@ -70,18 +70,18 @@ export default function PartecipaPage() {
               </p>
             </div>
 
-            {/* BLOCCO PRIVACY (stesso stile dell’esempio con Trasparenza) */}
+            {/* BLOCCO PRIVACY */}
             <div className="mt-6 pt-6 border-t">
               <h4 className="font-semibold">Privacy</h4>
               <p className="text-sm text-slate-700">
                 Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
               </p>
-              <Link
-                href="/trasparenza#privacy"
+              <a
+                href="/docs/privacy.pdf"
                 className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
               >
                 Leggi l’informativa privacy
-              </Link>
+              </a>
             </div>
           </Card>
 

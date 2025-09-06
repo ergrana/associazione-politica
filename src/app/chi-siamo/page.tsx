@@ -2,9 +2,9 @@
 import AboutScreen from "@/components/AboutScreen";
 
 export const metadata = {
-  title: "Chi siamo — Città Futura",
+  title: "Chi siamo — La Repubblica degli Italiani nel Mondo",
   description:
-    "La nostra storia, i valori e le persone dell’associazione Città Futura.",
+    "La nostra storia, i valori e le persone dell’associazione.",
 };
 
 export default function Page() {
