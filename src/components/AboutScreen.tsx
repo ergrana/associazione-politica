@@ -37,7 +37,8 @@ function Stat({ kpi, label }: { kpi: string; label: string }) {
   return (
     <div className="text-center">
       <div className="text-3xl sm:text-4xl font-extrabold">{kpi}</div>
-      <div className="mt-1 text-sm text-slate-600">{label}</div>
+      {/* Cambiato da text-slate-600 a text-white */}
+      <div className="mt-1 text-sm text-white">{label}</div>
     </div>
   );
 }
@@ -143,12 +144,12 @@ export default function AboutScreen() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <Image
-  src="/images/hero.jpg"
-  alt=""
-  fill
-  className="object-cover -z-10"
-/>
-<div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+          src="/images/hero.jpg"
+          alt=""
+          fill
+          className="object-cover -z-10"
+        />
+        <div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
@@ -242,12 +243,13 @@ export default function AboutScreen() {
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 items-center opacity-80">
           {[
-            "stampa1.svg",
-            "stampa2.svg",
-            "stampa3.svg",
-            "stampa4.svg",
-            "stampa5.svg",
-            "stampa6.svg",
+            // Cambiati da .svg a .jpg
+            "stampa1.jpg",
+            "stampa2.jpg",
+            "stampa3.jpg",
+            "stampa4.jpg",
+            "stampa5.jpg",
+            "stampa6.jpg",
           ].map((f) => (
             <div key={f} className="flex items-center justify-center">
               <Image src={`/images/logos/${f}`} alt={f} width={112} height={32} />
@@ -262,8 +264,7 @@ export default function AboutScreen() {
           <div>
             <h2 className="text-3xl font-bold">La nostra storia</h2>
             <p className="mt-3 text-slate-600">
-              Dalla nascita all’impatto nel mondo: tappe e risultati
-              concreti.
+              Ripercorri le tappe principali del nostro percorso.
             </p>
             <div className="mt-6 rounded-2xl overflow-hidden">
               <Image
@@ -271,7 +272,7 @@ export default function AboutScreen() {
                 alt="Incontro pubblico"
                 width={1600}
                 height={900}
-                className="w-full h-56 object-cover"
+                className="w-full h-65 object-cover"
                 priority={false}
               />
             </div>
@@ -281,23 +282,23 @@ export default function AboutScreen() {
             <div className="space-y-8">
               <Step
                 year="2019"
-                title="Nasce Città Futura"
+                title="Nasce la Repubblica degli Italiani nel Mondo"
                 text="Gruppo civico che si organizza in associazione politica."
               />
               <Step
                 year="2021"
-                title="Primi progetti"
-                text="Sportelli civici e percorsi di educazione alla cittadinanza."
+                title="Primo evento"
+                text="Assemblea, conferenza e primo evento conoscitivo."
               />
               <Step
                 year="2023"
-                title="Bilancio partecipativo"
-                text="Pilota in 3 quartieri con migliaia di cittadini coinvolti."
+                title="Prima donazione"
+                text="Associazione inizia a strutturarsi."
               />
               <Step
                 year="2024"
-                title="Trasparenza totale"
-                text="Rendicontazione aperta: donazioni, spese e contratti."
+                title="Superati i 1000 associati"
+                text="Associazione inizia ad allargarsi."
               />
             </div>
           </div>
@@ -311,7 +312,7 @@ export default function AboutScreen() {
             <div>
               <h2 className="text-3xl font-bold">Leadership e volti</h2>
               <p className="mt-2 text-slate-600">
-                Persone competenti al servizio della comunità.
+                Conosci le persone che gestiscono l'associazione.
               </p>
             </div>
             <Link
@@ -353,7 +354,7 @@ export default function AboutScreen() {
           <div className="rounded-2xl border p-8 bg-white shadow-sm">
             <h3 className="text-2xl font-bold">Il nostro Manifesto</h3>
             <p className="mt-2 text-slate-600">
-              Una visione chiara per città più giuste, verdi e inclusive.
+              Una visione chiara e un percorso definito.
             </p>
             <a
               href="/docs/manifesto.pdf"
@@ -380,9 +381,9 @@ export default function AboutScreen() {
       <section className="py-16 bg-gradient-to-br from-slate-50 to-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">
-            Entra nella{" "}
+            Unisciti alla{" "}
             <span className="whitespace-nowrap">
-              Repubblica degli Italiani nel Mondo
+              nostra associazione
             </span>
             .
           </h2>

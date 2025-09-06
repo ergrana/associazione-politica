@@ -13,13 +13,8 @@ export default function ContattiPage() {
     <main className="min-h-screen">
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <Image
-  src="/images/hero.jpg"
-  alt=""
-  fill
-  className="object-cover -z-10"
-/>
-<div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+        <Image src="/images/hero.jpg" alt="" fill className="object-cover -z-10" />
+        <div className="absolute inset-0 bg-black/50 -z-10" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
@@ -32,46 +27,17 @@ export default function ContattiPage() {
         </div>
       </section>
 
-      {/* GRID 2×2 simmetrica: sx (Recapiti + Sede), dx (Mappa + Social). Le due colonne hanno altezza pari. */}
+      {/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {/* COLONNA SINISTRA */}
           <div className="flex flex-col gap-8">
-            <Card title="Recapiti diretti" className="flex-1">
-              <InfoRow label="Email">
-                <a className="underline" href="mailto:info@cittafutura.it">
-                  info@cittafutura.it
-                </a>
-              </InfoRow>
-              <InfoRow label="PEC">
-                <a className="underline" href="mailto:cittafutura@pec.it">
-                  cittafutura@pec.it
-                </a>
-              </InfoRow>
-              <InfoRow label="Telefono">
-                <a className="underline" href="tel:+39060000000">
-                  +39 06 0000 0000
-                </a>
-              </InfoRow>
-              <p className="mt-2 text-xs text-slate-500">
-                Clicca su email o numero per contattarci.
-              </p>
+            <Card title="Recapiti diretti">
+              <RecapitiTimeline />
+              <p className="mt-3 text-xs text-slate-500">Clicca sul canale per avviare il contatto.</p>
             </Card>
 
-            <Card title="La nostra sede" className="flex-1">
-              <Slideshow images={SLIDES} />
-            </Card>
-          </div>
-
-          {/* COLONNA DESTRA */}
-          <div className="flex flex-col gap-8">
-            <Card title="Dove siamo" className="flex-1">
-              <ClickableMap address="Viale Giuseppe Mazzini 73, 00195 Roma" />
-              <div className="mt-3 text-slate-700">Viale Giuseppe Mazzini 73, 00195 Roma</div>
-              <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
-            </Card>
-
-            <Card title="Seguici sui social" className="flex-1">
+            <Card title="Seguici sui social">
               <p className="text-slate-600">Resta aggiornato su iniziative, eventi e campagne.</p>
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <SocialBtn href="#" icon={<IconInstagram />} label="Instagram" />
@@ -79,6 +45,19 @@ export default function ContattiPage() {
                 <SocialBtn href="#" icon={<IconYouTube />} label="YouTube" />
                 <SocialBtn href="#" icon={<IconTelegram />} label="Telegram" />
               </div>
+            </Card>
+          </div>
+
+          {/* COLONNA DESTRA */}
+          <div className="flex flex-col gap-8">
+            <Card title="Dove siamo">
+              <ClickableMap address="Viale Giuseppe Mazzini 73, 00195 Roma" />
+              <div className="mt-3 text-slate-700">Viale Giuseppe Mazzini 73, 00195 Roma</div>
+              <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
+            </Card>
+
+            <Card title="La nostra sede">
+              <Slideshow images={SLIDES} />
             </Card>
           </div>
         </div>
@@ -125,16 +104,57 @@ function Card({
   return (
     <div className={`rounded-2xl bg-white p-6 shadow-sm ${className}`}>
       <h3 className="text-lg font-semibold">{title}</h3>
-      <div className="mt-3 space-y-3">{children}</div>
+      <div className="mt-3">{children}</div>
     </div>
   );
 }
 
-function InfoRow({ label, children }: { label: string; children: React.ReactNode }) {
+/** Timeline stile roadmap per i recapiti */
+function RecapitiTimeline() {
+  const items = [
+    {
+      k: "Email generale",
+      desc: "Informazioni, richieste e segnalazioni.",
+      action: { label: "info@cittafutura.it", href: "mailto:info@cittafutura.it" },
+    },
+    {
+      k: "PEC",
+      desc: "Comunicazioni formali e protocollate.",
+      action: { label: "cittafutura@pec.it", href: "mailto:cittafutura@pec.it" },
+    },
+    {
+      k: "Stampa",
+      desc: "Ufficio comunicazione e media partner.",
+      action: { label: "press@cittafutura.it", href: "mailto:press@cittafutura.it" },
+    },
+    {
+      k: "Telefono",
+      desc: "Segreteria organizzativa (lun–ven 10–13).",
+      action: { label: "+39 06 0000 0000", href: "tel:+39060000000" },
+    },
+  ] as const;
+
   return (
-    <div className="text-sm">
-      <span className="text-slate-500">{label}:</span> <span className="text-slate-800">{children}</span>
-    </div>
+    <ol className="relative">
+      <span className="absolute left-3 top-0 bottom-0 w-px bg-slate-200" />
+      {items.map((it, i) => (
+        <li key={i} className="relative pl-10 py-5">
+          <span className="absolute left-0 top-6 -translate-y-1/2 inline-flex items-center justify-center w-6 h-6 rounded-full">
+            <span className="w-3 h-3 rounded-full bg-violet-600" />
+          </span>
+          <p className="font-bold leading-6">{it.k}</p>
+          <p className="text-slate-600 text-sm mt-1">{it.desc}</p>
+          <div className="mt-2">
+            <a
+              href={it.action.href}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 hover:underline"
+            >
+              {it.action.label} <span aria-hidden>↗</span>
+            </a>
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 
@@ -143,7 +163,6 @@ function ClickableMap({ address }: { address: string }) {
   const mapsUrl = `https://www.google.com/maps?q=${q}`;
   return (
     <div className="relative overflow-hidden rounded-2xl bg-black/5">
-      {/* link invisibile che copre tutta la mappa */}
       <a href={mapsUrl} target="_blank" rel="noopener" className="absolute inset-0 z-10" aria-label="Apri Google Maps" />
       <div className="relative h-72 sm:h-80">
         <iframe
@@ -168,13 +187,6 @@ function Slideshow({ images }: { images: string[] }) {
     return () => clearInterval(t);
   }, [images.length, paused]);
 
-  function prev() {
-    setI((p) => (p - 1 + images.length) % images.length);
-  }
-  function next() {
-    setI((p) => (p + 1) % images.length);
-  }
-
   return (
     <div
       className="relative overflow-hidden rounded-2xl bg-black/5"
@@ -185,24 +197,18 @@ function Slideshow({ images }: { images: string[] }) {
       <div className="relative h-72 sm:h-80">
         <Image src={images[i]} alt={`Sede — immagine ${i + 1}`} fill className="object-cover" priority={false} />
       </div>
-
-      {/* Controls */}
       <button
-        onClick={prev}
+        onClick={() => setI((p) => (p - 1 + images.length) % images.length)}
         className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1.5 text-sm font-semibold shadow hover:bg-white"
-        aria-label="Precedente"
       >
         ←
       </button>
       <button
-        onClick={next}
+        onClick={() => setI((p) => (p + 1) % images.length)}
         className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1.5 text-sm font-semibold shadow hover:bg-white"
-        aria-label="Successiva"
       >
         →
       </button>
-
-      {/* Dots */}
       <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
         {images.map((_, idx) => (
           <button
@@ -211,7 +217,6 @@ function Slideshow({ images }: { images: string[] }) {
             className={`h-2.5 w-2.5 rounded-full transition ${
               i === idx ? "bg-white ring-2 ring-black/30" : "bg-white/60 hover:bg-white"
             }`}
-            aria-label={`Vai alla slide ${idx + 1}`}
           />
         ))}
       </div>

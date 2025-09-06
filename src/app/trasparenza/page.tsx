@@ -354,7 +354,7 @@ export default function TrasparenzaPage() {
       {/* DOCUMENTI */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-6">
-          <DocCard title="Manifesto politico" desc="Documento fondativo con principi e obiettivi dell’associazione." primary={{ href: "/docs/manifesto.pdf", label: "Apri Manifesto (PDF)" }} />
+          <DocCard title="Manifesto politico" desc="Principi e obiettivi dell’associazione." primary={{ href: "/docs/manifesto.pdf", label: "Apri Manifesto (PDF)" }} />
           <DocCard title="Statuto dell’associazione" desc="Regole organizzative e funzionamento interno." primary={{ href: "/docs/statuto.pdf", label: "Apri Statuto (PDF)" }} />
           <DocCard title={`Bilancio d’esercizio ${year}`} desc="Rendiconto economico-finanziario completo." primary={{ href: `/docs/bilancio-${year}.pdf`, label: `Apri Bilancio ${year} (PDF)` }} />
         </div>

@@ -203,7 +203,7 @@ export default function ProgrammaPage() {
                 alt="Roadmap delle attività"
                 width={1600}
                 height={900}
-                className="w-full h-56 object-cover"
+                className="w-full h-64 object-cover"
                 priority={false}
               />
             </div>

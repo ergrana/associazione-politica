@@ -1,12 +1,13 @@
-import Link from "next/link";
+// src/app/layout.tsx
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Città Futura — Associazione politica",
-  description:
-    "Città Futura: partecipazione, trasparenza, futuro. Sito ufficiale dell’associazione politica.",
+  description: "Città Futura: partecipazione, trasparenza, futuro.",
   icons: { icon: "/favicon.ico" },
 };
 
@@ -21,74 +22,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
       </body>
     </html>
-  );
-}
-
-function Footer() {
-  const nav = [
-    { href: "/chi-siamo", label: "Chi siamo" },
-    { href: "/programma", label: "Programma" },
-    { href: "/notizie", label: "Notizie" },
-    { href: "/eventi", label: "Eventi" },
-    { href: "/partecipa", label: "Partecipa" },
-    { href: "/trasparenza", label: "Trasparenza" },
-    { href: "/contatti", label: "Contatti" },
-  ];
-
-  return (
-    <footer className="mt-16 bg-slate-50 border-t">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-10 md:grid-cols-4">
-        <div className="md:col-span-2">
-          <div className="flex items-center gap-3 font-extrabold">
-            <span aria-hidden className="inline-block h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-amber-500" />
-            <span>Città Futura</span>
-          </div>
-          <p className="mt-3 text-slate-600 max-w-md">
-            Associazione politica indipendente. Partecipazione, trasparenza, futuro.
-          </p>
-          <p className="mt-2 text-slate-600 text-sm">
-            C.F. 00000000000 • Via dell’Esempio 1, 00000 Città (IT)
-          </p>
-          <p className="text-slate-600 text-sm">
-            Email: <a className="underline" href="mailto:info@cittafutura.it">info@cittafutura.it</a> • PEC:{" "}
-            <a className="underline" href="mailto:cittafutura@pec.it">cittafutura@pec.it</a>
-          </p>
-        </div>
-
-        <div>
-          <p className="font-semibold">Pagine</p>
-          <ul className="mt-3 space-y-2 text-slate-600">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link className="hover:text-indigo-600" href={item.href}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <p className="font-semibold">Seguici</p>
-          <ul className="mt-3 space-y-2 text-slate-600">
-            <li><a className="hover:text-indigo-600" href="#" aria-label="Instagram">Instagram</a></li>
-            <li><a className="hover:text-indigo-600" href="#" aria-label="Facebook">Facebook</a></li>
-            <li><a className="hover:text-indigo-600" href="#" aria-label="YouTube">YouTube</a></li>
-            <li><a className="hover:text-indigo-600" href="#" aria-label="Telegram">Telegram</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="border-t py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-3">
-          <span>© {new Date().getFullYear()} Città Futura — Tutti i diritti riservati</span>
-          <div className="flex gap-4">
-            <Link href="/trasparenza" className="underline">Trasparenza</Link>
-            <Link href="#" className="underline">Privacy</Link>
-            <Link href="#" className="underline">Cookie</Link>
-          </div>
-        </div>
-      </div>
-    </footer>
   );
 }

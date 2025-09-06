@@ -47,13 +47,8 @@ export default function EventiPage() {
     <main className="min-h-screen">
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <Image
-  src="/images/hero.jpg"
-  alt=""
-  fill
-  className="object-cover -z-10"
-/>
-<div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
+        <Image src="/images/hero.jpg" alt="" fill className="object-cover -z-10" />
+        <div className="absolute inset-0 bg-black/50 -z-10" /> {/* overlay scuro per testo leggibile */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
@@ -63,7 +58,7 @@ export default function EventiPage() {
             Eventi e iniziative
           </h1>
           <p className="mt-4 max-w-2xl text-white/90">
-            Assemblee pubbliche, incontri, volontariato: tutte le occasioni per partecipare.
+            Assemblee pubbliche e incontri: tutte le occasioni per partecipare.
           </p>
 
           {/* Filtri + Ricerca + Tendina Calendario */}
@@ -187,15 +182,13 @@ export default function EventiPage() {
                     >
                       Dettagli
                     </Link>
-                    {e.rsvpUrl && (
-                      <a
-                        href={e.rsvpUrl}
-                        className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-                        onClick={(ev) => ev.stopPropagation()}
-                      >
-                        Iscriviti
-                      </a>
-                    )}
+                    {/* Iscriviti → stessa pagina dei Dettagli */}
+                    <Link
+                      href={`/eventi/${e.id}`}
+                      className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+                    >
+                      Iscriviti
+                    </Link>
                   </div>
                 </div>
               </article>
