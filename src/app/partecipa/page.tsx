@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+/** ============================== CONFIG ============================== */
+// Inserisci qui il tuo endpoint Formcarry (solo l'ID finale o l'intera URL)
+const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
+
 /* ============================== PAGE ============================== */
 
 export default function PartecipaPage() {
@@ -61,9 +65,9 @@ export default function PartecipaPage() {
           {/* SINISTRA — ISCRIZIONE */}
           <Card id="iscrizione" title="Iscrizione — Modulo di adesione" className="h-full flex flex-col">
             <div className="flex-1">
-              <IscrizioneFormDemo />
+              <IscrizioneForm />
               <p className="mt-3 text-xs text-slate-500">
-                Versione demo: nessun invio reale. Per contatti scrivi a{" "}
+                Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
                 <a className="underline" href="mailto:info@cittafutura.it">
                   info@cittafutura.it
                 </a>.
@@ -187,40 +191,72 @@ function Timeline({ items }: { items: { k: string; d?: string }[] }) {
   );
 }
 
-/** Modulo iscrizione (DEMO) */
-function IscrizioneFormDemo() {
+/** Modulo iscrizione — invio diretto via Formcarry (no backend) */
+function IscrizioneForm() {
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setErr(null);
+    setOk(false);
+
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+    // Validazione minima
     if (!data.nome || !data.cognome || !data.email || !data.comune || !data.consent) {
       alert("Compila i campi obbligatori e accetta la privacy.");
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch(FORMCARRY_URL, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form), // non impostare Content-Type: lo fa il browser
+      });
+
+      if (res.ok) {
+        setOk(true);
+        form.reset();
+      } else {
+        const j = await res.json().catch(() => null);
+        setErr(j?.message || "Invio non riuscito. Riprova più tardi.");
+      }
+    } catch {
+      setErr("Connessione non riuscita. Controlla la rete e riprova.");
+    } finally {
       setLoading(false);
-      setOk(true);
-      form.reset();
-    }, 600);
+    }
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-4">
-      <Input name="nome" label="Nome *" />
-      <Input name="cognome" label="Cognome *" />
-      <Input name="email" type="email" label="Email *" />
+    <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-4" noValidate>
+      <Input name="nome" label="Nome *" required />
+      <Input name="cognome" label="Cognome *" required />
+      <Input name="email" type="email" label="Email *" required />
       <Input name="telefono" type="tel" label="Telefono (opzionale)" />
-      <Input name="comune" label="Comune di residenza *" />
+      <Input name="comune" label="Comune di residenza *" required />
       <Select name="fascia" label="Fascia di età">
+        <option value="">Seleziona…</option>
         <option>18–25</option>
         <option>26–35</option>
         <option>36–50</option>
         <option>51+</option>
       </Select>
+
+      {/* Honeypot antispam (nascosto via CSS) */}
+      <label className="hidden">
+        Non compilare questo campo: <input name="_gotcha" tabIndex={-1} autoComplete="off" />
+      </label>
+
+      {/* Opzionale: soggetto personalizzato (se supportato) */}
+      <input type="hidden" name="_subject" value="Nuova iscrizione dal sito" />
+      {/* Opzionale: pagina di redirect dopo invio (se preferisci) */}
+      {/* <input type="hidden" name="_redirect" value="https://tuodominio.it/grazie" /> */}
 
       <label className="md:col-span-2 text-sm text-slate-600">
         <input type="checkbox" name="consent" className="mr-2" /> Ho letto e accetto l’informativa privacy *
@@ -231,16 +267,23 @@ function IscrizioneFormDemo() {
           type="submit"
           disabled={loading}
           className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+          aria-busy={loading}
         >
-          {loading ? "Invio in corso..." : "Invia adesione (demo)"}
+          {loading ? "Invio in corso..." : "Invia adesione"}
         </button>
+
         <a
           href="mailto:info@cittafutura.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!"
           className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50"
         >
           Oppure scrivici via email
         </a>
-        {ok && <span className="text-sm text-emerald-600">Ricevuto! (demo) Ti contatteremo a breve.</span>}
+
+        <span className="sr-only" aria-live="polite">
+          {ok ? "Invio riuscito" : err ? "Errore di invio" : ""}
+        </span>
+        {ok && <span className="text-sm text-emerald-600">Ricevuto! Ti contatteremo a breve.</span>}
+        {err && <span className="text-sm text-rose-600">{err}</span>}
       </div>
     </form>
   );
@@ -271,14 +314,33 @@ function CopyRow({ label, value, className = "" }: { label: string; value: strin
 }
 
 /** UI basics */
-function Input({ name, label, type = "text" }: { name: string; label: string; type?: string }) {
+function Input({
+  name,
+  label,
+  type = "text",
+  required = false,
+}: {
+  name: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+}) {
   return (
     <label className="text-sm">
-      <span className="block text-slate-700 mb-1">{label}</span>
-      <input name={name} type={type} className="w-full rounded-xl border px-4 py-2.5" />
+      <span className="block text-slate-700 mb-1">
+        {label} {required ? <span className="text-rose-600" aria-hidden>*</span> : null}
+      </span>
+      <input
+        name={name}
+        type={type}
+        required={required}
+        className="w-full rounded-xl border px-4 py-2.5"
+        aria-required={required}
+      />
     </label>
   );
 }
+
 function Select({ name, label, children }: { name: string; label: string; children: React.ReactNode }) {
   return (
     <label className="text-sm">
