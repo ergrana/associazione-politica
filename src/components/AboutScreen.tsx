@@ -9,6 +9,15 @@ import { useState } from "react";
 // Inserisci qui il tuo endpoint Formcarry (solo l'ID finale o l'intera URL)
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
+// Sede e immagini slideshow (sostituisci con le tue)
+const ADDRESS = "Viale Giuseppe Mazzini 73, 00195 Roma";
+const SLIDES = [
+  "/images/sede/1.jpg",
+  "/images/sede/2.jpg",
+  "/images/sede/3.jpg",
+  "/images/sede/4.jpg",
+];
+
 /**
  * Config base (soluzione B): niente denominazione/sede qui.
  * Rimane solo ciò che serve per missione/valori.
@@ -42,7 +51,6 @@ function Stat({ kpi, label }: { kpi: string; label: string }) {
   return (
     <div className="text-center">
       <div className="text-3xl sm:text-4xl font-extrabold">{kpi}</div>
-      {/* Su hero scuro resta bianco per contrasto */}
       <div className="mt-1 text-sm text-white">{label}</div>
     </div>
   );
@@ -60,7 +68,6 @@ function ValueGhost({
 }) {
   return (
     <div className="group relative rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-5 sm:p-6 hover:bg-white dark:hover:bg-slate-800 transition shadow-sm hover:shadow-md">
-      {/* Linea colorata a sinistra (gradient) */}
       <span
         aria-hidden
         className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`}
@@ -69,7 +76,6 @@ function ValueGhost({
       <p className="mt-2 text-slate-600 dark:text-slate-300 leading-relaxed">
         {text}
       </p>
-      {/* Micro-animazione icona → */}
       <span className="absolute right-4 top-4 text-slate-300 dark:text-slate-500 transition-transform group-hover:translate-x-0.5">
         →
       </span>
@@ -230,7 +236,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* ============================== UI BASICS PER PARTECIPA ============================== */
+/* ============================== UI BASICS PER PARTECIPA / CONTATTI ============================== */
 
 function Card({
   title,
@@ -410,6 +416,136 @@ function IscrizioneForm() {
   );
 }
 
+/* ============================== SOCIAL / RECAPITI / MAPPA / SLIDESHOW ============================== */
+
+function RecapitiTimeline() {
+  return (
+    <ol className="relative">
+      <span className="absolute left-3 top-0 bottom-0 w-px bg-slate-200" />
+      {[
+        { label: "Email", value: "info@cittafutura.it", href: "mailto:info@cittafutura.it" },
+        { label: "Tesoreria", value: "tesoreria@cittafutura.it", href: "mailto:tesoreria@cittafutura.it" },
+        { label: "Telefono", value: "+39 06 0000 0000", href: "tel:+390600000000" },
+      ].map((r) => (
+        <li key={r.value} className="relative pl-10 py-5">
+          <span className="absolute left-0 top-6 -translate-y-1/2 inline-flex items-center justify-center w-6 h-6 rounded-full">
+            <span className="w-3 h-3 rounded-full bg-violet-600" />
+          </span>
+          <p className="font-bold leading-6">{r.label}</p>
+          <p className="text-slate-600 text-sm mt-1">
+            <a className="underline" href={r.href}>
+              {r.value}
+            </a>
+          </p>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function SocialBtn({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50"
+      aria-label={`Apri ${label}`}
+    >
+      <span className="h-4 w-4">{icon}</span>
+      {label}
+    </a>
+  );
+}
+
+// Icone minime (SVG inline)
+function IconInstagram() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm6.5-.75a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0z" />
+    </svg>
+  );
+}
+function IconFacebook() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+      <path d="M13 22v-9h3l1-4h-4V7a1 1 0 0 1 1-1h3V2h-3a5 5 0 0 0-5 5v2H6v4h3v9h4z" />
+    </svg>
+  );
+}
+function IconYouTube() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+      <path d="M23 7.5a4 4 0 0 0-2.8-2.9C18.4 4 12 4 12 4s-6.4 0-8.2.6A4 4 0 0 0 1 7.5 41 41 0 0 0 1 12a41 41 0 0 0 0 4.5 4 4 0 0 0 2.8 2.9C5.6 20 12 20 12 20s6.4 0 8.2-.6A4 4 0 0 0 23 16.5 41 41 0 0 0 23 12a41 41 0 0 0 0-4.5zM10 15.5v-7l6 3.5-6 3.5z" />
+    </svg>
+  );
+}
+function IconTelegram() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+      <path d="M9.9 15.6 9.7 20a.9.9 0 0 0 1.3.8l3-1.8 3.5 2.6a1 1 0 0 0 1.6-.6l3-14a1 1 0 0 0-1.4-1.1L2.5 10.2a1 1 0 0 0 .1 1.9l5.1 1.5 11.8-7.3-9.6 9.3z" />
+    </svg>
+  );
+}
+
+function ClickableMap({ address }: { address: string }) {
+  const q = encodeURIComponent(address);
+  const mapUrl = `https://www.google.com/maps?q=${q}&z=16&output=embed`;
+  const clickUrl = `https://www.google.com/maps/search/?api=1&query=${q}`;
+  return (
+    <a href={clickUrl} target="_blank" rel="noopener noreferrer" className="block rounded-xl overflow-hidden border">
+      <iframe
+        src={mapUrl}
+        title={`Mappa - ${address}`}
+        className="w-full h-64"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      />
+    </a>
+  );
+}
+
+function Slideshow({ images }: { images: string[] }) {
+  const [i, setI] = useState(0);
+  const prev = () => setI((p) => (p === 0 ? images.length - 1 : p - 1));
+  const next = () => setI((p) => (p === images.length - 1 ? 0 : p + 1));
+  return (
+    <div className="relative rounded-xl overflow-hidden">
+      <Image
+        src={images[i]}
+        alt={`Foto sede ${i + 1}`}
+        width={1200}
+        height={700}
+        className="w-full h-64 object-cover"
+        priority={i === 0}
+      />
+      <button
+        onClick={prev}
+        className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-1 text-sm font-semibold hover:bg-white"
+        aria-label="Foto precedente"
+      >
+        ←
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-1 text-sm font-semibold hover:bg-white"
+        aria-label="Foto successiva"
+      >
+        →
+      </button>
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
+        {images.map((_, idx) => (
+          <span
+            key={idx}
+            className={`h-1.5 w-4 rounded-full ${i === idx ? "bg-white" : "bg-white/50"}`}
+            aria-hidden
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ============================================= */
 
 export default function AboutScreen() {
@@ -434,13 +570,13 @@ export default function AboutScreen() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/partecipa"
+              href="#partecipa" // link diretto alla sezione interna
               className="inline-flex items-center justify-center rounded-xl bg-white text-slate-900 px-5 py-3 font-semibold hover:opacity-90"
             >
               Iscriviti ora
             </Link>
             <Link
-              href="/partecipa"
+              href="#pagamento" // link diretto al blocco pagamento
               className="inline-flex items-center justify-center rounded-xl ring-2 ring-white/80 text-white px-5 py-3 font-semibold hover:bg-white/10"
             >
               Sostienici con una donazione
@@ -775,24 +911,64 @@ export default function AboutScreen() {
       </section>
       {/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
 
+      {/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          {/* COLONNA SINISTRA */}
+          <div className="flex flex-col gap-8">
+            <Card title="Recapiti diretti">
+              <RecapitiTimeline />
+              <p className="mt-3 text-xs text-slate-500">Clicca sul canale per avviare il contatto.</p>
+            </Card>
+
+            <Card title="Seguici sui social">
+              <p className="text-slate-600">Resta aggiornato su iniziative, eventi e campagne.</p>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <SocialBtn href="#" icon={<IconInstagram />} label="Instagram" />
+                <SocialBtn href="#" icon={<IconFacebook />} label="Facebook" />
+                <SocialBtn href="#" icon={<IconYouTube />} label="YouTube" />
+                <SocialBtn href="#" icon={<IconTelegram />} label="Telegram" />
+              </div>
+            </Card>
+          </div>
+
+          {/* COLONNA DESTRA */}
+          <div className="flex flex-col gap-8">
+            <Card title="Dove siamo">
+              <ClickableMap address={ADDRESS} />
+              <div className="mt-3 text-slate-700">{ADDRESS}</div>
+              <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
+            </Card>
+
+            <Card title="La nostra sede">
+              <Slideshow images={SLIDES} />
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA FINALE */}
-      <section className="py-16 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-900 border-t border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold">
-            Unisciti alla <span className="whitespace-nowrap">nostra associazione</span>.
-          </h2>
-          <p className="mt-3 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            Tutti i soci hanno pari diritto di concorrere alla gestione
-            dell&apos;Associazione.
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold">Preferisci parlarne di persona?</h2>
+          <p className="mt-2 text-slate-600">
+            Vieni alla prossima assemblea aperta o scrivici per fissare un incontro.
           </p>
           <div className="mt-6 flex justify-center gap-3">
             <Link
-              href="#partecipa"
-              className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
-            
+              href="/eventi"
+              aria-label="Vai alla pagina Eventi"
+              className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
             >
-              Contattaci
+              Vedi Eventi
             </Link>
+            <a
+              aria-label="Invia una email a info@cittafutura.it per fissare un incontro"
+              href="mailto:info@cittafutura.it?subject=Richiesta%20incontro&body=Ciao%2C%20vorrei%20fissare%20un%20appuntamento%20in%20sede.%0A%0ANome%3A%20%0ATelefono%3A%20%0ADisponibilit%C3%A0%3A%20%0A%0AGrazie!"
+              className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+            >
+              Scrivici ora
+            </a>
           </div>
         </div>
       </section>
