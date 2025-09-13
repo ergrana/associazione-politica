@@ -297,11 +297,6 @@ export default function AboutScreen() {
         <h2 className="sr-only">I nostri valori</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <ValueGhost
-            title="Legalità e integrità"
-            text="Pubblicazione di contratti e dichiarazioni dei conflitti d’interesse."
-            colorClass="from-indigo-600 to-indigo-400"
-          />
-          <ValueGhost
             title="Partecipazione Attiva"
             text="Assemblee aperte, consultazioni e bilancio partecipativo per decidere insieme."
             colorClass="from-emerald-600 to-emerald-400"
