@@ -257,8 +257,8 @@ export default function ProgrammaPage() {
               a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese."
             />
             <Faq
-              q="Come rendicontate i risultati?"
-              a="Report e materiali pubblici nella sezione Trasparenza; indicatori e verbali disponibili in formato aperto."
+              q="Chi partecipa all'associazione?"
+              a="Imprenditori, intellettuali e giovani interessati a crescere personalmente e professionalmente."
             />
             <Faq
               q="Collaborate con le comunità italiane all’estero?"
