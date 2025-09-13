@@ -33,30 +33,8 @@ export default function PartecipaPage() {
           <p className="mt-3 max-w-2xl text-white/90">
             Benefici, modulo di adesione e donazioni.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#iscrizione" className="rounded-xl bg-white text-slate-900 px-5 py-3 font-semibold hover:opacity-90">
-              📝 Vai al modulo
-            </a>
-            <a href="#pagamento" className="rounded-xl ring-2 ring-white/80 text-white px-5 py-3 font-semibold hover:bg-white/10">
-              💳 Vai al pagamento
-            </a>
-          </div>
+          {/* Bottoni rimossi come richiesto */}
         </div>
-      </section>
-
-      {/* PANORAMICA */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <Card title="Cosa include l’iscrizione">
-          <Timeline
-            items={[
-              { k: "Diritto di voto in assemblea" },
-              { k: "Accesso ai gruppi e agli incontri" },
-              { k: "Newsletter con iniziative e inviti" },
-              { k: "Copertura assicurativa durante attività riconosciute" },
-              { k: "Supporto e materiali per i volontari" },
-            ]}
-          />
-        </Card>
       </section>
 
       {/* DUE RIQUADRI AFFIANCATI (altezza uguale) */}
@@ -170,24 +148,6 @@ function Card({
       <h3 className="text-lg font-semibold">{title}</h3>
       <div className="mt-3">{children}</div>
     </section>
-  );
-}
-
-/** Timeline stile “roadmap” */
-function Timeline({ items }: { items: { k: string; d?: string }[] }) {
-  return (
-    <ol className="relative">
-      <span className="absolute left-3 top-0 bottom-0 w-px bg-slate-200" />
-      {items.map((it, i) => (
-        <li key={i} className="relative pl-10 py-5">
-          <span className="absolute left-0 top-6 -translate-y-1/2 inline-flex items-center justify-center w-6 h-6 rounded-full">
-            <span className="w-3 h-3 rounded-full bg-violet-600" />
-          </span>
-          <p className="font-bold leading-6">{it.k}</p>
-          {it.d && <p className="text-slate-600 text-sm mt-1">{it.d}</p>}
-        </li>
-      ))}
-    </ol>
   );
 }
 
