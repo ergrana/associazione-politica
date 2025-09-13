@@ -8,7 +8,7 @@ import Image from "next/image";
 
 const nav = [
   { href: "/chi-siamo", label: "Chi siamo" },
-  { href: "/programma", label: "Programma" },
+  { href: "/chi-siamo#assi", label: "Programma" }, // ← manda alla sezione "assi" in AboutScreen
   { href: "/notizie", label: "Notizie" },
   { href: "/eventi", label: "Eventi" },
   { href: "/partecipa", label: "Partecipa" },
@@ -40,6 +40,15 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // helper: considera attivo anche quando l'href ha un hash (#)
+  const isActive = (href: string) => {
+    if (href.includes("#")) {
+      const base = href.split("#")[0];
+      return pathname === base;
+    }
+    return pathname === href;
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <nav className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -61,7 +70,7 @@ export default function Header() {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
           {nav.map((item) => {
-            const active = pathname === item.href;
+            const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
@@ -146,7 +155,7 @@ export default function Header() {
 
         <nav className="p-4 space-y-1">
           {nav.map((item) => {
-            const active = pathname === item.href;
+            const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
