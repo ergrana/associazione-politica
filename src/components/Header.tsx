@@ -12,7 +12,7 @@ const nav = [
   { href: "/notizie", label: "Notizie" },
   { href: "/eventi", label: "Eventi" },
   { href: "/partecipa", label: "Partecipa" },
-  { href: "/trasparenza", label: "Trasparenza" },
+  // rimosso: { href: "/trasparenza", label: "Trasparenza" },
   { href: "/contatti", label: "Contatti" },
 ];
 

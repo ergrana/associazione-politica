@@ -8,7 +8,7 @@ export default function Footer() {
     { href: "/notizie", label: "Notizie" },
     { href: "/eventi", label: "Eventi" },
     { href: "/partecipa", label: "Partecipa" },
-    { href: "/trasparenza", label: "Trasparenza" },
+    // rimosso: { href: "/trasparenza", label: "Trasparenza" },
     { href: "/contatti", label: "Contatti" },
   ];
 
@@ -28,7 +28,7 @@ export default function Footer() {
             <span>La Repubblica degli Italiani nel Mondo</span>
           </div>
           <p className="mt-3 text-slate-600 max-w-md">
-            Associazione politica indipendente. Partecipazione, trasparenza, futuro.
+            Associazione politica indipendente. Partecipazione, futuro.
           </p>
           <p className="mt-2 text-slate-600 text-sm">
             C.F. 00000000000 • Via dell’Esempio 1, 00000 Città (IT)
@@ -95,10 +95,13 @@ export default function Footer() {
             riservati
           </span>
           <div className="flex gap-4">
-            <Link href="/trasparenza" className="underline">
-              Trasparenza
-            </Link>
-            <a href="/docs/privacy.pdf" target="_blank" rel="noopener noreferrer" className="underline">
+            {/* rimosso link Trasparenza */}
+            <a
+              href="/docs/privacy.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
               Privacy
             </a>
             <Link href="#" className="underline">

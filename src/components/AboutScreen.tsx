@@ -210,8 +210,8 @@ export default function AboutScreen() {
         <h2 className="sr-only">I nostri valori</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <ValueGhost
-            title="Legalità e trasparenza"
-            text="Bilanci pubblici in formato aperto, pubblicazione contratti e conflitti d’interesse dichiarati."
+            title="Legalità e integrità"
+            text="Pubblicazione di contratti e dichiarazioni dei conflitti d’interesse."
             colorClass="from-indigo-600 to-indigo-400"
           />
           <ValueGhost
