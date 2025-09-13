@@ -805,6 +805,24 @@ export default function AboutScreen() {
         </div>
       </section>
 
+      {/*** ====== NEWS / NOTIZIE CTA ====== ***/}
+      <section className="py-16 bg-slate-50 border-y">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold">Rimani sempre aggiornato</h2>
+          <p className="mt-2 text-slate-600">
+            Leggi le ultime notizie, aggiornamenti e iniziative della nostra associazione.
+          </p>
+          <div className="mt-6">
+            <Link
+              href="/notizie"
+              className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Vai alle Notizie
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/*** === QUI FINISCONO I CONTENUTI "PROGRAMMA" === ***/}
 
       {/* STATUTO + MANIFESTO (PDF nello stesso tab) */}
@@ -837,137 +855,136 @@ export default function AboutScreen() {
       </section>
 
       {/*** ===== Titolo sopra sezione PARTECIPA ===== ***/}
-<section
-  id="partecipa"
-  className="scroll-mt-24 pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
->
-  <h2 className="text-3xl font-bold">Iscriviti e Sostienici</h2>
-</section>
+      <section
+        id="partecipa"
+        className="scroll-mt-24 pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+      >
+        <h2 className="text-3xl font-bold">Iscriviti e Sostienici</h2>
+      </section>
 
-{/*** ========== SEZIONE "PARTECIPA" ========== ***/}
-<section className="py-4 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-  <div className="grid md:grid-cols-2 gap-8 items-stretch">
-    {/* SINISTRA — ISCRIZIONE */}
-    <Card
-      id="iscrizione"
-      title="Iscrizione — Modulo di adesione"
-      className="scroll-mt-24 h-full flex flex-col"
-    >
-      <div className="flex-1">
-        <IscrizioneForm />
-        <p className="mt-3 text-xs text-slate-500">
-          Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
-          <a className="underline" href="mailto:info@cittafutura.it">
-            info@cittafutura.it
-          </a>.
-        </p>
-      </div>
+      {/*** ========== SEZIONE "PARTECIPA" ========== ***/}
+      <section className="py-4 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          {/* SINISTRA — ISCRIZIONE */}
+          <Card
+            id="iscrizione"
+            title="Iscrizione — Modulo di adesione"
+            className="scroll-mt-24 h-full flex flex-col"
+          >
+            <div className="flex-1">
+              <IscrizioneForm />
+              <p className="mt-3 text-xs text-slate-500">
+                Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
+                <a className="underline" href="mailto:info@cittafutura.it">
+                  info@cittafutura.it
+                </a>.
+              </p>
+            </div>
 
-      {/* BLOCCO PRIVACY */}
-      <div className="mt-6 pt-6 border-t">
-        <h4 className="font-semibold">Privacy</h4>
-        <p className="text-sm text-slate-700">
-          Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
-        </p>
-        <a
-          href="/docs/privacy.pdf"
-          className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-        >
-          Leggi l’informativa privacy
-        </a>
-      </div>
-    </Card>
+            {/* BLOCCO PRIVACY */}
+            <div className="mt-6 pt-6 border-t">
+              <h4 className="font-semibold">Privacy</h4>
+              <p className="text-sm text-slate-700">
+                Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
+              </p>
+              <a
+                href="/docs/privacy.pdf"
+                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+              >
+                Leggi l’informativa privacy
+              </a>
+            </div>
+          </Card>
 
-    {/* DESTRA — PAGAMENTO */}
-    <Card
-      id="pagamento"
-      title="Pagamento — Donazione / Quota annuale"
-      className="scroll-mt-24 h-full flex flex-col"
-    >
-      <div className="flex-1">
-        <h4 className="font-semibold">Dona online (coming soon)</h4>
-        <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-        <button
-          disabled
-          className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
-          title="In arrivo"
-        >
-          Dona ora — In arrivo
-        </button>
-        <p className="mt-2 text-xs text-slate-500">
-          Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.
-        </p>
+          {/* DESTRA — PAGAMENTO */}
+          <Card
+            id="pagamento"
+            title="Pagamento — Donazione / Quota annuale"
+            className="scroll-mt-24 h-full flex flex-col"
+          >
+            <div className="flex-1">
+              <h4 className="font-semibold">Dona online (coming soon)</h4>
+              <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
+              <button
+                disabled
+                className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
+                title="In arrivo"
+              >
+                Dona ora — In arrivo
+              </button>
+              <p className="mt-2 text-xs text-slate-500">
+                Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.
+              </p>
 
-        <div className="my-6 h-px bg-slate-200" />
+              <div className="my-6 h-px bg-slate-200" />
 
-        <h4 className="font-semibold">Bonifico bancario</h4>
-        <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
-        <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
-        <p className="mt-3 text-xs text-slate-500">
-          Per ricevuta fiscale scrivi a{" "}
-          <a className="underline" href="mailto:tesoreria@cittafutura.it">
-            tesoreria@cittafutura.it
-          </a>{" "}
-          indicando data e importo.
-        </p>
-      </div>
+              <h4 className="font-semibold">Bonifico bancario</h4>
+              <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
+              <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
+              <p className="mt-3 text-xs text-slate-500">
+                Per ricevuta fiscale scrivi a{" "}
+                <a className="underline" href="mailto:tesoreria@cittafutura.it">
+                  tesoreria@cittafutura.it
+                </a>{" "}
+                indicando data e importo.
+              </p>
+            </div>
 
-      <div className="mt-6 pt-6 border-t">
-        <h4 className="font-semibold">Trasparenza</h4>
-        <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
-        <Link
-          href="/trasparenza"
-          className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-        >
-          Vai alla sezione Trasparenza
-        </Link>
-      </div>
-    </Card>
-  </div>
-</section>
-{/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
-
+            <div className="mt-6 pt-6 border-t">
+              <h4 className="font-semibold">Trasparenza</h4>
+              <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
+              <Link
+                href="/trasparenza"
+                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+              >
+                Vai alla sezione Trasparenza
+              </Link>
+            </div>
+          </Card>
+        </div>
+      </section>
+      {/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
 
       {/*** ===== Titolo sopra sezione CONTATTI ===== ***/}
-<section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-  <h2 className="text-3xl font-bold">Siamo qui per ascoltarti</h2>
-</section>
+      <section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold">Siamo qui per ascoltarti</h2>
+      </section>
 
-{/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
-<section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-  <div className="grid md:grid-cols-2 gap-8 items-stretch">
-    {/* COLONNA SINISTRA */}
-    <div className="flex flex-col gap-8">
-      <Card title="Recapiti diretti">
-        <RecapitiTimeline />
-        <p className="mt-3 text-xs text-slate-500">Clicca sul canale per avviare il contatto.</p>
-      </Card>
+      {/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          {/* COLONNA SINISTRA */}
+          <div className="flex flex-col gap-8">
+            <Card title="Recapiti diretti">
+              <RecapitiTimeline />
+              <p className="mt-3 text-xs text-slate-500">Clicca sul canale per avviare il contatto.</p>
+            </Card>
 
-      <Card title="Seguici sui social">
-        <p className="text-slate-600">Resta aggiornato su iniziative, eventi e campagne.</p>
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <SocialBtn href="#" icon={<IconInstagram />} label="Instagram" />
-          <SocialBtn href="#" icon={<IconFacebook />} label="Facebook" />
-          <SocialBtn href="#" icon={<IconYouTube />} label="YouTube" />
-          <SocialBtn href="#" icon={<IconTelegram />} label="Telegram" />
+            <Card title="Seguici sui social">
+              <p className="text-slate-600">Resta aggiornato su iniziative, eventi e campagne.</p>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <SocialBtn href="#" icon={<IconInstagram />} label="Instagram" />
+                <SocialBtn href="#" icon={<IconFacebook />} label="Facebook" />
+                <SocialBtn href="#" icon={<IconYouTube />} label="YouTube" />
+                <SocialBtn href="#" icon={<IconTelegram />} label="Telegram" />
+              </div>
+            </Card>
+          </div>
+
+          {/* COLONNA DESTRA */}
+          <div className="flex flex-col gap-8">
+            <Card title="Dove siamo">
+              <ClickableMap address={ADDRESS} />
+              <div className="mt-3 text-slate-700">{ADDRESS}</div>
+              <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
+            </Card>
+
+            <Card title="La nostra sede">
+              <Slideshow images={SLIDES} />
+            </Card>
+          </div>
         </div>
-      </Card>
-    </div>
-
-    {/* COLONNA DESTRA */}
-    <div className="flex flex-col gap-8">
-      <Card title="Dove siamo">
-        <ClickableMap address={ADDRESS} />
-        <div className="mt-3 text-slate-700">{ADDRESS}</div>
-        <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
-      </Card>
-
-      <Card title="La nostra sede">
-        <Slideshow images={SLIDES} />
-      </Card>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* CTA FINALE */}
       <section className="py-16 bg-slate-50">
