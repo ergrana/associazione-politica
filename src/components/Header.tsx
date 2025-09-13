@@ -13,7 +13,7 @@ const nav = [
   { href: "/eventi", label: "Eventi" },
   { href: "/chi-siamo#partecipa", label: "Partecipa" }, // ← ora va alla sezione PARTECIPA in AboutScreen
   // { href: "/trasparenza", label: "Trasparenza" }, // se vorrai riattivarla
-  { href: "/contatti", label: "Contatti" },
+  { href: "/chi-siamo#contatti", label: "Contatti" }, // ← porta alla sezione Contatti in AboutScreen
 ];
 
 export default function Header() {
