@@ -837,9 +837,9 @@ export default function AboutScreen() {
       </section>
 
       {/*** ===== Titolo sopra sezione PARTECIPA ===== ***/}
-      <section className="pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center">iscriviti e sostienici</h2>
-      </section>
+<section className="pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <h2 className="text-3xl font-bold">Iscriviti e Sostienici</h2>
+</section>
 
       {/*** ========== SEZIONE "PARTECIPA" ========== ***/}
       <section id="partecipa" className="py-4 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -918,8 +918,8 @@ export default function AboutScreen() {
 
       {/*** ===== Titolo sopra sezione CONTATTI ===== ***/}
       <section className="pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center">siamo qui per ascoltarti</h2>
-      </section>
+  <h2 className="text-3xl font-bold">Siamo qui per ascoltarti</h2>
+</section>
 
       {/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
