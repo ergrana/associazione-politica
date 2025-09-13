@@ -329,7 +329,7 @@ export default function AboutScreen() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 items-center opacity-80">
           {["stampa1.jpg","stampa2.jpg","stampa3.jpg","stampa4.jpg","stampa5.jpg","stampa6.jpg"].map((f) => (
             <div key={f} className="flex items-center justify-center">
-              <Image src={`/images/logos/${f}`} alt={f} width={112} height={32} />
+              <Image src={`/images/logos/${f}`} alt={f} width={90} height={20} />
             </div>
           ))}
         </div>
