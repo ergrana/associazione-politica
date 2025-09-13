@@ -8,16 +8,16 @@ import type { Metadata } from "next";
 /* ------------------------------- STATIC ----------------------------------- */
 
 export async function generateStaticParams() {
-  // Nessun filtro per categoria: costruisce tutte le pagine delle notizie
+  // genera tutte le pagine (nessuna logica speciale su "Trasparenza")
   return POSTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
   const p = POSTS.find((x) => x.slug === slug);
   if (!p) return {};
 
@@ -35,7 +35,7 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: absoluteAsset(p.image), // assicura URL assoluto
+          url: absoluteAsset(p.image),
           width: 1200,
           height: 630,
           alt: p.title,
@@ -46,19 +46,19 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [absoluteAsset(p.image)], // assicura URL assoluto
+      images: [absoluteAsset(p.image)],
     },
   };
 }
 
 /* --------------------------------- PAGE ---------------------------------- */
 
-export default function PostPage({
+export default async function PostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
   const p = POSTS.find((x) => x.slug === slug);
   if (!p) return notFound();
 
@@ -103,7 +103,12 @@ export default function PostPage({
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
           <div className="absolute inset-x-0 bottom-0">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 pb-10">
-              {/* Niente badge/condizionali legati alla categoria */}
+              {/* NASCONDI il badge se la categoria è "Trasparenza" */}
+              {p.category && p.category !== "Trasparenza" && (
+                <span className="inline-flex items-center gap-2 text-xs font-semibold text-violet-700 bg-white rounded-full px-3 py-1">
+                  {p.category}
+                </span>
+              )}
               <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
                 {p.title}
               </h1>
