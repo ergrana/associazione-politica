@@ -311,6 +311,11 @@ export default function AboutScreen() {
             text="Diffusione della cultura imprenditoriale basata su conoscenza, responsabilità, comunicazione e apertura al cambiamento."
             colorClass="from-sky-600 to-sky-400"
           />
+          <ValueGhost
+            title="Valorizzazione delle attività giovanili"
+            text="Promuovere tra i giovani una cultura imprenditoriale fondata su conoscenza, responsabilità, collaborazione e apertura all’innovazione."
+            colorClass="from-sky-600 to-sky-400"
+          />
         </div>
       </section>
 
