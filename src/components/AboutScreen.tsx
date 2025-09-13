@@ -917,45 +917,45 @@ export default function AboutScreen() {
       {/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
 
       {/*** ===== Titolo sopra sezione CONTATTI ===== ***/}
-      <section className="pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+<section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
   <h2 className="text-3xl font-bold">Siamo qui per ascoltarti</h2>
 </section>
 
-      {/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-8 items-stretch">
-          {/* COLONNA SINISTRA */}
-          <div className="flex flex-col gap-8">
-            <Card title="Recapiti diretti">
-              <RecapitiTimeline />
-              <p className="mt-3 text-xs text-slate-500">Clicca sul canale per avviare il contatto.</p>
-            </Card>
+{/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
+<section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div className="grid md:grid-cols-2 gap-8 items-stretch">
+    {/* COLONNA SINISTRA */}
+    <div className="flex flex-col gap-8">
+      <Card title="Recapiti diretti">
+        <RecapitiTimeline />
+        <p className="mt-3 text-xs text-slate-500">Clicca sul canale per avviare il contatto.</p>
+      </Card>
 
-            <Card title="Seguici sui social">
-              <p className="text-slate-600">Resta aggiornato su iniziative, eventi e campagne.</p>
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <SocialBtn href="#" icon={<IconInstagram />} label="Instagram" />
-                <SocialBtn href="#" icon={<IconFacebook />} label="Facebook" />
-                <SocialBtn href="#" icon={<IconYouTube />} label="YouTube" />
-                <SocialBtn href="#" icon={<IconTelegram />} label="Telegram" />
-              </div>
-            </Card>
-          </div>
-
-          {/* COLONNA DESTRA */}
-          <div className="flex flex-col gap-8">
-            <Card title="Dove siamo">
-              <ClickableMap address={ADDRESS} />
-              <div className="mt-3 text-slate-700">{ADDRESS}</div>
-              <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
-            </Card>
-
-            <Card title="La nostra sede">
-              <Slideshow images={SLIDES} />
-            </Card>
-          </div>
+      <Card title="Seguici sui social">
+        <p className="text-slate-600">Resta aggiornato su iniziative, eventi e campagne.</p>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <SocialBtn href="#" icon={<IconInstagram />} label="Instagram" />
+          <SocialBtn href="#" icon={<IconFacebook />} label="Facebook" />
+          <SocialBtn href="#" icon={<IconYouTube />} label="YouTube" />
+          <SocialBtn href="#" icon={<IconTelegram />} label="Telegram" />
         </div>
-      </section>
+      </Card>
+    </div>
+
+    {/* COLONNA DESTRA */}
+    <div className="flex flex-col gap-8">
+      <Card title="Dove siamo">
+        <ClickableMap address={ADDRESS} />
+        <div className="mt-3 text-slate-700">{ADDRESS}</div>
+        <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
+      </Card>
+
+      <Card title="La nostra sede">
+        <Slideshow images={SLIDES} />
+      </Card>
+    </div>
+  </div>
+</section>
 
       {/* CTA FINALE */}
       <section className="py-16 bg-slate-50">
