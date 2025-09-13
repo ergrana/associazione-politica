@@ -837,84 +837,96 @@ export default function AboutScreen() {
       </section>
 
       {/*** ===== Titolo sopra sezione PARTECIPA ===== ***/}
-<section className="pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+<section
+  id="partecipa"
+  className="scroll-mt-24 pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+>
   <h2 className="text-3xl font-bold">Iscriviti e Sostienici</h2>
 </section>
 
-      {/*** ========== SEZIONE "PARTECIPA" ========== ***/}
-      <section id="partecipa" className="py-4 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-8 items-stretch">
-          {/* SINISTRA — ISCRIZIONE */}
-          <Card id="iscrizione" title="Iscrizione — Modulo di adesione" className="h-full flex flex-col">
-            <div className="flex-1">
-              <IscrizioneForm />
-              <p className="mt-3 text-xs text-slate-500">
-                Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
-                <a className="underline" href="mailto:info@cittafutura.it">
-                  info@cittafutura.it
-                </a>.
-              </p>
-            </div>
+{/*** ========== SEZIONE "PARTECIPA" ========== ***/}
+<section className="py-4 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <div className="grid md:grid-cols-2 gap-8 items-stretch">
+    {/* SINISTRA — ISCRIZIONE */}
+    <Card
+      id="iscrizione"
+      title="Iscrizione — Modulo di adesione"
+      className="scroll-mt-24 h-full flex flex-col"
+    >
+      <div className="flex-1">
+        <IscrizioneForm />
+        <p className="mt-3 text-xs text-slate-500">
+          Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
+          <a className="underline" href="mailto:info@cittafutura.it">
+            info@cittafutura.it
+          </a>.
+        </p>
+      </div>
 
-            {/* BLOCCO PRIVACY */}
-            <div className="mt-6 pt-6 border-t">
-              <h4 className="font-semibold">Privacy</h4>
-              <p className="text-sm text-slate-700">
-                Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
-              </p>
-              <a
-                href="/docs/privacy.pdf"
-                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              >
-                Leggi l’informativa privacy
-              </a>
-            </div>
-          </Card>
+      {/* BLOCCO PRIVACY */}
+      <div className="mt-6 pt-6 border-t">
+        <h4 className="font-semibold">Privacy</h4>
+        <p className="text-sm text-slate-700">
+          Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
+        </p>
+        <a
+          href="/docs/privacy.pdf"
+          className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+        >
+          Leggi l’informativa privacy
+        </a>
+      </div>
+    </Card>
 
-          {/* DESTRA — PAGAMENTO */}
-          <Card id="pagamento" title="Pagamento — Donazione / Quota annuale" className="h-full flex flex-col">
-            <div className="flex-1">
-              <h4 className="font-semibold">Dona online (coming soon)</h4>
-              <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-              <button
-                disabled
-                className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
-                title="In arrivo"
-              >
-                Dona ora — In arrivo
-              </button>
-              <p className="mt-2 text-xs text-slate-500">
-                Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.
-              </p>
+    {/* DESTRA — PAGAMENTO */}
+    <Card
+      id="pagamento"
+      title="Pagamento — Donazione / Quota annuale"
+      className="scroll-mt-24 h-full flex flex-col"
+    >
+      <div className="flex-1">
+        <h4 className="font-semibold">Dona online (coming soon)</h4>
+        <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
+        <button
+          disabled
+          className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
+          title="In arrivo"
+        >
+          Dona ora — In arrivo
+        </button>
+        <p className="mt-2 text-xs text-slate-500">
+          Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.
+        </p>
 
-              <div className="my-6 h-px bg-slate-200" />
+        <div className="my-6 h-px bg-slate-200" />
 
-              <h4 className="font-semibold">Bonifico bancario</h4>
-              <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
-              <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
-              <p className="mt-3 text-xs text-slate-500">
-                Per ricevuta fiscale scrivi a{" "}
-                <a className="underline" href="mailto:tesoreria@cittafutura.it">
-                  tesoreria@cittafutura.it
-                </a>{" "}
-                indicando data e importo.
-              </p>
-            </div>
+        <h4 className="font-semibold">Bonifico bancario</h4>
+        <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
+        <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
+        <p className="mt-3 text-xs text-slate-500">
+          Per ricevuta fiscale scrivi a{" "}
+          <a className="underline" href="mailto:tesoreria@cittafutura.it">
+            tesoreria@cittafutura.it
+          </a>{" "}
+          indicando data e importo.
+        </p>
+      </div>
 
-            <div className="mt-6 pt-6 border-t">
-              <h4 className="font-semibold">Trasparenza</h4>
-              <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
-              <Link
-                href="/trasparenza"
-                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              >
-                Vai alla sezione Trasparenza
-              </Link>
-            </div>
-          </Card>
-        </div>
-      </section>
-      {/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
+      <div className="mt-6 pt-6 border-t">
+        <h4 className="font-semibold">Trasparenza</h4>
+        <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
+        <Link
+          href="/trasparenza"
+          className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+        >
+          Vai alla sezione Trasparenza
+        </Link>
+      </div>
+    </Card>
+  </div>
+</section>
+{/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
+
 
       {/*** ===== Titolo sopra sezione CONTATTI ===== ***/}
 <section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
