@@ -789,12 +789,7 @@ export default function AboutScreen() {
             <Link
               href="#partecipa"
               className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
-            >
-              Partecipa ora
-            </Link>
-            <Link
-              href="/contatti"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 px-5 py-3 font-semibold hover:bg-white dark:hover:bg-slate-800"
+            
             >
               Contattaci
             </Link>
