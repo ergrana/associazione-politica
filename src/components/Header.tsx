@@ -8,11 +8,11 @@ import Image from "next/image";
 
 const nav = [
   { href: "/chi-siamo", label: "Chi siamo" },
-  { href: "/chi-siamo#assi", label: "Programma" }, // ← manda alla sezione "assi" in AboutScreen
+  { href: "/chi-siamo#assi", label: "Programma" }, // sezione "assi" in AboutScreen
   { href: "/notizie", label: "Notizie" },
   { href: "/eventi", label: "Eventi" },
-  { href: "/partecipa", label: "Partecipa" },
-  // rimosso: { href: "/trasparenza", label: "Trasparenza" },
+  { href: "/chi-siamo#partecipa", label: "Partecipa" }, // ← ora va alla sezione PARTECIPA in AboutScreen
+  // { href: "/trasparenza", label: "Trasparenza" }, // se vorrai riattivarla
   { href: "/contatti", label: "Contatti" },
 ];
 
@@ -90,13 +90,13 @@ export default function Header() {
         {/* Desktop CTA */}
         <div className="hidden sm:flex items-center gap-2">
           <Link
-            href="/partecipa"
+            href="/chi-siamo#partecipa" // ← Iscriviti manda alla sezione PARTECIPA nell'AboutScreen
             className="rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:bg-white dark:hover:bg-slate-800"
           >
             Iscriviti
           </Link>
           <Link
-            href="/partecipa"
+            href="/chi-siamo#pagamento" // ← Dona ora manda direttamente al blocco Pagamento
             className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
           >
             Dona ora
@@ -113,7 +113,7 @@ export default function Header() {
         </button>
       </nav>
 
-      {/* Overlay (solido, niente trasparenze problematiche) */}
+      {/* Overlay */}
       {open && (
         <button
           aria-label="Chiudi menu"
@@ -173,13 +173,13 @@ export default function Header() {
 
           <div className="mt-4 flex gap-2">
             <Link
-              href="/partecipa"
+              href="/chi-siamo#partecipa" // ← mobile Iscriviti
               className="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:bg-white dark:hover:bg-slate-800"
             >
               Iscriviti
             </Link>
             <Link
-              href="/partecipa"
+              href="/chi-siamo#pagamento" // ← mobile Dona ora
               className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
             >
               Dona ora
