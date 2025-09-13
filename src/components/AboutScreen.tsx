@@ -473,8 +473,8 @@ export default function AboutScreen() {
               a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese."
             />
             <FaqItem
-              q="Come rendicontate i risultati?"
-              a="Attraverso report e materiali pubblici (PDF e pagine informative) pubblicati periodicamente sul sito."
+              q="Chi partecipa all'associazione?"
+              a="Imprenditori, intellettuali e giovani interessati a crescere personalmente e professionalmente."
             />
             <FaqItem
               q="Collaborate con le comunità italiane all’estero?"
