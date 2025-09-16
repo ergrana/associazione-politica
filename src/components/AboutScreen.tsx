@@ -133,26 +133,22 @@ function Person({
   );
 }
 
-/** Sostituisce l’embed YouTube con un video locale da /public/images/about
- *  Fix: usa <source> con MIME type, minuscolo .mp4, fallback WebM e poster per evitare schermo nero.
- */
-function ResponsiveYouTube({ id: _id }: { id: string }) {
+/** Embed YouTube responsivo */
+function ResponsiveYouTube({ id }: { id: string }) {
   return (
     <div
       className="relative w-full overflow-hidden rounded-2xl"
       style={{ paddingTop: "56.25%" }}
     >
-      <video
+      <iframe
         className="absolute inset-0 h-full w-full"
-        controls
-        playsInline
-        preload="metadata"
-        poster="/images/about/video-associazione-poster.jpg"
-      >
-        <source src="/images/about/video-associazione.mp4" type="video/mp4" />
-        <source src="/images/about/video-associazione.webm" type="video/webm" />
-        Il tuo browser non supporta i video HTML5.
-      </video>
+        src={`https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`}
+        title="Video — La Repubblica degli Italiani nel Mondo"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        loading="lazy"
+      />
     </div>
   );
 }
@@ -614,8 +610,8 @@ export default function AboutScreen() {
             <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
           </div>
           <div>
-            {/* Ora riproduce il video locale con poster/fallback */}
-            <ResponsiveYouTube id="local-video" />
+            {/* YouTube embed */}
+            <ResponsiveYouTube id="NVYcFKesMIc" />
           </div>
         </div>
       </section>
@@ -677,7 +673,7 @@ export default function AboutScreen() {
                 alt="Incontro pubblico"
                 width={1600}
                 height={900}
-                className="w-full h-65 object-cover"
+                className="w-full h-64 object-cover"
               />
             </div>
           </div>
