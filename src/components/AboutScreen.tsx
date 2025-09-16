@@ -462,7 +462,7 @@ function SocialBtn({ href, icon, label }: { href: string; icon: React.ReactNode;
 function IconInstagram() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm6.5-.75a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0z" />
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 0-5-5V7a5 5 0 0 0 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm6.5-.75a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0z" />
     </svg>
   );
 }
@@ -825,7 +825,7 @@ export default function AboutScreen() {
 
       {/*** === QUI FINISCONO I CONTENUTI "PROGRAMMA" === ***/}
 
-      {/* STATUTO + MANIFESTO (apre pagina manifesto) */}
+      {/* STATUTO + MANIFESTO (ora Statuto apre la pagina /statuto) */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 items-stretch">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
@@ -833,7 +833,6 @@ export default function AboutScreen() {
             <p className="mt-2 text-slate-600 dark:text-slate-300">
               Una visione chiara e un percorso definito.
             </p>
-            {/* Modifica: ora apre la pagina /manifesto */}
             <Link
               href="/manifesto"
               className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
@@ -844,13 +843,14 @@ export default function AboutScreen() {
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
             <h3 className="text-2xl font-bold">Statuto e governance</h3>
-            <p className="mt-2 text-slate-600 dark:text-slate-300">Scarica il nostro Statuto.</p>
-            <a
-              href="/docs/statuto.pdf"
+            <p className="mt-2 text-slate-600 dark:text-slate-300">Consulta lo Statuto completo online.</p>
+            {/* Modifica: link alla pagina App Router /statuto */}
+            <Link
+              href="/statuto"
               className="mt-6 inline-flex rounded-xl border border-slate-200 dark:border-slate-700 px-5 py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800"
             >
-              Apri lo Statuto (PDF)
-            </a>
+              Apri lo Statuto
+            </Link>
           </div>
         </div>
       </section>
