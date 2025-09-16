@@ -133,19 +133,19 @@ function Person({
   );
 }
 
-function ResponsiveYouTube({ id }: { id: string }) {
+/** Sostituisce l’embed YouTube con un video locale da /public/images/about */
+function ResponsiveYouTube({ id: _id }: { id: string }) {
   return (
     <div
       className="relative w-full overflow-hidden rounded-2xl"
       style={{ paddingTop: "56.25%" }}
     >
-      <iframe
+      <video
         className="absolute inset-0 h-full w-full"
-        src={`https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`}
-        title="La nostra missione — Città Futura"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
+        src="/images/about/video-associazione.MP4"
+        controls
+        playsInline
+        preload="metadata"
       />
     </div>
   );
@@ -608,7 +608,8 @@ export default function AboutScreen() {
             <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
           </div>
           <div>
-            <ResponsiveYouTube id="dQw4w9WgXcQ" />
+            {/* Ora riproduce il video locale */}
+            <ResponsiveYouTube id="local-video" />
           </div>
         </div>
       </section>
@@ -844,7 +845,6 @@ export default function AboutScreen() {
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
             <h3 className="text-2xl font-bold">Statuto e governance</h3>
             <p className="mt-2 text-slate-600 dark:text-slate-300">Consulta lo Statuto completo online.</p>
-            {/* Modifica: link alla pagina App Router /statuto */}
             <Link
               href="/statuto"
               className="mt-6 inline-flex rounded-xl border border-slate-200 dark:border-slate-700 px-5 py-3 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800"
