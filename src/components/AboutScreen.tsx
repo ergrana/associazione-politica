@@ -133,7 +133,9 @@ function Person({
   );
 }
 
-/** Sostituisce l’embed YouTube con un video locale da /public/images/about */
+/** Sostituisce l’embed YouTube con un video locale da /public/images/about
+ *  Fix: usa <source> con MIME type, minuscolo .mp4, fallback WebM e poster per evitare schermo nero.
+ */
 function ResponsiveYouTube({ id: _id }: { id: string }) {
   return (
     <div
@@ -142,11 +144,15 @@ function ResponsiveYouTube({ id: _id }: { id: string }) {
     >
       <video
         className="absolute inset-0 h-full w-full"
-        src="/images/about/video-associazione.MP4"
         controls
         playsInline
         preload="metadata"
-      />
+        poster="/images/about/video-associazione-poster.jpg"
+      >
+        <source src="/images/about/video-associazione.mp4" type="video/mp4" />
+        <source src="/images/about/video-associazione.webm" type="video/webm" />
+        Il tuo browser non supporta i video HTML5.
+      </video>
     </div>
   );
 }
@@ -608,7 +614,7 @@ export default function AboutScreen() {
             <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
           </div>
           <div>
-            {/* Ora riproduce il video locale */}
+            {/* Ora riproduce il video locale con poster/fallback */}
             <ResponsiveYouTube id="local-video" />
           </div>
         </div>
