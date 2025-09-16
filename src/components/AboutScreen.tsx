@@ -825,7 +825,7 @@ export default function AboutScreen() {
 
       {/*** === QUI FINISCONO I CONTENUTI "PROGRAMMA" === ***/}
 
-      {/* STATUTO + MANIFESTO (PDF nello stesso tab) */}
+      {/* STATUTO + MANIFESTO (apre pagina manifesto) */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 items-stretch">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
@@ -833,12 +833,13 @@ export default function AboutScreen() {
             <p className="mt-2 text-slate-600 dark:text-slate-300">
               Una visione chiara e un percorso definito.
             </p>
-            <a
-              href="/docs/manifesto.pdf"
+            {/* Modifica: ora apre la pagina /manifesto */}
+            <Link
+              href="/manifesto"
               className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
             >
-              Apri il Manifesto (PDF)
-            </a>
+              Apri il Manifesto
+            </Link>
           </div>
 
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
