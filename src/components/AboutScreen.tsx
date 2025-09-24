@@ -553,39 +553,48 @@ function Slideshow({ images }: { images: string[] }) {
 export default function AboutScreen() {
   return (
     <main className="min-h-screen">
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <Image src="/images/hero.jpg" alt="" fill className="object-cover -z-10" />
-        {/* overlay scuro per testo leggibile */}
-        <div className="absolute inset-0 bg-black/50 -z-10" />
+      {/* HERO — bandiera CSS + logo centrato (no crop) */}
+      <section
+        className="relative min-h-[60vh] grid place-items-center overflow-hidden
+        bg-[linear-gradient(to_right,#009246_0_33.333%,#ffffff_33.333%_66.666%,#ce2b37_66.666%_100%)]"
+      >
+        <Image
+          src="/images/logo-rotondo.png" // <-- metti qui il PNG/SVG del logo rotondo con trasparenza
+          alt="La Repubblica degli Italiani nel Mondo"
+          width={720}
+          height={720}
+          priority
+          className="w-[min(80vw,560px)] h-auto drop-shadow-xl"
+        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-white">
-          <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
+        {/* Testo e CTA */}
+        <div className="absolute inset-x-0 bottom-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-900">
+          <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/70 px-3 py-1 rounded-full">
             La Repubblica degli Italiani nel Mondo • Chi Siamo
           </span>
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             La Repubblica degli Italiani nel Mondo
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/90">
+          <p className="mt-4 max-w-2xl mx-auto text-lg">
             Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              href="#partecipa" // link diretto alla sezione interna
-              className="inline-flex items-center justify-center rounded-xl bg-white text-slate-900 px-5 py-3 font-semibold hover:opacity-90"
+              href="#partecipa"
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
             >
               Iscriviti ora
             </Link>
             <Link
-              href="#pagamento" // link diretto al blocco pagamento
-              className="inline-flex items-center justify-center rounded-xl ring-2 ring-white/80 text-white px-5 py-3 font-semibold hover:bg-white/10"
+              href="#pagamento"
+              className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/80 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
             >
               Sostienici con una donazione
             </Link>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-6">
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-white">
             <Stat kpi="1.200+" label="aderenti" />
             <Stat kpi="85" label="volontari attivi" />
             <Stat kpi="27" label="progetti sul territorio" />
