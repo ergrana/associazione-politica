@@ -11,12 +11,7 @@ const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
 // Sede e immagini slideshow (sostituisci con le tue)
 const ADDRESS = "Viale Giuseppe Mazzini 73, 00195 Roma";
-const SLIDES = [
-  "/images/sede/1.jpg",
-  "/images/sede/2.jpg",
-  "/images/sede/3.jpg",
-  "/images/sede/4.jpg",
-];
+const SLIDES = ["/images/sede/1.jpg", "/images/sede/2.jpg", "/images/sede/3.jpg", "/images/sede/4.jpg"];
 
 /**
  * Config base (soluzione B): niente denominazione/sede qui.
@@ -41,20 +36,9 @@ const STATUTE_CONFIG = {
     "Segretario Generale.",
     "Revisore dei Conti.",
   ],
-  durata:
-    "Durata a tempo indeterminato salvo diversa deliberazione dell’Assemblea.",
-  bilancio:
-    "Bilancio annuale e rendicontazione pubblica, pubblicati in formato aperto.",
+  durata: "Durata a tempo indeterminato salvo diversa deliberazione dell’Assemblea.",
+  bilancio: "Bilancio annuale e rendicontazione pubblica, pubblicati in formato aperto.",
 };
-
-function Stat({ kpi, label }: { kpi: string; label: string }) {
-  return (
-    <div className="text-center">
-      <div className="text-3xl sm:text-4xl font-extrabold">{kpi}</div>
-      <div className="mt-1 text-sm text-white">{label}</div>
-    </div>
-  );
-}
 
 /** Variante “ghost” con linea colorata a sinistra (niente riquadro) */
 function ValueGhost({
@@ -73,9 +57,7 @@ function ValueGhost({
         className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`}
       />
       <h3 className="font-semibold text-lg">{title}</h3>
-      <p className="mt-2 text-slate-600 dark:text-slate-300 leading-relaxed">
-        {text}
-      </p>
+      <p className="mt-2 text-slate-600 dark:text-slate-300 leading-relaxed">{text}</p>
       <span className="absolute right-4 top-4 text-slate-300 dark:text-slate-500 transition-transform group-hover:translate-x-0.5">
         →
       </span>
@@ -83,21 +65,11 @@ function ValueGhost({
   );
 }
 
-function Step({
-  year,
-  title,
-  text,
-}: {
-  year: string;
-  title: string;
-  text: string;
-}) {
+function Step({ year, title, text }: { year: string; title: string; text: string }) {
   return (
     <div className="relative pl-8">
       <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-indigo-600" />
-      <div className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-        {year}
-      </div>
+      <div className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">{year}</div>
       <div className="mt-1 font-semibold">{title}</div>
       <p className="mt-1 text-slate-600 dark:text-slate-300">{text}</p>
     </div>
@@ -105,25 +77,11 @@ function Step({
 }
 
 /** Foto più grandi, senza bio */
-function Person({
-  name,
-  role,
-  img,
-}: {
-  name: string;
-  role: string;
-  img: string;
-}) {
+function Person({ name, role, img }: { name: string; role: string; img: string }) {
   return (
     <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-sm text-center">
       <div className="mx-auto h-40 w-40 overflow-hidden rounded-2xl">
-        <Image
-          src={img}
-          alt={name}
-          width={160}
-          height={160}
-          className="h-40 w-40 object-cover"
-        />
+        <Image src={img} alt={name} width={160} height={160} className="h-40 w-40 object-cover" />
       </div>
       <div className="mt-4">
         <div className="font-semibold">{name}</div>
@@ -136,10 +94,7 @@ function Person({
 /** Embed YouTube responsivo */
 function ResponsiveYouTube({ id }: { id: string }) {
   return (
-    <div
-      className="relative w-full overflow-hidden rounded-2xl"
-      style={{ paddingTop: "56.25%" }}
-    >
+    <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingTop: "56.25%" }}>
       <iframe
         className="absolute inset-0 h-full w-full"
         src={`https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`}
@@ -154,13 +109,7 @@ function ResponsiveYouTube({ id }: { id: string }) {
 }
 
 /* ====== CONTENUTI "PROGRAMMA" spostati qui ====== */
-
-type Pillar = {
-  title: string;
-  desc: string;
-  points: string[];
-  icon?: string;
-};
+type Pillar = { title: string; desc: string; points: string[]; icon?: string };
 
 const pillars: Pillar[] = [
   {
@@ -210,15 +159,7 @@ const pillars: Pillar[] = [
 ];
 
 /* Componenti rinominati per evitare collisioni */
-function RoadmapStep({
-  when,
-  title,
-  text,
-}: {
-  when: string;
-  title: string;
-  text: string;
-}) {
+function RoadmapStep({ when, title, text }: { when: string; title: string; text: string }) {
   return (
     <div className="relative pl-8">
       <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-indigo-600" />
@@ -239,7 +180,6 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 /* ============================== UI BASICS PER PARTECIPA / CONTATTI ============================== */
-
 function Card({
   title,
   children,
@@ -259,29 +199,13 @@ function Card({
   );
 }
 
-function Input({
-  name,
-  label,
-  type = "text",
-  required = false,
-}: {
-  name: string;
-  label: string;
-  type?: string;
-  required?: boolean;
-}) {
+function Input({ name, label, type = "text", required = false }: { name: string; label: string; type?: string; required?: boolean }) {
   return (
     <label className="text-sm">
       <span className="block text-slate-700 mb-1">
         {label} {required ? <span className="text-rose-600" aria-hidden>*</span> : null}
       </span>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="w-full rounded-xl border px-4 py-2.5"
-        aria-required={required}
-      />
+      <input name={name} type={type} required={required} className="w-full rounded-xl border px-4 py-2.5" aria-required={required} />
     </label>
   );
 }
@@ -334,7 +258,6 @@ function IscrizioneForm() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
-    // Validazione minima
     if (!data.nome || !data.cognome || !data.email || !data.comune || !data.consent) {
       alert("Compila i campi obbligatori e accetta la privacy.");
       return;
@@ -345,7 +268,7 @@ function IscrizioneForm() {
       const res = await fetch(FORMCARRY_URL, {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: new FormData(form), // non impostare Content-Type: lo fa il browser
+        body: new FormData(form),
       });
 
       if (res.ok) {
@@ -377,15 +300,12 @@ function IscrizioneForm() {
         <option>51+</option>
       </Select>
 
-      {/* Honeypot antispam (nascosto via CSS) */}
+      {/* Honeypot antispam */}
       <label className="hidden">
         Non compilare questo campo: <input name="_gotcha" tabIndex={-1} autoComplete="off" />
       </label>
 
-      {/* Opzionale: soggetto personalizzato (se supportato) */}
       <input type="hidden" name="_subject" value="Nuova iscrizione dal sito" />
-      {/* Opzionale: pagina di redirect dopo invio (se preferisci) */}
-      {/* <input type="hidden" name="_redirect" value="https://tuodominio.it/grazie" /> */}
 
       <label className="md:col-span-2 text-sm text-slate-600">
         <input type="checkbox" name="consent" className="mr-2" /> Ho letto e accetto l’informativa privacy *
@@ -419,7 +339,6 @@ function IscrizioneForm() {
 }
 
 /* ============================== SOCIAL / RECAPITI / MAPPA / SLIDESHOW ============================== */
-
 function RecapitiTimeline() {
   return (
     <ol className="relative">
@@ -513,14 +432,7 @@ function Slideshow({ images }: { images: string[] }) {
   const next = () => setI((p) => (p === images.length - 1 ? 0 : p + 1));
   return (
     <div className="relative rounded-xl overflow-hidden">
-      <Image
-        src={images[i]}
-        alt={`Foto sede ${i + 1}`}
-        width={1200}
-        height={700}
-        className="w-full h-64 object-cover"
-        priority={i === 0}
-      />
+      <Image src={images[i]} alt={`Foto sede ${i + 1}`} width={1200} height={700} className="w-full h-64 object-cover" priority={i === 0} />
       <button
         onClick={prev}
         className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-1 text-sm font-semibold hover:bg-white"
@@ -537,11 +449,7 @@ function Slideshow({ images }: { images: string[] }) {
       </button>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
         {images.map((_, idx) => (
-          <span
-            key={idx}
-            className={`h-1.5 w-4 rounded-full ${i === idx ? "bg-white" : "bg-white/50"}`}
-            aria-hidden
-          />
+          <span key={idx} className={`h-1.5 w-4 rounded-full ${i === idx ? "bg-white" : "bg-white/50"}`} aria-hidden />
         ))}
       </div>
     </div>
@@ -549,32 +457,34 @@ function Slideshow({ images }: { images: string[] }) {
 }
 
 /* ============================================= */
-
 export default function AboutScreen() {
   return (
     <main className="min-h-screen">
-      {/* HERO — bandiera CSS + logo centrato (no crop) */}
+      {/* HERO — bandiera CSS + logo centrato, con offset verticali (senza KPI) */}
       <section
-        className="relative min-h-[60vh] grid place-items-center overflow-hidden
+        className="relative min-h-[62vh] flex flex-col items-center justify-center overflow-hidden
         bg-[linear-gradient(to_right,#009246_0_33.333%,#ffffff_33.333%_66.666%,#ce2b37_66.666%_100%)]"
       >
+        {/* Logo leggermente più in alto */}
         <Image
-          src="/images/logo-rotondo.png" // <-- metti qui il PNG/SVG del logo rotondo con trasparenza
+          src="/images/logo-rotondo.png"
           alt="La Repubblica degli Italiani nel Mondo"
           width={720}
           height={720}
           priority
-          className="w-[min(80vw,560px)] h-auto drop-shadow-xl"
+          className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-6 sm:-translate-y-10"
         />
 
-        {/* Testo e CTA */}
-        <div className="absolute inset-x-0 bottom-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-900">
+        {/* Testo e CTA leggermente più in basso */}
+        <div className="mt-4 sm:mt-6 translate-y-4 sm:translate-y-6 text-center text-slate-900 px-4">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/70 px-3 py-1 rounded-full">
             La Repubblica degli Italiani nel Mondo • Chi Siamo
           </span>
+
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             La Repubblica degli Italiani nel Mondo
           </h1>
+
           <p className="mt-4 max-w-2xl mx-auto text-lg">
             Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
           </p>
@@ -593,13 +503,6 @@ export default function AboutScreen() {
               Sostienici con una donazione
             </Link>
           </div>
-
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-white">
-            <Stat kpi="1.200+" label="aderenti" />
-            <Stat kpi="85" label="volontari attivi" />
-            <Stat kpi="27" label="progetti sul territorio" />
-            <Stat kpi="€120k" label="fondi rendicontati 2024" />
-          </div>
         </div>
       </section>
 
@@ -608,9 +511,7 @@ export default function AboutScreen() {
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <div>
             <h2 className="text-3xl font-bold">La nostra missione</h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">
-              {STATUTE_CONFIG.scopi[0]}
-            </p>
+            <p className="mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">{STATUTE_CONFIG.scopi[0]}</p>
             <ul className="mt-4 list-disc pl-5 text-slate-600 dark:text-slate-300 space-y-2">
               {STATUTE_CONFIG.scopi.slice(1).map((s) => (
                 <li key={s}>{s}</li>
@@ -619,7 +520,6 @@ export default function AboutScreen() {
             <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
           </div>
           <div>
-            {/* YouTube embed */}
             <ResponsiveYouTube id="NVYcFKesMIc" />
           </div>
         </div>
@@ -655,12 +555,10 @@ export default function AboutScreen() {
       {/* PRESS */}
       <section className="py-10 bg-slate-50 dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-medium text-slate-500 dark:text-slate-400">
-            Hanno parlato di noi
-          </p>
+          <p className="text-center text-xs font-medium text-slate-500 dark:text-slate-400">Hanno parlato di noi</p>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 items-center opacity-80">
-          {["stampa1.jpg","stampa2.jpg","stampa3.jpg","stampa4.jpg","stampa5.jpg","stampa6.jpg"].map((f) => (
+          {["stampa1.jpg", "stampa2.jpg", "stampa3.jpg", "stampa4.jpg", "stampa5.jpg", "stampa6.jpg"].map((f) => (
             <div key={f} className="flex items-center justify-center">
               <Image src={`/images/logos/${f}`} alt={f} width={90} height={20} />
             </div>
@@ -673,17 +571,9 @@ export default function AboutScreen() {
         <div className="grid lg:grid-cols-3 gap-10">
           <div>
             <h2 className="text-3xl font-bold">La nostra storia</h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              Ripercorri le tappe principali del nostro percorso.
-            </p>
+            <p className="mt-3 text-slate-600 dark:text-slate-300">Ripercorri le tappe principali del nostro percorso.</p>
             <div className="mt-6 rounded-2xl overflow-hidden">
-              <Image
-                src="/images/about/timeline.jpg"
-                alt="Incontro pubblico"
-                width={1600}
-                height={900}
-                className="w-full h-64 object-cover"
-              />
+              <Image src="/images/about/timeline.jpg" alt="Incontro pubblico" width={1600} height={900} className="w-full h-64 object-cover" />
             </div>
           </div>
           <div className="lg:col-span-2 relative">
@@ -704,14 +594,9 @@ export default function AboutScreen() {
           <div className="flex items-end justify-between">
             <div>
               <h2 className="text-3xl font-bold">Leadership e volti</h2>
-              <p className="mt-2 text-slate-600 dark:text-slate-300">
-                Conosci le persone che gestiscono l&apos;associazione.
-              </p>
+              <p className="mt-2 text-slate-600 dark:text-slate-300">Conosci le persone che gestiscono l&apos;associazione.</p>
             </div>
-            <Link
-              href="/contatti"
-              className="hidden sm:inline-flex rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-white dark:hover:bg-slate-800"
-            >
+            <Link href="/contatti" className="hidden sm:inline-flex rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-white dark:hover:bg-slate-800">
               Contattaci
             </Link>
           </div>
@@ -726,14 +611,11 @@ export default function AboutScreen() {
       </section>
 
       {/*** === QUI INIZIANO I CONTENUTI "PROGRAMMA" === ***/}
-
       {/* ASSI STRATEGICI */}
       <section id="assi" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <header className="mb-10">
           <h2 className="text-3xl font-bold">Gli assi strategici</h2>
-          <p className="mt-3 text-slate-600">
-            Quattro priorità tratte dallo statuto. Ogni asse ha obiettivi, azioni e indicatori.
-          </p>
+          <p className="mt-3 text-slate-600">Quattro priorità tratte dallo statuto. Ogni asse ha obiettivi, azioni e indicatori.</p>
         </header>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -764,13 +646,7 @@ export default function AboutScreen() {
               Le prossime tappe per rafforzare i legami con la diaspora, promuovere cultura e diritti e diffondere una cultura d’impresa aperta all’innovazione.
             </p>
             <div className="mt-6 rounded-2xl overflow-hidden">
-              <Image
-                src="/images/program/roadmap.jpg"
-                alt="Roadmap delle attività"
-                width={1600}
-                height={900}
-                className="w-full h-64 object-cover"
-              />
+              <Image src="/images/program/roadmap.jpg" alt="Roadmap delle attività" width={1600} height={900} className="w-full h-64 object-cover" />
             </div>
           </div>
 
@@ -791,28 +667,14 @@ export default function AboutScreen() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-10">
             <h2 className="text-3xl font-bold">Domande frequenti</h2>
-            <p className="mt-3 text-slate-600">
-              Risposte rapide su attività e volontariato.
-            </p>
+            <p className="mt-3 text-slate-600">Risposte rapide su attività e volontariato.</p>
           </header>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <FaqItem
-              q="Come posso partecipare alle attività?"
-              a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa."
-            />
-            <FaqItem
-              q="Che tipo di iniziative editoriali realizzate?"
-              a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese."
-            />
-            <FaqItem
-              q="Chi partecipa all'associazione?"
-              a="Imprenditori, intellettuali e giovani interessati a crescere personalmente e professionalmente."
-            />
-            <FaqItem
-              q="Collaborate con le comunità italiane all’estero?"
-              a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora per rafforzare i legami con l’Italia."
-            />
+            <FaqItem q="Come posso partecipare alle attività?" a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa." />
+            <FaqItem q="Che tipo di iniziative editoriali realizzate?" a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese." />
+            <FaqItem q="Chi partecipa all'associazione?" a="Imprenditori, intellettuali e giovani interessati a crescere personalmente e professionalmente." />
+            <FaqItem q="Collaborate con le comunità italiane all’estero?" a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora per rafforzare i legami con l’Italia." />
           </div>
         </div>
       </section>
@@ -821,34 +683,22 @@ export default function AboutScreen() {
       <section className="py-16 bg-slate-50 border-y">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Rimani sempre aggiornato</h2>
-          <p className="mt-2 text-slate-600">
-            Leggi le ultime notizie, aggiornamenti e iniziative della nostra associazione.
-          </p>
+          <p className="mt-2 text-slate-600">Leggi le ultime notizie, aggiornamenti e iniziative della nostra associazione.</p>
           <div className="mt-6">
-            <Link
-              href="/notizie"
-              className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
-            >
+            <Link href="/notizie" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
               Vai alle Notizie
             </Link>
           </div>
         </div>
       </section>
 
-      {/*** === QUI FINISCONO I CONTENUTI "PROGRAMMA" === ***/}
-
-      {/* STATUTO + MANIFESTO (ora Statuto apre la pagina /statuto) */}
+      {/* STATUTO + MANIFESTO */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 items-stretch">
           <div className="rounded-2xl border border-slate-200 dark:border-slate-700 p-8 bg-white dark:bg-slate-900 shadow-sm">
             <h3 className="text-2xl font-bold">Il nostro Manifesto</h3>
-            <p className="mt-2 text-slate-600 dark:text-slate-300">
-              Una visione chiara e un percorso definito.
-            </p>
-            <Link
-              href="/manifesto"
-              className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
-            >
+            <p className="mt-2 text-slate-600 dark:text-slate-300">Una visione chiara e un percorso definito.</p>
+            <Link href="/manifesto" className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
               Apri il Manifesto
             </Link>
           </div>
@@ -866,67 +716,45 @@ export default function AboutScreen() {
         </div>
       </section>
 
-      {/*** ===== Titolo sopra sezione PARTECIPA ===== ***/}
-      <section
-        id="partecipa"
-        className="scroll-mt-24 pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
-      >
+      {/* PARTECIPA */}
+      <section id="partecipa" className="scroll-mt-24 pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold">Iscriviti e Sostienici</h2>
       </section>
 
-      {/*** ========== SEZIONE "PARTECIPA" ========== ***/}
       <section className="py-4 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {/* SINISTRA — ISCRIZIONE */}
-          <Card
-            id="iscrizione"
-            title="Iscrizione — Modulo di adesione"
-            className="scroll-mt-24 h-full flex flex-col"
-          >
+          <Card id="iscrizione" title="Iscrizione — Modulo di adesione" className="scroll-mt-24 h-full flex flex-col">
             <div className="flex-1">
               <IscrizioneForm />
               <p className="mt-3 text-xs text-slate-500">
                 Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
                 <a className="underline" href="mailto:info@cittafutura.it">
                   info@cittafutura.it
-                </a>.
+                </a>
+                .
               </p>
             </div>
 
             {/* BLOCCO PRIVACY */}
             <div className="mt-6 pt-6 border-t">
               <h4 className="font-semibold">Privacy</h4>
-              <p className="text-sm text-slate-700">
-                Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
-              </p>
-              <a
-                href="/docs/privacy.pdf"
-                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              >
+              <p className="text-sm text-slate-700">Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).</p>
+              <a href="/docs/privacy.pdf" className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
                 Leggi l’informativa privacy
               </a>
             </div>
           </Card>
 
           {/* DESTRA — PAGAMENTO */}
-          <Card
-            id="pagamento"
-            title="Pagamento — Donazione / Quota annuale"
-            className="scroll-mt-24 h-full flex flex-col"
-          >
+          <Card id="pagamento" title="Pagamento — Donazione / Quota annuale" className="scroll-mt-24 h-full flex flex-col">
             <div className="flex-1">
               <h4 className="font-semibold">Dona online (coming soon)</h4>
               <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-              <button
-                disabled
-                className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
-                title="In arrivo"
-              >
+              <button disabled className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed" title="In arrivo">
                 Dona ora — In arrivo
               </button>
-              <p className="mt-2 text-xs text-slate-500">
-                Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.
-              </p>
+              <p className="mt-2 text-xs text-slate-500">Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.</p>
 
               <div className="my-6 h-px bg-slate-200" />
 
@@ -945,24 +773,20 @@ export default function AboutScreen() {
             <div className="mt-6 pt-6 border-t">
               <h4 className="font-semibold">Trasparenza</h4>
               <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
-              <Link
-                href="/trasparenza"
-                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              >
+              <Link href="/trasparenza" className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
                 Vai alla sezione Trasparenza
               </Link>
             </div>
           </Card>
         </div>
       </section>
-      {/*** ========== FINE SEZIONE "PARTECIPA" ========== ***/}
 
-      {/*** ===== Titolo sopra sezione CONTATTI ===== ***/}
+      {/* CONTATTI */}
       <section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold">Siamo qui per ascoltarti</h2>
       </section>
 
-      {/* GRID 2×2: sx (Recapiti + Social), dx (Mappa + Sede) */}
+      {/* GRID 2×2 */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {/* COLONNA SINISTRA */}
@@ -1002,15 +826,9 @@ export default function AboutScreen() {
       <section className="py-16 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Preferisci parlarne di persona?</h2>
-          <p className="mt-2 text-slate-600">
-            Vieni alla prossima assemblea aperta o scrivici per fissare un incontro.
-          </p>
+          <p className="mt-2 text-slate-600">Vieni alla prossima assemblea aperta o scrivici per fissare un incontro.</p>
           <div className="mt-6 flex justify-center gap-3">
-            <Link
-              href="/eventi"
-              aria-label="Vai alla pagina Eventi"
-              className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
-            >
+            <Link href="/eventi" aria-label="Vai alla pagina Eventi" className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
               Vedi Eventi
             </Link>
             <a
