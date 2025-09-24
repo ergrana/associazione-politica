@@ -460,51 +460,49 @@ function Slideshow({ images }: { images: string[] }) {
 export default function AboutScreen() {
   return (
     <main className="min-h-screen">
-      {/* HERO — bandiera CSS + logo centrato, con offset verticali (senza KPI) */}
-      <section
-        className="relative min-h-[62vh] flex flex-col items-center justify-center overflow-hidden
-        bg-[linear-gradient(to_right,#009246_0_33.333%,#ffffff_33.333%_66.666%,#ce2b37_66.666%_100%)]"
+      {/* HERO — bandiera CSS + logo centrato, H1/CTA più in alto e senza breadcrumb */}
+<section
+  className="relative min-h-[68vh] flex flex-col items-center justify-center overflow-hidden
+  bg-[linear-gradient(to_right,#009246_0_33.333%,#ffffff_33.333%_66.666%,#ce2b37_66.666%_100%)] pb-8"
+>
+  {/* Logo leggermente più in alto */}
+  <Image
+    src="/images/logo-rotondo.png"
+    alt="La Repubblica degli Italiani nel Mondo"
+    width={720}
+    height={720}
+    priority
+    className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-8 sm:-translate-y-12"
+  />
+
+  {/* Testo e CTA spostati verso l'alto */}
+  <div className="mt-2 sm:mt-3 -translate-y-2 sm:-translate-y-4 text-center text-slate-900 px-4">
+    {/* breadcrumb rimosso */}
+
+    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+      La Repubblica degli Italiani nel Mondo
+    </h1>
+
+    <p className="mt-3 max-w-2xl mx-auto text-lg">
+      Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
+    </p>
+
+    <div className="mt-5 flex flex-wrap justify-center gap-3">
+      <Link
+        href="#partecipa"
+        className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
       >
-        {/* Logo leggermente più in alto */}
-        <Image
-          src="/images/logo-rotondo.png"
-          alt="La Repubblica degli Italiani nel Mondo"
-          width={720}
-          height={720}
-          priority
-          className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-6 sm:-translate-y-10"
-        />
-
-        {/* Testo e CTA leggermente più in basso */}
-        <div className="mt-4 sm:mt-6 translate-y-4 sm:translate-y-6 text-center text-slate-900 px-4">
-          <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/70 px-3 py-1 rounded-full">
-            La Repubblica degli Italiani nel Mondo • Chi Siamo
-          </span>
-
-          <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
-            La Repubblica degli Italiani nel Mondo
-          </h1>
-
-          <p className="mt-4 max-w-2xl mx-auto text-lg">
-            Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
-          </p>
-
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="#partecipa"
-              className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
-            >
-              Iscriviti ora
-            </Link>
-            <Link
-              href="#pagamento"
-              className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/80 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
-            >
-              Sostienici con una donazione
-            </Link>
-          </div>
-        </div>
-      </section>
+        Iscriviti ora
+      </Link>
+      <Link
+        href="#pagamento"
+        className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/80 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
+      >
+        Sostienici con una donazione
+      </Link>
+    </div>
+  </div>
+</section>
 
       {/* MISSIONE + VIDEO */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
