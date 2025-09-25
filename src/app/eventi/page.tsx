@@ -105,7 +105,7 @@ export default function EventiPage() {
                 aria-controls="calendar-dropdown"
                 title="Filtra per data"
               >
-                <span aria-hidden>📅</span> Calendario
+                <span aria-hidden={true}>📅</span> Calendario
               </button>
 
               {selectedDay && (
@@ -353,7 +353,7 @@ function dayKey(d: Date) {
   return `${y}-${m}-${da}`;
 }
 function groupEventsByDay(events: typeof EVENTS) {
-  const map = new Map<string, typeof EVENTS>();
+  const map = new Map<string, (typeof EVENTS)[number][]>();
   for (const e of events) {
     const key = dayKey(new Date(e.date));
     const arr = map.get(key) || [];

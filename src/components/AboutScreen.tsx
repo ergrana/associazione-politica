@@ -3,7 +3,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { EVENTS, POSTS } from "@/lib/content";
 
 /** ============================== CONFIG ============================== */
 // Inserisci qui il tuo endpoint Formcarry (solo l'ID finale o l'intera URL)
@@ -456,11 +457,45 @@ function Slideshow({ images }: { images: string[] }) {
   );
 }
 
+/* ===== Helpers (date/format) ===== */
+function startOfDay(d: Date) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
+function fmtShortDate(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString("it-IT", { year: "numeric", month: "short", day: "2-digit" });
+}
+function fmtBadgeDate(iso: string, end?: string) {
+  const s = new Date(iso);
+  const e = end ? new Date(end) : undefined;
+  const day = s.toLocaleDateString("it-IT", { day: "2-digit" });
+  const mon = s.toLocaleDateString("it-IT", { month: "short" });
+  if (!e) return `${day} ${mon}`;
+  const same = s.toDateString() === e.toDateString();
+  const day2 = e.toLocaleDateString("it-IT", { day: "2-digit" });
+  const mon2 = e.toLocaleDateString("it-IT", { month: "short" });
+  return same ? `${day} ${mon}` : `${day} ${mon} → ${day2} ${mon2}`;
+}
+
 /* ============================================= */
 export default function AboutScreen() {
+  /** Prossimo evento utile (>= oggi) */
+  const nextEvent = useMemo(() => {
+    const now = startOfDay(new Date());
+    const upcoming = EVENTS.filter((e) => new Date(e.date) >= now).sort((a, b) => +new Date(a.date) - +new Date(b.date));
+    return upcoming[0] ?? null;
+  }, []);
+
+  /** Top news (ultimi 10 post) */
+  const topPosts = useMemo(() => {
+    return [...POSTS].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10);
+  }, []);
+
   return (
     <main className="min-h-screen">
-      {/* HERO — bandiera CSS + logo centrato, H1/CTA più in alto e senza breadcrumb */}
+      {/* HERO — bandiera CSS + logo centrato, testo vicino al logo */}
       <section
         className="relative min-h-[68vh] flex flex-col items-center justify-center overflow-hidden
   bg-[linear-gradient(to_right,#009246_0_33.333%,#ffffff_33.333%_66.666%,#ce2b37_66.666%_100%)] pb-8"
@@ -475,19 +510,13 @@ export default function AboutScreen() {
           className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-8 sm:-translate-y-12"
         />
 
-        {/* Testo e CTA spostati verso l'alto */}
-        <div className="mt-2 sm:mt-3 -translate-y-2 sm:-translate-y-4 text-center text-slate-900 px-4">
-          {/* breadcrumb rimosso */}
-
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-            La Repubblica degli Italiani nel Mondo
-          </h1>
-
-          <p className="mt-3 max-w-2xl mx-auto text-lg">
+        {/* Wrapper testo/CTA senza margin-top; traslato un filo più su */}
+        <div className="-translate-y-3 sm:-translate-y-5 text-center text-slate-900 px-4">
+          <p className="mt-0 max-w-2xl mx-auto text-lg">
             Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
           </p>
 
-          <div className="mt-5 flex flex-wrap justify-center gap-3">
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Link
               href="#partecipa"
               className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
@@ -509,14 +538,27 @@ export default function AboutScreen() {
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <div>
             <h2 className="text-3xl font-bold">La nostra missione</h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">{STATUTE_CONFIG.scopi[0]}</p>
-            <ul className="mt-4 list-disc pl-5 text-slate-600 dark:text-slate-300 space-y-2">
-              {STATUTE_CONFIG.scopi.slice(1).map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-            <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
+
+            {/* Testo missione estrapolato dall'immagine, in tre paragrafi */}
+            <div className="mt-3 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p>
+                La Repubblica degli Italiani nel Mondo nasce per unire tutti coloro che, fino ad oggi
+                spettatori di una crescente crisi internazionale, comprendono sia giunto il momento di
+                partecipare alla sfida del cambiamento.
+              </p>
+              <p>
+                L’obiettivo fondamentale dell’Associazione è quello di riunire le teste pensanti del nostro
+                Paese, in Italia e all’Estero, fino ad oggi distanti da una diretta partecipazione alla vita
+                pubblica, per costruire un percorso capace di coniugare presente e futuro per restituire fiducia
+                e speranza alle nuove generazioni.
+              </p>
+              <p>
+                La Repubblica degli Italiani nel Mondo vuole essere uno strumento aggregativo, partecipativo,
+                un luogo di sintesi delle idee e delle iniziative che ognuno di voi vorrà proporre.
+              </p>
+            </div>
           </div>
+
           <div>
             {/* Sostituito con l'ID del link richiesto: https://youtu.be/7qmZoXRg_QY */}
             <ResponsiveYouTube id="7qmZoXRg_QY" />
@@ -614,7 +656,6 @@ export default function AboutScreen() {
       <section id="assi" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <header className="mb-10">
           <h2 className="text-3xl font-bold">Gli assi strategici</h2>
-          <p className="mt-3 text-slate-600">Quattro priorità tratte dallo statuto. Ogni asse ha obiettivi, azioni e indicatori.</p>
         </header>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -678,18 +719,8 @@ export default function AboutScreen() {
         </div>
       </section>
 
-      {/*** ====== NEWS / NOTIZIE CTA ====== ***/}
-      <section className="py-16 bg-slate-50 border-y">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold">Rimani sempre aggiornato</h2>
-          <p className="mt-2 text-slate-600">Leggi le ultime notizie, aggiornamenti e iniziative della nostra associazione.</p>
-          <div className="mt-6">
-            <Link href="/notizie" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
-              Vai alle Notizie
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* NOTIZIE — Carosello */}
+      <NewsCarouselSection posts={topPosts} />
 
       {/* STATUTO + MANIFESTO */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -714,6 +745,9 @@ export default function AboutScreen() {
           </div>
         </div>
       </section>
+
+      {/* PROSSIMI EVENTI (tra Statuto/Manifesto e Iscriviti) */}
+      <NextEventSection event={nextEvent} />
 
       {/* PARTECIPA */}
       <section id="partecipa" className="scroll-mt-24 pt-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -839,5 +873,259 @@ export default function AboutScreen() {
         </div>
       </section>
     </main>
+  );
+}
+
+/* ====== Prossimo evento: componente sezione (con lista successivi) ====== */
+function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) {
+  // Ordina tutti gli eventi futuri (da oggi in poi)
+  const { featured, nextThree } = useMemo(() => {
+    const now = startOfDay(new Date());
+    const upcoming = [...EVENTS]
+      .filter((e) => new Date(e.date) >= now)
+      .sort((a, b) => +new Date(a.date) - +new Date(b.date));
+
+    const featured = event ?? upcoming[0] ?? null;
+    const nextThree = featured
+      ? upcoming.filter((e) => e.id !== featured.id).slice(0, 3)
+      : upcoming.slice(0, 3);
+
+    return { featured, nextThree };
+  }, [event]);
+
+  if (!featured) {
+    return (
+      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="rounded-2xl border bg-white p-6 sm:p-8 shadow-sm text-center">
+          <h2 className="text-3xl font-bold">Partecipa ai nostri eventi</h2>
+          <p className="mt-2 text-slate-600">Non ci sono eventi imminenti. Scopri il calendario completo.</p>
+          <div className="mt-5">
+            <Link href="/eventi" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+              Vai alla pagina Eventi
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* Su desktop: 1 col info • 2 col evento in evidenza • 1 col lista successivi */}
+      <div className="grid lg:grid-cols-4 gap-8 items-stretch">
+        {/* Colonna testo/CTA */}
+        <div className="lg:col-span-1">
+          <h2 className="text-3xl font-bold">Partecipa ai nostri eventi</h2>
+          <p className="mt-2 text-slate-600">
+            In evidenza il prossimo appuntamento. Unisciti a noi e vivi la comunità.
+          </p>
+          <div className="mt-5 flex gap-3">
+            <Link href="/eventi" className="rounded-xl border px-4 py-2 font-semibold hover:bg-slate-50">
+              Tutti gli eventi
+            </Link>
+          </div>
+        </div>
+
+        {/* Card evento in evidenza */}
+        <article className="lg:col-span-2 rounded-2xl border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <Link href={`/eventi/${featured.id}`} className="block relative">
+            <Image
+              src={featured.cover}
+              alt={featured.title}
+              width={1200}
+              height={630}
+              className="w-full h-64 object-cover"
+              priority
+            />
+            <div className="absolute top-3 left-3 rounded-xl bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">
+              {fmtBadgeDate(featured.date, featured.end)}
+            </div>
+            <div className="absolute top-3 right-3 rounded-full bg-black/40 text-white px-3 py-1 text-xs font-semibold">
+              {featured.category}
+            </div>
+          </Link>
+          <div className="p-6">
+            <div className="text-xs text-slate-500">
+              {featured.city} • {fmtShortDate(featured.date)}
+            </div>
+            <h3 className="mt-1 text-xl font-semibold">{featured.title}</h3>
+            <p className="mt-2 text-slate-600 line-clamp-3">{featured.description}</p>
+            <div className="mt-3 text-sm text-slate-700">
+              📍 {featured.place} — {featured.address}, {featured.city}
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link href={`/eventi/${featured.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+                Partecipa
+              </Link>
+              <Link href={`/eventi/${featured.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
+                Dettagli
+              </Link>
+            </div>
+          </div>
+        </article>
+
+        {/* Lista dei 3 successivi (a fianco su desktop) */}
+        <aside className="lg:col-span-1 hidden lg:flex flex-col gap-4">
+          {nextThree.length === 0 ? (
+            <div className="rounded-2xl border bg-white p-4 text-sm text-slate-600">
+              Nessun altro evento programmato al momento.
+            </div>
+          ) : (
+            nextThree.map((e) => (
+              <Link
+                key={e.id}
+                href={`/eventi/${e.id}`}
+                className="group rounded-2xl border bg-white p-3 hover:shadow-sm transition-shadow"
+              >
+                <div className="flex gap-3">
+                  <Image
+                    src={e.cover}
+                    alt={e.title}
+                    width={160}
+                    height={100}
+                    className="h-20 w-28 object-cover rounded-xl flex-shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-slate-500">
+                      {fmtShortDate(e.date)} • {e.city}
+                    </div>
+                    <div className="mt-0.5 font-semibold text-sm line-clamp-2 group-hover:underline">
+                      {e.title}
+                    </div>
+                    <div className="mt-1 text-[12px] text-slate-600 line-clamp-1">📍 {e.place}</div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          )}
+        </aside>
+      </div>
+
+      {/* Sotto il featured su mobile */}
+      {nextThree.length > 0 && (
+        <div className="mt-6 grid gap-4 lg:hidden">
+          {nextThree.map((e) => (
+            <Link
+              key={e.id}
+              href={`/eventi/${e.id}`}
+              className="group rounded-2xl border bg-white p-3 hover:shadow-sm transition-shadow"
+            >
+              <div className="flex gap-3">
+                <Image
+                  src={e.cover}
+                  alt={e.title}
+                  width={160}
+                  height={100}
+                  className="h-20 w-28 object-cover rounded-xl flex-shrink-0"
+                />
+                <div className="min-w-0">
+                  <div className="text-[11px] text-slate-500">
+                    {fmtShortDate(e.date)} • {e.city}
+                  </div>
+                  <div className="mt-0.5 font-semibold text-sm line-clamp-2 group-hover:underline">
+                    {e.title}
+                  </div>
+                  <div className="mt-1 text-[12px] text-slate-600 line-clamp-1">📍 {e.place}</div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ====== Carosello Notizie ====== */
+function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  function scrollBy(dir: "prev" | "next") {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const delta = Math.round(el.clientWidth * 0.9);
+    el.scrollBy({ left: dir === "next" ? delta : -delta, behavior: "smooth" });
+  }
+
+  return (
+    <section className="py-16 bg-slate-50 border-y">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold">Notizie in evidenza</h2>
+            <p className="mt-2 text-slate-600">Aggiornamenti dal territorio, iniziative e comunicati.</p>
+          </div>
+          <Link
+            href="/notizie"
+            className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
+            Vai alle Notizie
+          </Link>
+        </div>
+
+        {/* Carosello */}
+        <div className="mt-6 relative">
+          <div className="absolute -left-2 top-1/2 -translate-y-1/2 z-10">
+            <button
+              onClick={() => scrollBy("prev")}
+              aria-label="Notizie precedenti"
+              className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white"
+            >
+              ←
+            </button>
+          </div>
+          <div className="absolute -right-2 top-1/2 -translate-y-1/2 z-10">
+            <button
+              onClick={() => scrollBy("next")}
+              aria-label="Notizie successive"
+              className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white"
+            >
+              →
+            </button>
+          </div>
+
+          <div
+            ref={scrollerRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2"
+          >
+            {posts.map((p) => (
+              <article
+                key={p.id}
+                className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <Link href={`/notizie/${p.slug}`} className="block">
+                  <Image
+                    src={p.image}
+                    alt={p.title}
+                    width={800}
+                    height={450}
+                    className="w-full h-44 object-cover"
+                    priority={false}
+                  />
+                  <div className="p-5">
+                    <div className="text-xs text-slate-500">
+                      {fmtShortDate(p.date)} • {p.read}
+                    </div>
+                    <h3 className="mt-1 text-lg font-semibold line-clamp-2">{p.title}</h3>
+                    <p className="mt-2 text-slate-600 line-clamp-3">{p.excerpt}</p>
+                    <div className="mt-3 text-sm font-semibold text-indigo-700">Leggi di più →</div>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          {/* CTA mobile */}
+          <div className="mt-6 sm:hidden text-center">
+            <Link
+              href="/notizie"
+              className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Tutte le Notizie
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
