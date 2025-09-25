@@ -461,48 +461,48 @@ export default function AboutScreen() {
   return (
     <main className="min-h-screen">
       {/* HERO — bandiera CSS + logo centrato, H1/CTA più in alto e senza breadcrumb */}
-<section
-  className="relative min-h-[68vh] flex flex-col items-center justify-center overflow-hidden
+      <section
+        className="relative min-h-[68vh] flex flex-col items-center justify-center overflow-hidden
   bg-[linear-gradient(to_right,#009246_0_33.333%,#ffffff_33.333%_66.666%,#ce2b37_66.666%_100%)] pb-8"
->
-  {/* Logo leggermente più in alto */}
-  <Image
-    src="/images/logo-rotondo.png"
-    alt="La Repubblica degli Italiani nel Mondo"
-    width={720}
-    height={720}
-    priority
-    className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-8 sm:-translate-y-12"
-  />
-
-  {/* Testo e CTA spostati verso l'alto */}
-  <div className="mt-2 sm:mt-3 -translate-y-2 sm:-translate-y-4 text-center text-slate-900 px-4">
-    {/* breadcrumb rimosso */}
-
-    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-      La Repubblica degli Italiani nel Mondo
-    </h1>
-
-    <p className="mt-3 max-w-2xl mx-auto text-lg">
-      Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
-    </p>
-
-    <div className="mt-5 flex flex-wrap justify-center gap-3">
-      <Link
-        href="#partecipa"
-        className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
       >
-        Iscriviti ora
-      </Link>
-      <Link
-        href="#pagamento"
-        className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/80 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
-      >
-        Sostienici con una donazione
-      </Link>
-    </div>
-  </div>
-</section>
+        {/* Logo leggermente più in alto */}
+        <Image
+          src="/images/logo-rotondo.png"
+          alt="La Repubblica degli Italiani nel Mondo"
+          width={720}
+          height={720}
+          priority
+          className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-8 sm:-translate-y-12"
+        />
+
+        {/* Testo e CTA spostati verso l'alto */}
+        <div className="mt-2 sm:mt-3 -translate-y-2 sm:-translate-y-4 text-center text-slate-900 px-4">
+          {/* breadcrumb rimosso */}
+
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+            La Repubblica degli Italiani nel Mondo
+          </h1>
+
+          <p className="mt-3 max-w-2xl mx-auto text-lg">
+            Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
+          </p>
+
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <Link
+              href="#partecipa"
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
+            >
+              Iscriviti ora
+            </Link>
+            <Link
+              href="#pagamento"
+              className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/80 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
+            >
+              Sostienici con una donazione
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* MISSIONE + VIDEO */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -518,7 +518,8 @@ export default function AboutScreen() {
             <p className="mt-4 text-slate-600 dark:text-slate-300">{STATUTE_CONFIG.soci}</p>
           </div>
           <div>
-            <ResponsiveYouTube id="NVYcFKesMIc" />
+            {/* Sostituito con l'ID del link richiesto: https://youtu.be/7qmZoXRg_QY */}
+            <ResponsiveYouTube id="7qmZoXRg_QY" />
           </div>
         </div>
       </section>
@@ -749,7 +750,11 @@ export default function AboutScreen() {
             <div className="flex-1">
               <h4 className="font-semibold">Dona online (coming soon)</h4>
               <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-              <button disabled className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed" title="In arrivo">
+              <button
+                disabled
+                className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
+                title="In arrivo"
+              >
                 Dona ora — In arrivo
               </button>
               <p className="mt-2 text-xs text-slate-500">Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.</p>
@@ -768,13 +773,7 @@ export default function AboutScreen() {
               </p>
             </div>
 
-            <div className="mt-6 pt-6 border-t">
-              <h4 className="font-semibold">Trasparenza</h4>
-              <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
-              <Link href="/trasparenza" className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
-                Vai alla sezione Trasparenza
-              </Link>
-            </div>
+            {/* *** BLOCCO "Trasparenza" RIMOSSO COME RICHIESTO *** */}
           </Card>
         </div>
       </section>
