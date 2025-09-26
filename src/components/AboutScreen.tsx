@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EVENTS, POSTS } from "@/lib/content";
 
 /** ============================== CONFIG ============================== */
@@ -519,7 +519,7 @@ export default function AboutScreen() {
           className="w-[min(80vw,560px)] h-auto drop-shadow-xl -translate-y-8 sm:-translate-y-12"
         />
 
-        {/* Wrapper testo/CTA senza margin-top; traslato un filo più su */}
+        {/* Wrapper testo/CTA */}
         <div className="-translate-y-3 sm:-translate-y-5 text-center text-slate-900 px-4">
           <p className="mt-0 max-w-2xl mx-auto text-lg">
             Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
@@ -818,13 +818,22 @@ export default function AboutScreen() {
         </div>
       </section>
 
-      {/* ===== SEDE PRIMA DEI CONTATTI ===== */}
-      <section id="sede" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+      {/* ===== BLOCCO PRENOTA + FOTO + MAPPA (titolo sopra) ===== */}
+      <section id="prenota" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <header className="mb-8">
+          <h2 className="text-3xl font-bold">Prenota gli spazi della sede</h2>
+          <p className="mt-2 text-slate-600">
+            Prima scegli dove vuoi stare (ufficio o sala riunioni) e poi seleziona data e orario. La prenotazione avviene con
+            <strong> donazione libera</strong> (con un <strong>minimo</strong> in base alla durata).
+          </p>
+        </header>
+
+        {/* Foto sede + Mappa (subito sotto il titolo) */}
+        <div className="grid md:grid-cols-2 gap-8 items-stretch mb-10">
           <Card title="La nostra sede">
             <Slideshow images={SLIDES} />
             <div className="mt-4 text-slate-700">{ADDRESS}</div>
-            <p className="mt-1 text-xs text-slate-500">Spazi attrezzati per lavoro e riunioni. Prenotabili a donazione libera con minimo.</p>
+            <p className="mt-1 text-xs text-slate-500">Spazi attrezzati per lavoro e riunioni.</p>
           </Card>
           <Card title="Dove siamo">
             <ClickableMap address={ADDRESS} />
@@ -832,10 +841,10 @@ export default function AboutScreen() {
             <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
           </Card>
         </div>
-      </section>
 
-      {/* ===== PRENOTAZIONE SPAZI ===== */}
-      <BookingSection />
+        {/* UI prenotazione (senza titolo, già sopra) */}
+        <BookingSection showTitle={false} />
+      </section>
 
       {/* CONTATTI */}
       <section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -939,7 +948,7 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
 
       {/* Su desktop: 1 col info (spazio) • 2 col evento in evidenza • 1 col lista successivi */}
       <div className="mt-6 grid lg:grid-cols-4 gap-8 items-stretch">
-        {/* Spazio vuoto a sinistra per bilanciare la griglia (mantengo CTA) */}
+        {/* Spazio info/CTA */}
         <div className="lg:col-span-1">
           <div className="rounded-2xl border bg-white p-5 shadow-sm">
             <p className="text-sm text-slate-600">Partecipa, conosci persone e vivi la comunità.</p>
@@ -1203,7 +1212,7 @@ const ROOMS: Room[] = [
   },
 ];
 
-function BookingSection() {
+function BookingSection({ showTitle = true }: { showTitle?: boolean }) {
   // Stato
   const [roomId, setRoomId] = useState<Room["id"]>("office");
   const [date, setDate] = useState<string>("");
@@ -1213,11 +1222,10 @@ function BookingSection() {
   const minTotal = room.minPerHour * Math.max(1, duration);
   const [amount, setAmount] = useState<number>(minTotal);
 
-  // Sync amount minimo quando cambiano stanza/durata
-  useMemo(() => {
+  // Mantieni l'importo >= minimo quando cambia stanza/durata
+  useEffect(() => {
     setAmount((curr) => Math.max(minTotal, curr));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId, duration]);
+  }, [roomId, duration]); // eslint-disable-line
 
   // Genera slot 09:00–19:00, passo 60'
   const timeSlots = useMemo(() => {
@@ -1249,14 +1257,16 @@ function BookingSection() {
   }
 
   return (
-    <section id="prenota" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <header className="mb-8">
-        <h2 className="text-3xl font-bold">Prenota gli spazi della sede</h2>
-        <p className="mt-2 text-slate-600">
-          Scegli uno spazio, seleziona data e orario e contribuisci con una <strong>donazione libera</strong> (con un
-          <strong> minimo</strong> in base alla durata). Perfetto per lavoro individuale o riunioni.
-        </p>
-      </header>
+    <section className="py-0 px-0">
+      {showTitle && (
+        <header className="mb-8">
+          <h2 className="text-3xl font-bold">Prenota gli spazi della sede</h2>
+          <p className="mt-2 text-slate-600">
+            Scegli uno spazio, seleziona data e orario e contribuisci con una <strong>donazione libera</strong> (con un
+            <strong> minimo</strong> in base alla durata).
+          </p>
+        </header>
+      )}
 
       <div className="grid lg:grid-cols-3 gap-8 items-start">
         {/* Colonna sinistra: scelta spazio */}
