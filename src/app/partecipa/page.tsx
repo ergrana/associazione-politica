@@ -33,7 +33,80 @@ export default function PartecipaPage() {
           <p className="mt-3 max-w-2xl text-white/90">
             Benefici, modulo di adesione e donazioni.
           </p>
-          {/* Bottoni rimossi come richiesto */}
+        </div>
+      </section>
+
+      {/* PREAMBOLO — come funziona iscrizione e donazioni */}
+      <section className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="max-w-3xl">
+          <h2 className="text-2xl font-bold tracking-tight">Prima di iniziare</h2>
+          <p className="mt-3 text-slate-700 leading-relaxed">
+            Siamo un’associazione <strong>no-profit</strong>: esistiamo per rafforzare la rete degli italiani
+            nel mondo a livello <em>culturale</em>, <em>imprenditoriale</em> e <em>civico</em>. Iscriversi
+            significa entrare in una comunità che progetta eventi, scambi, formazione e opportunità
+            tra Italia e diaspora.
+          </p>
+        </div>
+
+        <div className="mt-6 grid md:grid-cols-3 gap-6">
+          {/* Box 1: Iscrizione */}
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div className="flex items-center gap-3">
+              <IconBadge className="text-indigo-600" />
+              <h3 className="text-lg font-semibold">Come funziona l’iscrizione</h3>
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Compili il modulo con i tuoi dati essenziali.
+              </li>
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Entri nella rete: newsletter dedicata, inviti a incontri
+                ed eventi, possibilità di contribuire ai tavoli tematici.
+              </li>
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Nessun vincolo politico: partecipazione civile e aperta.
+              </li>
+            </ul>
+          </div>
+
+          {/* Box 2: Donazioni */}
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div className="flex items-center gap-3">
+              <IconHeart className="text-rose-600" />
+              <h3 className="text-lg font-semibold">Come funzionano le donazioni</h3>
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Importo libero (minimo suggerito), una tantum o ricorrente quando disponibile.
+              </li>
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Metodi: bonifico subito; pagamento online in arrivo (Stripe, Apple/Google Pay).
+              </li>
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Ricevuta su richiesta all’indirizzo di tesoreria.
+              </li>
+            </ul>
+          </div>
+
+          {/* Box 3: Uso dei fondi */}
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div className="flex items-center gap-3">
+              <IconShield className="text-amber-600" />
+              <h3 className="text-lg font-semibold">Come utilizziamo i fondi</h3>
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> I fondi coprono esclusivamente attività associative:
+                eventi, progetti culturali, strumenti digitali, supporto ai gruppi territoriali/esteri.
+              </li>
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Nessuna distribuzione di utili: ogni euro torna nella missione.
+              </li>
+              <li className="flex gap-2">
+                <IconCheck className="mt-0.5 text-emerald-600" /> Le priorità sono definite annualmente con il programma attività.
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -58,12 +131,12 @@ export default function PartecipaPage() {
               <p className="text-sm text-slate-700">
                 Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
               </p>
-              <a
-                href="/docs/privacy.pdf"
+              <Link
+                href="/privacy" // ← apre app/privacy/page.tsx
                 className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
               >
                 Leggi l’informativa privacy
-              </a>
+              </Link>
             </div>
           </Card>
 
@@ -96,17 +169,7 @@ export default function PartecipaPage() {
                 indicando data e importo.
               </p>
             </div>
-
-            <div className="mt-6 pt-6 border-t">
-              <h4 className="font-semibold">Trasparenza</h4>
-              <p className="text-sm text-slate-700">Rendicontiamo periodicamente entrate e spese in formato aperto.</p>
-              <Link
-                href="/trasparenza"
-                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              >
-                Vai alla sezione Trasparenza
-              </Link>
-            </div>
+            {/* (Nessun riferimento alla trasparenza dei conti) */}
           </Card>
         </div>
       </section>
@@ -176,7 +239,7 @@ function IscrizioneForm() {
       const res = await fetch(FORMCARRY_URL, {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: new FormData(form), // non impostare Content-Type: lo fa il browser
+        body: new FormData(form),
       });
 
       if (res.ok) {
@@ -213,10 +276,8 @@ function IscrizioneForm() {
         Non compilare questo campo: <input name="_gotcha" tabIndex={-1} autoComplete="off" />
       </label>
 
-      {/* Opzionale: soggetto personalizzato (se supportato) */}
+      {/* Opzionale: soggetto personalizzato */}
       <input type="hidden" name="_subject" value="Nuova iscrizione dal sito" />
-      {/* Opzionale: pagina di redirect dopo invio (se preferisci) */}
-      {/* <input type="hidden" name="_redirect" value="https://tuodominio.it/grazie" /> */}
 
       <label className="md:col-span-2 text-sm text-slate-600">
         <input type="checkbox" name="consent" className="mr-2" /> Ho letto e accetto l’informativa privacy *
@@ -309,5 +370,35 @@ function Select({ name, label, children }: { name: string; label: string; childr
         {children}
       </select>
     </label>
+  );
+}
+
+/* ======= Icone preambolo ======= */
+function IconCheck({ className = "" }: { className?: string }) {
+  return (
+    <svg className={`h-5 w-5 flex-none ${className}`} viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
+    </svg>
+  );
+}
+function IconBadge({ className = "" }: { className?: string }) {
+  return (
+    <svg className={`h-5 w-5 ${className}`} viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M12 2 3 6v6c0 5 3.8 9.7 9 10 5.2-.3 9-5 9-10V6l-9-4zm0 4.2 6 2.7V12c0 3.8-2.8 7.4-6 7.7-3.2-.3-6-3.9-6-7.7V8.9l6-2.7z" />
+    </svg>
+  );
+}
+function IconHeart({ className = "" }: { className?: string }) {
+  return (
+    <svg className={`h-5 w-5 ${className}`} viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M12 21s-6.7-4.4-9.3-7C.3 11.6.3 8.4 2.7 6.7 4.2 5.6 6.3 5.8 7.7 7c1.7-2.1 5-2.1 6.7 0 1.4-1.2 3.5-1.4 5-0.3 2.4 1.7 2.4 4.9 0 7.3C18.7 16.6 12 21 12 21z" />
+    </svg>
+  );
+}
+function IconShield({ className = "" }: { className?: string }) {
+  return (
+    <svg className={`h-5 w-5 ${className}`} viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M12 2 4 5v6c0 5 3.6 9.6 8 11 4.4-1.4 8-6 8-11V5l-8-3zm0 4.2 5 1.9V11c0 3.3-2.1 6.6-5 7.9-2.9-1.3-5-4.6-5-7.9V8.1l5-1.9z" />
+    </svg>
   );
 }

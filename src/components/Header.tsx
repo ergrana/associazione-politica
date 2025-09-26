@@ -6,18 +6,19 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+// Navigazione per pagine separate
 const nav = [
+  { href: "/", label: "Home" },
   { href: "/chi-siamo", label: "Chi siamo" },
-  { href: "/chi-siamo#assi", label: "Programma" }, // sezione "assi" in AboutScreen
   { href: "/notizie", label: "Notizie" },
   { href: "/eventi", label: "Eventi" },
-  { href: "/chi-siamo#partecipa", label: "Partecipa" }, // ← ora va alla sezione PARTECIPA in AboutScreen
-  // { href: "/trasparenza", label: "Trasparenza" }, // se vorrai riattivarla
-  { href: "/chi-siamo#contatti", label: "Contatti" }, // ← porta alla sezione Contatti in AboutScreen
+  { href: "/prenotazioni", label: "Prenotazioni" },
+  { href: "/partecipa", label: "Partecipa" },
+  { href: "/contatti", label: "Contatti" },
 ];
 
 export default function Header() {
-  const pathname = usePathname() || "";
+  const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
 
   // Chiude il drawer su cambio rotta
@@ -40,20 +41,17 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // helper: considera attivo anche quando l'href ha un hash (#)
+  // Attivo anche per sottopagine (es. /eventi/slug)
   const isActive = (href: string) => {
-    if (href.includes("#")) {
-      const base = href.split("#")[0];
-      return pathname === base;
-    }
-    return pathname === href;
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(href + "/");
   };
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <nav className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand con logo */}
-        <Link href="/" className="flex items-center gap-3 font-extrabold">
+        {/* Brand: solo logo (niente testo visibile) */}
+        <Link href="/" className="flex items-center gap-3" aria-label="Vai alla Home">
           <Image
             src="/images/logo.jpg"
             alt="Logo La Repubblica degli Italiani nel Mondo"
@@ -62,9 +60,7 @@ export default function Header() {
             className="rounded-md"
             priority
           />
-          <span className="text-base sm:text-lg tracking-tight text-slate-900 dark:text-slate-100">
-            La Repubblica degli Italiani nel Mondo
-          </span>
+          <span className="sr-only">La Repubblica degli Italiani nel Mondo</span>
         </Link>
 
         {/* Desktop nav */}
@@ -75,6 +71,7 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={active ? "page" : undefined}
                 className={
                   active
                     ? "text-indigo-700 dark:text-indigo-400 font-semibold"
@@ -87,26 +84,12 @@ export default function Header() {
           })}
         </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden sm:flex items-center gap-2">
-          <Link
-            href="/chi-siamo#partecipa" // ← Iscriviti manda alla sezione PARTECIPA nell'AboutScreen
-            className="rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:bg-white dark:hover:bg-slate-800"
-          >
-            Iscriviti
-          </Link>
-          <Link
-            href="/chi-siamo#pagamento" // ← Dona ora manda direttamente al blocco Pagamento
-            className="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
-          >
-            Dona ora
-          </Link>
-        </div>
-
         {/* Mobile trigger */}
         <button
           className="md:hidden rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
           aria-label="Apri menu"
+          aria-haspopup="dialog"
+          aria-expanded={open}
           onClick={() => setOpen(true)}
         >
           ☰
@@ -165,26 +148,12 @@ export default function Header() {
                     ? "bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-semibold"
                     : "text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
+                aria-current={active ? "page" : undefined}
               >
                 {item.label}
               </Link>
             );
           })}
-
-          <div className="mt-4 flex gap-2">
-            <Link
-              href="/chi-siamo#partecipa" // ← mobile Iscriviti
-              className="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:bg-white dark:hover:bg-slate-800"
-            >
-              Iscriviti
-            </Link>
-            <Link
-              href="/chi-siamo#pagamento" // ← mobile Dona ora
-              className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
-            >
-              Dona ora
-            </Link>
-          </div>
         </nav>
       </div>
     </header>
