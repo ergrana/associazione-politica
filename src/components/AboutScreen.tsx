@@ -478,6 +478,15 @@ function fmtBadgeDate(iso: string, end?: string) {
   const mon2 = e.toLocaleDateString("it-IT", { month: "short" });
   return same ? `${day} ${mon}` : `${day} ${mon} → ${day2} ${mon2}`;
 }
+function fmtTimeHHMM(date: Date) {
+  return date.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit", hour12: false });
+}
+function addHours(date: Date, h: number) {
+  const d = new Date(date);
+  d.setHours(d.getHours() + h);
+  return d;
+}
+const EURO = (n: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
 
 /* ============================================= */
 export default function AboutScreen() {
@@ -539,7 +548,7 @@ export default function AboutScreen() {
           <div>
             <h2 className="text-3xl font-bold">La nostra missione</h2>
 
-            {/* Testo missione estrapolato dall'immagine, in tre paragrafi */}
+            {/* Testo missione */}
             <div className="mt-3 space-y-4 text-slate-600 dark:text-slate-300 leading-relaxed">
               <p>
                 La Repubblica degli Italiani nel Mondo nasce per unire tutti coloro che, fino ad oggi
@@ -560,7 +569,6 @@ export default function AboutScreen() {
           </div>
 
           <div>
-            {/* Sostituito con l'ID del link richiesto: https://youtu.be/7qmZoXRg_QY */}
             <ResponsiveYouTube id="7qmZoXRg_QY" />
           </div>
         </div>
@@ -806,18 +814,35 @@ export default function AboutScreen() {
                 indicando data e importo.
               </p>
             </div>
-
-            {/* *** BLOCCO "Trasparenza" RIMOSSO COME RICHIESTO *** */}
           </Card>
         </div>
       </section>
+
+      {/* ===== SEDE PRIMA DEI CONTATTI ===== */}
+      <section id="sede" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          <Card title="La nostra sede">
+            <Slideshow images={SLIDES} />
+            <div className="mt-4 text-slate-700">{ADDRESS}</div>
+            <p className="mt-1 text-xs text-slate-500">Spazi attrezzati per lavoro e riunioni. Prenotabili a donazione libera con minimo.</p>
+          </Card>
+          <Card title="Dove siamo">
+            <ClickableMap address={ADDRESS} />
+            <div className="mt-3 text-slate-700">{ADDRESS}</div>
+            <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
+          </Card>
+        </div>
+      </section>
+
+      {/* ===== PRENOTAZIONE SPAZI ===== */}
+      <BookingSection />
 
       {/* CONTATTI */}
       <section id="contatti" className="scroll-mt-24 pt-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold">Siamo qui per ascoltarti</h2>
       </section>
 
-      {/* GRID 2×2 */}
+      {/* GRID 2×2 (senza “La nostra sede”) */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           {/* COLONNA SINISTRA */}
@@ -844,10 +869,6 @@ export default function AboutScreen() {
               <ClickableMap address={ADDRESS} />
               <div className="mt-3 text-slate-700">{ADDRESS}</div>
               <p className="mt-1 text-xs text-slate-500">Clicca sulla mappa per aprire Google Maps.</p>
-            </Card>
-
-            <Card title="La nostra sede">
-              <Slideshow images={SLIDES} />
             </Card>
           </div>
         </div>
@@ -910,24 +931,31 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
   }
 
   return (
-    <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Su desktop: 1 col info • 2 col evento in evidenza • 1 col lista successivi */}
-      <div className="grid lg:grid-cols-4 gap-8 items-stretch">
-        {/* Colonna testo/CTA */}
+    <section aria-labelledby="events-title" className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <h2 id="events-title" className="text-3xl font-bold">Partecipa ai nostri eventi</h2>
+      <p className="mt-2 text-slate-600">
+        In evidenza trovi il <strong>prossimo appuntamento</strong>; a destra gli <strong>eventi futuri in programmazione</strong>.
+      </p>
+
+      {/* Su desktop: 1 col info (spazio) • 2 col evento in evidenza • 1 col lista successivi */}
+      <div className="mt-6 grid lg:grid-cols-4 gap-8 items-stretch">
+        {/* Spazio vuoto a sinistra per bilanciare la griglia (mantengo CTA) */}
         <div className="lg:col-span-1">
-          <h2 className="text-3xl font-bold">Partecipa ai nostri eventi</h2>
-          <p className="mt-2 text-slate-600">
-            In evidenza il prossimo appuntamento. Unisciti a noi e vivi la comunità.
-          </p>
-          <div className="mt-5 flex gap-3">
-            <Link href="/eventi" className="rounded-xl border px-4 py-2 font-semibold hover:bg-slate-50">
+          <div className="rounded-2xl border bg-white p-5 shadow-sm">
+            <p className="text-sm text-slate-600">Partecipa, conosci persone e vivi la comunità.</p>
+            <Link href="/eventi" className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
               Tutti gli eventi
             </Link>
           </div>
         </div>
 
         {/* Card evento in evidenza */}
-        <article className="lg:col-span-2 rounded-2xl border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <article role="region" aria-labelledby="featured-title" className="lg:col-span-2 rounded-2xl border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div className="px-5 pt-4">
+            <h3 id="featured-title" className="mb-2 text-sm font-semibold text-slate-500 flex items-center gap-2">
+              <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs">Prossimo evento</span>
+            </h3>
+          </div>
           <Link href={`/eventi/${featured.id}`} className="block relative">
             <Image
               src={featured.cover}
@@ -937,8 +965,11 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
               className="w-full h-64 object-cover"
               priority
             />
-            <div className="absolute top-3 left-3 rounded-xl bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">
-              {fmtBadgeDate(featured.date, featured.end)}
+            <div className="absolute top-3 left-3 flex gap-2">
+              <span className="rounded-full bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">Prossimo evento</span>
+              <span className="rounded-full bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">
+                {fmtBadgeDate(featured.date, featured.end)}
+              </span>
             </div>
             <div className="absolute top-3 right-3 rounded-full bg-black/40 text-white px-3 py-1 text-xs font-semibold">
               {featured.category}
@@ -954,10 +985,10 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
               📍 {featured.place} — {featured.address}, {featured.city}
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link href={`/eventi/${featured.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+              <Link href={`/eventi/${featured.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700" aria-label={`Partecipa a ${featured.title}`}>
                 Partecipa
               </Link>
-              <Link href={`/eventi/${featured.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
+              <Link href={`/eventi/${featured.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50" aria-label={`Dettagli su ${featured.title}`}>
                 Dettagli
               </Link>
             </div>
@@ -965,7 +996,12 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
         </article>
 
         {/* Lista dei 3 successivi (a fianco su desktop) */}
-        <aside className="lg:col-span-1 hidden lg:flex flex-col gap-4">
+        <aside role="region" aria-labelledby="upcoming-title" className="lg:col-span-1 hidden lg:flex flex-col gap-4">
+          <h3 id="upcoming-title" className="mb-1 text-sm font-semibold text-slate-500 flex items-center gap-2">
+            <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs">In programma</span>
+            <span className="text-slate-400 text-xs">(eventi futuri)</span>
+          </h3>
+
           {nextThree.length === 0 ? (
             <div className="rounded-2xl border bg-white p-4 text-sm text-slate-600">
               Nessun altro evento programmato al momento.
@@ -986,8 +1022,11 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
                     className="h-20 w-28 object-cover rounded-xl flex-shrink-0"
                   />
                   <div className="min-w-0">
-                    <div className="text-[11px] text-slate-500">
-                      {fmtShortDate(e.date)} • {e.city}
+                    <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span className="inline-flex items-center rounded-full border px-2 py-0.5">
+                        {fmtBadgeDate(e.date)}
+                      </span>
+                      <span>• {e.city}</span>
                     </div>
                     <div className="mt-0.5 font-semibold text-sm line-clamp-2 group-hover:underline">
                       {e.title}
@@ -1003,33 +1042,39 @@ function NextEventSection({ event }: { event: (typeof EVENTS)[number] | null }) 
 
       {/* Sotto il featured su mobile */}
       {nextThree.length > 0 && (
-        <div className="mt-6 grid gap-4 lg:hidden">
-          {nextThree.map((e) => (
-            <Link
-              key={e.id}
-              href={`/eventi/${e.id}`}
-              className="group rounded-2xl border bg-white p-3 hover:shadow-sm transition-shadow"
-            >
-              <div className="flex gap-3">
-                <Image
-                  src={e.cover}
-                  alt={e.title}
-                  width={160}
-                  height={100}
-                  className="h-20 w-28 object-cover rounded-xl flex-shrink-0"
-                />
-                <div className="min-w-0">
-                  <div className="text-[11px] text-slate-500">
-                    {fmtShortDate(e.date)} • {e.city}
+        <div className="mt-6 lg:hidden">
+          <h3 className="mb-2 text-sm font-semibold text-slate-500">In programma</h3>
+          <div className="grid gap-4">
+            {nextThree.map((e) => (
+              <Link
+                key={e.id}
+                href={`/eventi/${e.id}`}
+                className="group rounded-2xl border bg-white p-3 hover:shadow-sm transition-shadow"
+              >
+                <div className="flex gap-3">
+                  <Image
+                    src={e.cover}
+                    alt={e.title}
+                    width={160}
+                    height={100}
+                    className="h-20 w-28 object-cover rounded-xl flex-shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span className="inline-flex items-center rounded-full border px-2 py-0.5">
+                        {fmtBadgeDate(e.date)}
+                      </span>
+                      <span>• {e.city}</span>
+                    </div>
+                    <div className="mt-0.5 font-semibold text-sm line-clamp-2 group-hover:underline">
+                      {e.title}
+                    </div>
+                    <div className="mt-1 text-[12px] text-slate-600 line-clamp-1">📍 {e.place}</div>
                   </div>
-                  <div className="mt-0.5 font-semibold text-sm line-clamp-2 group-hover:underline">
-                    {e.title}
-                  </div>
-                  <div className="mt-1 text-[12px] text-slate-600 line-clamp-1">📍 {e.place}</div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </section>
@@ -1123,6 +1168,225 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
             >
               Tutte le Notizie
             </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ====== Prenotazione Spazi (MVP UI) ====== */
+type Room = {
+  id: "office" | "meeting";
+  name: string;
+  capacity: number;
+  minPerHour: number; // EUR
+  amenities: string[];
+  photo: string;
+};
+const ROOMS: Room[] = [
+  {
+    id: "office",
+    name: "Ufficio (1–2 postazioni)",
+    capacity: 2,
+    minPerHour: 15,
+    amenities: ["Wi-Fi", "Scrivania", "Prese elettriche"],
+    photo: SLIDES[0] || "/images/sede/1.jpg",
+  },
+  {
+    id: "meeting",
+    name: "Sala riunioni (fino a 10 persone)",
+    capacity: 10,
+    minPerHour: 30,
+    amenities: ["Wi-Fi", "Schermo/TV", "HDMI", "Lavagna"],
+    photo: SLIDES[1] || "/images/sede/2.jpg",
+  },
+];
+
+function BookingSection() {
+  // Stato
+  const [roomId, setRoomId] = useState<Room["id"]>("office");
+  const [date, setDate] = useState<string>("");
+  const [start, setStart] = useState<string>(""); // "HH:MM"
+  const [duration, setDuration] = useState<number>(1); // ore
+  const room = ROOMS.find((r) => r.id === roomId)!;
+  const minTotal = room.minPerHour * Math.max(1, duration);
+  const [amount, setAmount] = useState<number>(minTotal);
+
+  // Sync amount minimo quando cambiano stanza/durata
+  useMemo(() => {
+    setAmount((curr) => Math.max(minTotal, curr));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId, duration]);
+
+  // Genera slot 09:00–19:00, passo 60'
+  const timeSlots = useMemo(() => {
+    const slots: string[] = [];
+    const open = 9;
+    const close = 19;
+    for (let h = open; h < close; h++) {
+      const hh = String(h).padStart(2, "0");
+      slots.push(`${hh}:00`);
+    }
+    return slots;
+  }, []);
+
+  // Riepilogo orario fine
+  const endTime = useMemo(() => {
+    if (!start) return "";
+    const [h, m] = start.split(":").map((x) => parseInt(x, 10));
+    const d = new Date();
+    d.setHours(h, m, 0, 0);
+    const e = addHours(d, duration);
+    return fmtTimeHHMM(e);
+  }, [start, duration]);
+
+  function handlePay() {
+    // Placeholder: integrare con Stripe Payment Element/Checkout
+    alert(
+      `Prenotazione bozza:\n- Spazio: ${room.name}\n- Data: ${date || "—"}\n- Orario: ${start || "—"} → ${endTime || "—"}\n- Durata: ${duration}h\n- Donazione: ${EURO(amount)} (min ${EURO(minTotal)})\n\nIntegrazione pagamento in arrivo.`
+    );
+  }
+
+  return (
+    <section id="prenota" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <header className="mb-8">
+        <h2 className="text-3xl font-bold">Prenota gli spazi della sede</h2>
+        <p className="mt-2 text-slate-600">
+          Scegli uno spazio, seleziona data e orario e contribuisci con una <strong>donazione libera</strong> (con un
+          <strong> minimo</strong> in base alla durata). Perfetto per lavoro individuale o riunioni.
+        </p>
+      </header>
+
+      <div className="grid lg:grid-cols-3 gap-8 items-start">
+        {/* Colonna sinistra: scelta spazio */}
+        <div className="lg:col-span-1 space-y-4">
+          <h3 className="text-sm font-semibold text-slate-500">1) Scegli lo spazio</h3>
+          {ROOMS.map((r) => (
+            <button
+              key={r.id}
+              onClick={() => setRoomId(r.id)}
+              className={`w-full text-left rounded-2xl border p-4 hover:shadow-sm transition ${
+                roomId === r.id ? "ring-2 ring-indigo-600" : ""
+              }`}
+            >
+              <div className="flex gap-3">
+                <Image src={r.photo} alt={r.name} width={160} height={100} className="h-20 w-28 object-cover rounded-xl" />
+                <div className="min-w-0">
+                  <div className="font-semibold">{r.name}</div>
+                  <div className="text-xs text-slate-600">
+                    Capienza {r.capacity} • Min {EURO(r.minPerHour)}/h
+                  </div>
+                  <div className="mt-1 text-[12px] text-slate-500 line-clamp-1">{r.amenities.join(" • ")}</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Colonna centrale: calendario + orario + durata */}
+        <div className="lg:col-span-1 space-y-4">
+          <h3 className="text-sm font-semibold text-slate-500">2) Data e orario</h3>
+          <div className="rounded-2xl border p-4">
+            <label className="block text-sm">
+              <span className="block text-slate-700 mb-1">Data</span>
+              <input
+                type="date"
+                className="w-full rounded-xl border px-4 py-2.5"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </label>
+
+            <div className="mt-4">
+              <span className="block text-sm text-slate-700 mb-2">Orario di inizio</span>
+              <div className="grid grid-cols-4 gap-2">
+                {timeSlots.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setStart(t)}
+                    className={`rounded-xl border px-3 py-2 text-sm hover:bg-slate-50 ${
+                      start === t ? "bg-indigo-600 text-white border-indigo-600" : ""
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <span className="block text-sm text-slate-700 mb-1">Durata</span>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4].map((h) => (
+                  <button
+                    key={h}
+                    onClick={() => setDuration(h)}
+                    className={`rounded-xl border px-3 py-2 text-sm hover:bg-slate-50 ${
+                      duration === h ? "bg-slate-900 text-white border-slate-900" : ""
+                    }`}
+                  >
+                    {h}h
+                  </button>
+                ))}
+              </div>
+              {start && (
+                <p className="mt-2 text-xs text-slate-500">
+                  Fine prevista: <strong>{endTime}</strong> (apertura 09:00 — chiusura 19:00)
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Colonna destra: Donazione + Riepilogo */}
+        <div className="lg:col-span-1 space-y-4">
+          <h3 className="text-sm font-semibold text-slate-500">3) Donazione e conferma</h3>
+          <div className="rounded-2xl border p-4">
+            <label className="block text-sm">
+              <span className="block text-slate-700 mb-1">Donazione (totale)</span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={minTotal}
+                  step={1}
+                  value={amount}
+                  onChange={(e) => setAmount(parseInt(e.target.value || "0", 10))}
+                  onBlur={() => setAmount((v) => (isNaN(v) || v < minTotal ? minTotal : v))}
+                  className="w-full rounded-xl border px-4 py-2.5"
+                />
+                <span className="text-sm text-slate-500">EUR</span>
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Minimo per {duration}h: <strong>{EURO(minTotal)}</strong>. Puoi aumentare per sostenere l’associazione.
+              </p>
+            </label>
+
+            <div className="my-4 h-px bg-slate-200" />
+
+            <div className="text-sm">
+              <div className="font-semibold">Riepilogo</div>
+              <ul className="mt-2 space-y-1 text-slate-600">
+                <li>Spazio: <strong>{room.name}</strong></li>
+                <li>Data: <strong>{date || "—"}</strong></li>
+                <li>Orario: <strong>{start ? `${start} → ${endTime}` : "—"}</strong></li>
+                <li>Durata: <strong>{duration}h</strong></li>
+                <li>Donazione: <strong>{EURO(amount)}</strong></li>
+              </ul>
+            </div>
+
+            <button
+              onClick={handlePay}
+              disabled={!roomId || !date || !start || amount < minTotal}
+              className="mt-4 w-full rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+              title={!date || !start ? "Seleziona data e orario" : amount < minTotal ? "Importo sotto il minimo" : "Conferma e paga"}
+            >
+              Conferma e paga (demo)
+            </button>
+
+            <p className="mt-2 text-[12px] text-slate-500">
+              Al pagamento riuscito riceverai email di conferma e un file .ics per il calendario.
+            </p>
           </div>
         </div>
       </div>
