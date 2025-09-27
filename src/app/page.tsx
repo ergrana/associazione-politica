@@ -3,33 +3,62 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EVENTS, POSTS } from "@/lib/content";
 
-/** ========================= CONFIG ========================= */
+/** ========================= CONFIG =========================
+ * Salva i file mappa in:
+ *  - public/world/world.svg
+ *  - public/world/italy-regions.svg
+ */
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
 /* ========================= HERO: Bandiera che sventola ========================= */
 function WavingFlagHero() {
   return (
-    <section className="relative min-h-[78vh] flex flex-col items-center justify-center overflow-hidden pb-10">
-      <svg className="absolute inset-0 -z-10 h-full w-full" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden>
+    <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
+      <svg
+        className="absolute inset-0 -z-10 h-full w-full"
+        viewBox="0 0 1200 600"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
         <defs>
           <filter id="flagWave">
-            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="2" seed="3" result="noise">
-              <animate attributeName="baseFrequency" dur="8s" values="0.008 0.02; 0.012 0.03; 0.008 0.02" repeatCount="indefinite" />
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.008 0.02"
+              numOctaves="2"
+              seed="3"
+              result="noise"
+            >
+              <animate
+                attributeName="baseFrequency"
+                dur="8s"
+                values="0.008 0.02; 0.012 0.03; 0.008 0.02"
+                repeatCount="indefinite"
+              />
             </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="22"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
           </filter>
+
           <linearGradient id="whiteShade" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0" stopColor="#ffffff" />
             <stop offset="1" stopColor="#f4f4f4" />
           </linearGradient>
+
           <linearGradient id="light" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0.2" stopColor="rgba(255,255,255,0.18)" />
             <stop offset="0.8" stopColor="rgba(0,0,0,0.08)" />
           </linearGradient>
         </defs>
+
         <g filter="url(#flagWave)">
           <rect x="0" y="0" width="400" height="600" fill="#009246" />
           <rect x="400" y="0" width="400" height="600" fill="url(#whiteShade)" />
@@ -41,19 +70,27 @@ function WavingFlagHero() {
       <Image
         src="/images/logo-rotondo.png"
         alt="La Repubblica degli Italiani nel Mondo"
-        width={720}
-        height={720}
+        width={420}
+        height={420}
         priority
         className="w-[min(80vw,540px)] h-auto drop-shadow-2xl"
       />
 
-      <div className="mt-6 text-center text-slate-900 px-4">
-        <p className="max-w-2xl mx-auto text-lg">Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.</p>
+      <div className="mt-0.25 text-center text-slate-900 px-4">
+        <p className="max-w-2xl mx-auto text-lg">
+          Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
+        </p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <Link href="/partecipa" className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90">
+          <Link
+            href="/partecipa"
+            className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
+          >
             Iscriviti ora
           </Link>
-          <Link href="/partecipa#pagamento" className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5">
+          <Link
+            href="/partecipa#pagamento"
+            className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
+          >
             Sostienici con una donazione
           </Link>
         </div>
@@ -62,17 +99,31 @@ function WavingFlagHero() {
   );
 }
 
-/* ========================= Sezioni riutilizzabili ========================= */
-function ValueGhost({ title, text, colorClass }: { title: string; text: string; colorClass: string }) {
+/* ========================= Utility / Mini componenti ========================= */
+function ValueGhost({
+  title,
+  text,
+  colorClass,
+}: {
+  title: string;
+  text: string;
+  colorClass: string;
+}) {
   return (
     <div className="group relative rounded-2xl bg-white/70 backdrop-blur-sm p-5 sm:p-6 hover:bg-white transition shadow-sm hover:shadow-md">
-      <span aria-hidden className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`} />
+      <span
+        aria-hidden
+        className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`}
+      />
       <h3 className="font-semibold text-lg">{title}</h3>
       <p className="mt-2 text-slate-600 leading-relaxed">{text}</p>
-      <span className="absolute right-4 top-4 text-slate-300 transition-transform group-hover:translate-x-0.5">→</span>
+      <span className="absolute right-4 top-4 text-slate-300 transition-transform group-hover:translate-x-0.5">
+        →
+      </span>
     </div>
   );
 }
+
 function RoadmapStep({ when, title, text }: { when: string; title: string; text: string }) {
   return (
     <div className="relative pl-8">
@@ -83,6 +134,7 @@ function RoadmapStep({ when, title, text }: { when: string; title: string; text:
     </div>
   );
 }
+
 function FaqItem({ q, a }: { q: string; a: string }) {
   return (
     <details className="rounded-2xl border bg-white p-5 sm:p-6 shadow-sm open:shadow-md transition-shadow">
@@ -91,6 +143,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     </details>
   );
 }
+
 function ResponsiveYouTube({ id }: { id: string }) {
   return (
     <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingTop: "56.25%" }}>
@@ -107,48 +160,170 @@ function ResponsiveYouTube({ id }: { id: string }) {
   );
 }
 
-/* ========================= DOVE SIAMO ARRIVATI ========================= */
-type ReachPoint = { label: string; x: number; y: number };
-const REACH_POINTS: ReachPoint[] = [
-  { label: "Italia", x: 56, y: 43 },
-  { label: "Francia", x: 51, y: 42 },
-  { label: "Germania", x: 54, y: 38 },
-  { label: "Regno Unito", x: 49, y: 36 },
-  { label: "USA", x: 23, y: 42 },
-  { label: "Canada", x: 20, y: 32 },
-  { label: "Argentina", x: 27, y: 70 },
-  { label: "Australia", x: 86, y: 78 },
-];
-function WorldReach() {
+/* ========================= MAPPE: zoom inline su Italia ========================= */
+const ACTIVE_ISO = ["USA", "CAN", "ARG", "BRA", "FRA", "CHE", "AUS", "GBR", "ITA"] as const;
+const ACTIVE_REGIONS = ["LOM", "LAZ", "VEN", "EMR", "PIE", "TOS", "CAM", "SIC"] as const;
+
+function WorldReachAdvanced() {
+  const [worldMarkup, setWorldMarkup] = useState<string | null>(null);
+  const [italyMarkup, setItalyMarkup] = useState<string | null>(null);
+  const [view, setView] = useState<"world" | "italy">("world");
+
+  const worldRef = useRef<HTMLDivElement>(null);
+  const italyRef = useRef<HTMLDivElement>(null);
+
+  // Carica i due SVG
+  useEffect(() => {
+    fetch("/world/world.svg").then(r => r.text()).then(setWorldMarkup).catch(() => setWorldMarkup(null));
+    fetch("/world/italy-regions.svg").then(r => r.text()).then(setItalyMarkup).catch(() => setItalyMarkup(null));
+  }, []);
+
+  // Stili + interazioni planisfero
+  useEffect(() => {
+    if (!worldMarkup) return;
+    const host = worldRef.current;
+    if (!host) return;
+    const svg = host.querySelector("svg");
+    if (!svg) return;
+
+    svg.querySelectorAll<SVGPathElement>("path").forEach((p) => {
+      if (!p.getAttribute("fill")) p.setAttribute("fill", "#e5e7eb");
+      p.setAttribute("stroke", "#94a3b8");
+      p.setAttribute("stroke-width", "0.6");
+      p.setAttribute("vector-effect", "non-scaling-stroke");
+      p.style.transition = "fill .2s ease";
+    });
+
+    ACTIVE_ISO.forEach((id) => {
+      const node = svg.querySelector<SVGPathElement>(`#${id}`);
+      if (node) {
+        node.setAttribute("fill", "#22c55e");
+        node.style.filter = "drop-shadow(0 0 6px rgba(16,185,129,.35))";
+        if (!node.querySelector("title")) {
+          const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          t.textContent = id;
+          node.appendChild(t);
+        }
+      }
+    });
+
+    const over = (e: Event) => {
+      const p = (e.target as Element).closest("path");
+      if (p && p instanceof SVGPathElement && !ACTIVE_ISO.includes(p.id as any)) {
+        p.setAttribute("fill", "#c7e3d4");
+      }
+    };
+    const out = (e: Event) => {
+      const p = (e.target as Element).closest("path");
+      if (p && p instanceof SVGPathElement && !ACTIVE_ISO.includes(p.id as any)) {
+        p.setAttribute("fill", "#e5e7eb");
+      }
+    };
+    const click = (e: MouseEvent) => {
+      const el = (e.target as Element);
+      const p = el.closest("path") as SVGPathElement | null;
+      if (!p) return;
+      if (p.id === "ITA" || el.closest("#ITA")) setView("italy");
+    };
+
+    svg.addEventListener("mouseover", over);
+    svg.addEventListener("mouseout", out);
+    svg.addEventListener("click", click);
+    return () => {
+      svg.removeEventListener("mouseover", over);
+      svg.removeEventListener("mouseout", out);
+      svg.removeEventListener("click", click);
+    };
+  }, [worldMarkup]);
+
+  // Stili vista Italia
+  useEffect(() => {
+    if (!italyMarkup) return;
+    const host = italyRef.current;
+    if (!host) return;
+    const svg = host.querySelector("svg");
+    if (!svg) return;
+
+    svg.querySelectorAll<SVGPathElement>("path").forEach((p) => {
+      if (!p.getAttribute("fill")) p.setAttribute("fill", "#e5e7eb");
+      p.setAttribute("stroke", "#94a3b8");
+      p.setAttribute("stroke-width", "0.6");
+      p.setAttribute("vector-effect", "non-scaling-stroke");
+      p.style.transition = "fill .2s ease";
+    });
+
+    ACTIVE_REGIONS.forEach((id) => {
+      const el = svg.querySelector<SVGPathElement>(`#${CSS.escape(id)}`);
+      if (el) {
+        el.setAttribute("fill", "#2563eb");
+        el.style.filter = "drop-shadow(0 0 6px rgba(37,99,235,.35))";
+        if (!el.querySelector("title")) {
+          const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          t.textContent = id;
+          el.appendChild(t);
+        }
+      }
+    });
+  }, [italyMarkup]);
+
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <header className="mb-6">
         <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
         <p className="mt-2 text-slate-600 max-w-3xl">
-          La nostra rete cresce nel mondo. Le aree evidenziate indicano Paesi dove sono nati gruppi locali,
-          partner o iniziative culturali e imprenditoriali.
+          Clicca sull’Italia per ingrandire e vedere le regioni in cui siamo presenti. Usa “Indietro” per tornare alla mappa mondiale.
         </p>
       </header>
 
       <div className="grid lg:grid-cols-3 gap-8 items-center">
-        <div className="lg:col-span-2 relative rounded-2xl overflow-hidden shadow-sm ring-1 ring-slate-200 bg-white">
-          <div className="relative w-full" style={{ paddingTop: "50%" }}>
-            <Image src="/images/world-map.jpg" alt="Mappa del mondo" fill className="object-cover" />
-            {REACH_POINTS.map((p) => (
-              <div key={p.label} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${p.x}%`, top: `${p.y}%` }} title={p.label}>
-                <span className="relative block h-3 w-3 rounded-full bg-emerald-500 shadow-[0_0_0_6px_rgba(16,185,129,0.25)]">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-60" />
-                </span>
+        <div className="lg:col-span-2">
+          <div
+            className="relative rounded-2xl overflow-hidden shadow-sm ring-1 ring-slate-200 bg-white"
+            style={{ aspectRatio: "2 / 1" }}
+          >
+            {/* WORLD layer */}
+            <div
+              ref={worldRef}
+              className={`absolute inset-0 select-none transition duration-300 ease-out
+                ${view === "world" ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
+              dangerouslySetInnerHTML={worldMarkup ? { __html: worldMarkup } : undefined}
+            />
+            {!worldMarkup && (
+              <div className="absolute inset-0 flex items-center justify-center text-slate-500">
+                Caricamento planisfero…
               </div>
-            ))}
+            )}
+
+            {/* ITALY layer */}
+            <div
+              ref={italyRef}
+              className={`absolute inset-0 select-none transition duration-300 ease-out
+                ${view === "italy" ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"}`}
+              style={{ padding: "2% 10%" }}
+              dangerouslySetInnerHTML={italyMarkup ? { __html: italyMarkup } : undefined}
+            />
+            {view === "italy" && (
+              <button
+                onClick={() => setView("world")}
+                className="absolute left-3 top-3 z-10 rounded-xl bg-white/95 border px-3 py-1.5 text-sm font-semibold hover:bg-white"
+              >
+                ← Indietro
+              </button>
+            )}
           </div>
+
+          <p className="mt-2 text-sm text-slate-500">
+            {view === "world"
+              ? "Suggerimento: clicca sull’Italia per lo zoom."
+              : "Stai visualizzando l’Italia. Clicca “Indietro” per tornare alla mappa mondiale."}
+          </p>
         </div>
 
         <div>
           <h3 className="text-xl font-semibold">Una rete in espansione</h3>
           <p className="mt-2 text-slate-700 leading-relaxed">
-            Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e
-            opportunità di collaborazione tra Italia e diaspora. Se vuoi avviare un nucleo nel tuo Paese,
+            Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e opportunità
+            di collaborazione tra Italia e diaspora. Se vuoi avviare un nucleo nel tuo Paese,
             <Link href="/contatti" className="underline decoration-2 underline-offset-2 ml-1">contattaci</Link>.
           </p>
           <ul className="mt-4 space-y-2 text-slate-700">
@@ -164,13 +339,19 @@ function WorldReach() {
 
 /* ========================= HELPERS ========================= */
 function startOfDay(d: Date) { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
-function fmtShortDate(iso: string) { const d = new Date(iso); return d.toLocaleDateString("it-IT", { year: "numeric", month: "short", day: "2-digit" }); }
+function fmtShortDate(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString("it-IT", { year: "numeric", month: "short", day: "2-digit" });
+}
 function fmtBadgeDate(iso: string, end?: string) {
-  const s = new Date(iso); const e = end ? new Date(end) : undefined;
-  const day = s.toLocaleDateString("it-IT", { day: "2-digit" }); const mon = s.toLocaleDateString("it-IT", { month: "short" });
+  const s = new Date(iso);
+  const e = end ? new Date(end) : undefined;
+  const day = s.toLocaleDateString("it-IT", { day: "2-digit" });
+  const mon = s.toLocaleDateString("it-IT", { month: "short" });
   if (!e) return `${day} ${mon}`;
   const same = s.toDateString() === e.toDateString();
-  const day2 = e.toLocaleDateString("it-IT", { day: "2-digit" }); const mon2 = e.toLocaleDateString("it-IT", { month: "short" });
+  const day2 = e.toLocaleDateString("it-IT", { day: "2-digit" });
+  const mon2 = e.toLocaleDateString("it-IT", { month: "short" });
   return same ? `${day} ${mon}` : `${day} ${mon} → ${day2} ${mon2}`;
 }
 
@@ -237,7 +418,6 @@ function NextEventTeaser() {
     const upcoming = EVENTS.filter((e) => new Date(e.date) >= now).sort((a, b) => +new Date(a.date) - +new Date(b.date));
     return upcoming[0] ?? null;
   }, []);
-
   if (!nextEvent) return null;
 
   return (
@@ -268,12 +448,8 @@ function NextEventTeaser() {
           <p className="mt-2 text-slate-600 line-clamp-3">{nextEvent.description}</p>
           <div className="mt-3 text-sm text-slate-700">📍 {nextEvent.place} — {nextEvent.address}, {nextEvent.city}</div>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
-              Partecipa
-            </Link>
-            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
-              Dettagli
-            </Link>
+            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Partecipa</Link>
+            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">Dettagli</Link>
           </div>
         </div>
       </article>
@@ -336,8 +512,8 @@ function BookingCTA() {
   );
 }
 
-/* ========================= CARD + FORM (per sezione preambolo) ========================= */
-function Card({ title, children, className = "", id }: { title: string; children: React.ReactNode; className?: string; id?: string }) {
+/* ========================= CARD + FORM ========================= */
+function Card({ title, children, className = "", id }: { title: string; children: React.ReactNode; className?: string; id?: string; }) {
   return (
     <section id={id} className={`rounded-2xl bg-white p-6 shadow-sm border ${className}`}>
       <h3 className="text-lg font-semibold">{title}</h3>
@@ -345,7 +521,7 @@ function Card({ title, children, className = "", id }: { title: string; children
     </section>
   );
 }
-function Input({ name, label, type = "text", required = false }: { name: string; label: string; type?: string; required?: boolean }) {
+function Input({ name, label, type = "text", required = false }: { name: string; label: string; type?: string; required?: boolean; }) {
   return (
     <label className="text-sm">
       <span className="block text-slate-700 mb-1">
@@ -370,12 +546,7 @@ function CopyRow({ label, value, className = "" }: { label: string; value: strin
       <div className="flex items-center justify-between gap-3">
         <span className="text-slate-600 text-sm">{label}</span>
         <button
-          onClick={() => {
-            navigator.clipboard?.writeText(value).then(() => {
-              setCopied(true);
-              setTimeout(() => setCopied(false), 1100);
-            });
-          }}
+          onClick={() => { navigator.clipboard?.writeText(value).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1100); }); }}
           className="rounded-lg border px-2 py-1 text-xs hover:bg-slate-50"
         >
           {copied ? "Copiato ✓" : "Copia"}
@@ -440,7 +611,7 @@ export default function HomePage() {
     <main className="min-h-screen">
       <WavingFlagHero />
 
-      {/* Missione + video */}
+      {/* MISSIONE + VIDEO */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <div>
@@ -455,10 +626,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Dove siamo arrivati */}
-      <WorldReach />
+      {/* DOVE SIAMO ARRIVATI — zoom inline su Italia */}
+      <WorldReachAdvanced />
 
-      {/* Valori */}
+      {/* VALORI */}
       <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="sr-only">I nostri valori</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -469,7 +640,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Assi strategici */}
+      {/* ASSI STRATEGICI */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold">Gli assi strategici</h2>
         <div className="mt-8 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -493,7 +664,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Roadmap */}
+      {/* ROADMAP */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-10">
           <div>
@@ -542,18 +713,17 @@ export default function HomePage() {
           <div className="rounded-2xl border p-8 bg-white shadow-sm">
             <h3 className="text-2xl font-bold">Statuto e governance</h3>
             <p className="mt-2 text-slate-600">Consulta lo Statuto completo online.</p>
-            <Link href="/statuto" className="mt-6 inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Apri lo Statuto</Link>
+            <Link href="/statuto" className="mt-6 inline-flex rounded-2xl border px-5 py-3 font-semibold hover:bg-slate-50">Apri lo Statuto</Link>
           </div>
         </div>
       </section>
 
-      {/* === SEZIONE: come funziona + moduli === */}
+      {/* Come funziona + moduli */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <header className="mb-8">
           <h2 className="text-3xl font-bold">Come funziona l’associazione</h2>
           <p className="mt-2 text-slate-700 max-w-3xl">
-            Siamo una realtà no-profit che unisce italiani in Italia e nel mondo. Partecipi tramite <strong>iscrizioni</strong> ed <strong>eventi</strong>, puoi
-            <strong> prenotare spazi</strong> nella nostra sede e, se vuoi, sostenere le attività con una <strong>donazione</strong>.
+            Siamo una realtà no-profit che unisce italiani in Italia e nel mondo. Partecipi tramite <strong>iscrizioni</strong> ed <strong>eventi</strong>, puoi <strong>prenotare spazi</strong> nella nostra sede e, se vuoi, sostenere le attività con una <strong>donazione</strong>.
           </p>
           <ul className="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-slate-700">
             <li className="rounded-xl border bg-white p-3">• Iscrizione: entri in rete e ricevi aggiornamenti</li>
@@ -568,8 +738,7 @@ export default function HomePage() {
             <div className="flex-1">
               <IscrizioneForm />
               <p className="mt-3 text-xs text-slate-500">
-                Gli invii arrivano alla nostra email tramite Formcarry. Per assistenza:{" "}
-                <a className="underline" href="mailto:info@cittafutura.it">info@cittafutura.it</a>.
+                Gli invii arrivano alla nostra email tramite Formcarry. Per assistenza: <a className="underline" href="mailto:info@cittafutura.it">info@cittafutura.it</a>.
               </p>
             </div>
             <div className="mt-6 pt-6 border-t">
@@ -601,32 +770,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Notizie in evidenza */}
+      {/* Notizie, Eventi, CTA finale */}
       <NewsCarouselSection posts={topPosts} />
-
-      {/* Prossimo evento */}
       <NextEventTeaser />
-
-      {/* Prenota spazi */}
       <BookingCTA />
 
-      {/* ===== CTA FINALE ===== */}
       <section className="py-16 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Entra nella comunità</h2>
-          <p className="mt-2 text-slate-600">
-            Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.
-          </p>
+          <p className="mt-2 text-slate-600">Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/partecipa" className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
-              Iscriviti
-            </Link>
-            <Link href="/eventi" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">
-              Vedi Eventi
-            </Link>
-            <Link href="/prenotazioni" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">
-              Prenota la sede
-            </Link>
+            <Link href="/partecipa" className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">Iscriviti</Link>
+            <Link href="/eventi" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Vedi Eventi</Link>
+            <Link href="/prenotazioni" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Prenota la sede</Link>
           </div>
         </div>
       </section>
