@@ -13,60 +13,28 @@ import { EVENTS, POSTS } from "@/lib/content";
  */
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
-/* ========================= HERO: Bandiera che sventola ========================= */
+/* ========================= HERO: Bandiera che sventola (video + logo overlay) ========================= */
 function WavingFlagHero() {
   return (
     <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
-      <svg
-        className="absolute inset-0 -z-10 h-full w-full"
-        viewBox="0 0 1200 600"
-        preserveAspectRatio="none"
-        aria-hidden
+      {/* Video background */}
+      <video
+        className="absolute inset-0 -z-10 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        // poster="/images/flag-poster.jpg" // facoltativo: frame statico iniziale
       >
-        <defs>
-          <filter id="flagWave">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.008 0.02"
-              numOctaves="2"
-              seed="3"
-              result="noise"
-            >
-              <animate
-                attributeName="baseFrequency"
-                dur="8s"
-                values="0.008 0.02; 0.012 0.03; 0.008 0.02"
-                repeatCount="indefinite"
-              />
-            </feTurbulence>
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="22"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
+        <source src="/video/bandiera.mp4" type="video/mp4" />
+        Il tuo browser non supporta il video HTML5.
+      </video>
 
-          <linearGradient id="whiteShade" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0" stopColor="#ffffff" />
-            <stop offset="1" stopColor="#f4f4f4" />
-          </linearGradient>
+      {/* Overlay per contrasto */}
+      <div className="absolute inset-0 -z-10 bg-black/20" aria-hidden />
 
-          <linearGradient id="light" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0.2" stopColor="rgba(255,255,255,0.18)" />
-            <stop offset="0.8" stopColor="rgba(0,0,0,0.08)" />
-          </linearGradient>
-        </defs>
-
-        <g filter="url(#flagWave)">
-          <rect x="0" y="0" width="400" height="600" fill="#009246" />
-          <rect x="400" y="0" width="400" height="600" fill="url(#whiteShade)" />
-          <rect x="800" y="0" width="400" height="600" fill="#ce2b37" />
-        </g>
-        <rect x="0" y="0" width="1200" height="600" fill="url(#light)" />
-      </svg>
-
+      {/* LOGO overlay */}
       <Image
         src="/images/logo-rotondo.png"
         alt="La Repubblica degli Italiani nel Mondo"
@@ -76,6 +44,7 @@ function WavingFlagHero() {
         className="w-[min(80vw,540px)] h-auto drop-shadow-2xl"
       />
 
+      {/* CTA */}
       <div className="mt-0.25 text-center text-slate-900 px-4">
         <p className="max-w-2xl mx-auto text-lg">
           Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
