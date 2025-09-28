@@ -3,13 +3,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { EVENTS, POSTS } from "@/lib/content";
 
 /** ========================= CONFIG =========================
- * Salva i file mappa in:
- *  - public/world/world.svg
- *  - public/world/italy-regions.svg
+ * Salva i file immagini in:
+ *  - public/images/maps/world.jpg (o .png)
+ *  - public/images/maps/italy.jpg (o .png)
  */
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
@@ -25,7 +25,6 @@ function WavingFlagHero() {
         loop
         playsInline
         preload="metadata"
-        // poster="/images/flag-poster.jpg" // facoltativo: frame statico iniziale
       >
         <source src="/video/bandiera.mp4" type="video/mp4" />
         Il tuo browser non supporta il video HTML5.
@@ -139,184 +138,55 @@ function ResponsiveYouTube({ id }: { id: string }) {
   );
 }
 
-/* ========================= MAPPE: niente zoom + "nuke & repaint" ========================= */
-const ACTIVE_ISO = ["USA", "CAN", "ARG", "BRA", "FRA", "CHE", "AUS", "GBR", "ITA"] as const;
-const ACTIVE_REGIONS = ["LOM", "LAZ", "VEN", "EMR", "PIE", "TOS", "CAM", "SIC"] as const;
-
-function WorldReachAdvanced() {
-  const [worldMarkup, setWorldMarkup] = useState<string | null>(null);
-  const [italyMarkup, setItalyMarkup] = useState<string | null>(null);
-  const [view] = useState<"world" | "italy">("world"); // vista fissa su world
-
-  const worldRef = useRef<HTMLDivElement>(null);
-  const italyRef = useRef<HTMLDivElement>(null);
-
-  // Carica gli SVG con cache-buster
-  useEffect(() => {
-    fetch("/world/world.svg?v=4").then(r => r.text()).then(setWorldMarkup).catch(() => setWorldMarkup(null));
-    fetch("/world/italy-regions.svg?v=4").then(r => r.text()).then(setItalyMarkup).catch(() => setItalyMarkup(null));
-  }, []);
-
-  // Stili + interazioni planisfero — rimuove fill/stroke inline e applica i nostri
-  useEffect(() => {
-    if (!worldMarkup) return;
-    const host = worldRef.current;
-    if (!host) return;
-    const svg = host.querySelector("svg");
-    if (!svg) return;
-
-    // fallback per mappe che usano currentColor
-    svg.setAttribute("color", "#e5e7eb");
-
-    // elimina qualsiasi <style> interno che imposti fill/stroke
-    svg.querySelectorAll("style").forEach(s => s.remove());
-
-    // ripulisci TUTTI i nodi da fill/stroke inline (attributi e inline-style)
-    svg.querySelectorAll<SVGElement>("*").forEach((el) => {
-      el.removeAttribute("fill");
-      el.removeAttribute("stroke");
-      el.removeAttribute("stroke-width");
-
-      const st = el.getAttribute("style");
-      if (st) {
-        const cleaned = st
-          .replace(/(^|;)\s*fill\s*:[^;!]+!?[^;]*;?/gi, "$1")
-          .replace(/(^|;)\s*stroke\s*:[^;!]+!?[^;]*;?/gi, "$1")
-          .replace(/(^|;)\s*stroke-width\s*:[^;!]+!?[^;]*;?/gi, "$1")
-          .replace(/;;+/g, ";")
-          .replace(/^\s*;|;\s*$/g, "");
-        if (cleaned.trim()) el.setAttribute("style", cleaned);
-        else el.removeAttribute("style");
-      }
-    });
-
-    // applica i colori base
-    svg.querySelectorAll<SVGElement>("path, polygon, rect, use").forEach((el) => {
-      el.setAttribute("fill", "#e5e7eb");
-      el.setAttribute("stroke", "#94a3b8");
-      el.setAttribute("stroke-width", "0.6");
-      el.setAttribute("vector-effect", "non-scaling-stroke");
-      el.setAttribute("paint-order", "stroke fill");
-      (el as SVGElement).style.transition = "fill .2s ease";
-    });
-
-    // evidenzia i Paesi attivi
-    ACTIVE_ISO.forEach((id) => {
-      const el = svg.querySelector<SVGElement>(`#${CSS.escape(id)}`);
-      if (el) {
-        el.setAttribute("fill", "#22c55e");
-        (el as SVGGraphicsElement).style.filter = "drop-shadow(0 0 6px rgba(16,185,129,.35))";
-        if (!el.querySelector("title")) {
-          const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
-          t.textContent = id;
-          el.appendChild(t);
-        }
-      }
-    });
-
-    // hover soft per non-attivi
-    const over = (e: Event) => {
-      const el = (e.target as Element).closest("path,polygon,rect,use") as SVGElement | null;
-      if (el && !ACTIVE_ISO.includes(el.id as any)) el.setAttribute("fill", "#c7e3d4");
-    };
-    const out = (e: Event) => {
-      const el = (e.target as Element).closest("path,polygon,rect,use") as SVGElement | null;
-      if (el && !ACTIVE_ISO.includes(el.id as any)) el.setAttribute("fill", "#e5e7eb");
-    };
-
-    svg.addEventListener("mouseover", over);
-    svg.addEventListener("mouseout", out);
-    return () => {
-      svg.removeEventListener("mouseover", over);
-      svg.removeEventListener("mouseout", out);
-    };
-  }, [worldMarkup]);
-
-  // Stili vista Italia (preparata ma non visibile)
-  useEffect(() => {
-    if (!italyMarkup) return;
-    const host = italyRef.current;
-    if (!host) return;
-    const svg = host.querySelector("svg");
-    if (!svg) return;
-
-    svg.querySelectorAll<SVGPathElement>("path").forEach((p) => {
-      p.setAttribute("fill", "#e5e7eb");
-      p.setAttribute("stroke", "#94a3b8");
-      p.setAttribute("stroke-width", "0.6");
-      p.setAttribute("vector-effect", "non-scaling-stroke");
-      p.style.transition = "fill .2s ease";
-    });
-
-    ACTIVE_REGIONS.forEach((id) => {
-      const el = svg.querySelector<SVGPathElement>(`#${CSS.escape(id)}`);
-      if (el) {
-        el.setAttribute("fill", "#2563eb");
-        el.style.filter = "drop-shadow(0 0 6px rgba(37,99,235,.35))";
-        if (!el.querySelector("title")) {
-          const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
-          t.textContent = id;
-          el.appendChild(t);
-        }
-      }
-    });
-  }, [italyMarkup]);
+/* ========================= DOVE SIAMO ARRIVATI — immagini statiche asimmetriche ========================= */
+function WorldReachSection() {
+  // Altezza uguale per entrambe, responsiva
+  const commonHeight =
+    "h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem]";
 
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <header className="mb-6">
         <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
-        <p className="mt-2 text-slate-600 max-w-3xl">
-          Panoramica dei Paesi in cui siamo presenti (evidenziati in verde).
+
+        {/* Testo subito sotto il titolo */}
+        <h3 className="mt-3 text-xl font-semibold">Una rete in espansione</h3>
+        <p className="mt-2 text-slate-700 leading-relaxed max-w-3xl">
+          Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e opportunità
+          di collaborazione tra Italia e diaspora. Se vuoi avviare un nucleo nel tuo Paese,
+          <Link href="/contatti" className="underline decoration-2 underline-offset-2 ml-1">contattaci</Link>.
         </p>
+        <ul className="mt-3 space-y-2 text-slate-700">
+          <li>• Incontri culturali e imprenditoriali</li>
+          <li>• Progetti con associazioni italiane all’estero</li>
+          <li>• Reti professionali e supporto alla mobilità</li>
+        </ul>
       </header>
 
-      <div className="grid lg:grid-cols-3 gap-8 items-center">
-        <div className="lg:col-span-2">
-          <div
-            className="relative rounded-2xl overflow-hidden shadow-sm ring-1 ring-slate-200 bg-white"
-            style={{ aspectRatio: "2 / 1" }}
-          >
-            {/* WORLD layer */}
-            <div
-              ref={worldRef}
-              className={`absolute inset-0 select-none transition duration-300 ease-out ${
-                view === "world" ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-              }`}
-              dangerouslySetInnerHTML={worldMarkup ? { __html: worldMarkup } : undefined}
-            />
-            {!worldMarkup && (
-              <div className="absolute inset-0 flex items-center justify-center text-slate-500">
-                Caricamento planisfero…
-              </div>
-            )}
-
-            {/* ITALY layer (non usato) */}
-            <div
-              ref={italyRef}
-              className={`absolute inset-0 select-none transition duration-300 ease-out ${
-                view === "italy" ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
-              }`}
-              style={{ padding: "2% 10%" }}
-              dangerouslySetInnerHTML={italyMarkup ? { __html: italyMarkup } : undefined}
-            />
-          </div>
-
-          <p className="mt-2 text-sm text-slate-500">Mappa mondiale — aree attive in evidenza.</p>
+      {/* Due immagini senza riquadro, stessa altezza, layout asimmetrico */}
+      <div className="grid grid-cols-12 gap-6 items-stretch">
+        {/* Planisfero: più largo, sinistra (7/12) */}
+        <div className={`relative col-span-12 lg:col-span-7 ${commonHeight}`}>
+          <Image
+            src="/images/maps/world.jpg"
+            alt="Mappa del mondo — presenza internazionale"
+            fill
+            className="object-contain"
+            sizes="(max-width: 1024px) 100vw, 58vw"
+            priority
+          />
         </div>
 
-        <div>
-          <h3 className="text-xl font-semibold">Una rete in espansione</h3>
-          <p className="mt-2 text-slate-700 leading-relaxed">
-            Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e opportunità
-            di collaborazione tra Italia e diaspora. Se vuoi avviare un nucleo nel tuo Paese,
-            <Link href="/contatti" className="underline decoration-2 underline-offset-2 ml-1">contattaci</Link>.
-          </p>
-          <ul className="mt-4 space-y-2 text-slate-700">
-            <li>• Incontri culturali e imprenditoriali</li>
-            <li>• Progetti con associazioni italiane all’estero</li>
-            <li>• Reti professionali e supporto alla mobilità</li>
-          </ul>
+        {/* Italia: meno della metà, destra (5/12) */}
+        <div className={`relative col-span-12 lg:col-span-5 ${commonHeight}`}>
+          <Image
+            src="/images/maps/italy.jpg"
+            alt="Mappa dell’Italia — reti e iniziative sul territorio"
+            fill
+            className="object-contain"
+            sizes="(max-width: 1024px) 100vw, 42vw"
+            priority
+          />
         </div>
       </div>
     </section>
@@ -370,7 +240,7 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
             <button onClick={() => scrollBy("next")} aria-label="Notizie successive" className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white">→</button>
           </div>
 
-          <div ref={scrollerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
+        <div ref={scrollerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
             {posts.map((p) => (
               <article key={p.id} className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow">
                 <Link href={`/notizie/${p.slug}`} className="block">
@@ -612,8 +482,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DOVE SIAMO ARRIVATI — nuke & repaint + niente zoom */}
-      <WorldReachAdvanced />
+      {/* DOVE SIAMO ARRIVATI — immagini statiche asimmetriche */}
+      <WorldReachSection />
 
       {/* VALORI */}
       <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -762,7 +632,7 @@ export default function HomePage() {
       <BookingCTA />
 
       <section className="py-16 bg-slate-50">
-        <div className="max-**w**-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Entra nella comunità</h2>
           <p className="mt-2 text-slate-600">Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
