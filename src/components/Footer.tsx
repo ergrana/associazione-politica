@@ -31,7 +31,7 @@ export default function Footer() {
             Associazione indipendente. Partecipazione, futuro.
           </p>
           <p className="mt-2 text-slate-600 text-sm">
-            C.F. 00000000000 • Via dell’Esempio 1, 00000 Città (IT)
+            C.F. 00000000000 • Viale Giuseppe Mazzini 73, 00195 Roma (RM)
           </p>
           <p className="text-slate-600 text-sm">
             Email:{" "}
