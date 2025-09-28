@@ -3,12 +3,12 @@ import Image from "next/image";
 
 export default function Footer() {
   const nav = [
+    { href: "/", label: "Home" },
     { href: "/chi-siamo", label: "Chi siamo" },
-    { href: "/programma", label: "Programma" },
     { href: "/notizie", label: "Notizie" },
     { href: "/eventi", label: "Eventi" },
+    { href: "/prenotazioni", label: "Prenotazioni" },
     { href: "/partecipa", label: "Partecipa" },
-    // rimosso: { href: "/trasparenza", label: "Trasparenza" },
     { href: "/contatti", label: "Contatti" },
   ];
 
@@ -95,7 +95,6 @@ export default function Footer() {
             riservati
           </span>
           <div className="flex gap-4">
-            {/* rimosso link Trasparenza */}
             <a
               href="/docs/privacy.pdf"
               target="_blank"
