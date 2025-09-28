@@ -160,14 +160,14 @@ function ResponsiveYouTube({ id }: { id: string }) {
   );
 }
 
-/* ========================= MAPPE: zoom inline su Italia ========================= */
+/* ========================= MAPPE: (niente zoom su Italia al click) ========================= */
 const ACTIVE_ISO = ["USA", "CAN", "ARG", "BRA", "FRA", "CHE", "AUS", "GBR", "ITA"] as const;
 const ACTIVE_REGIONS = ["LOM", "LAZ", "VEN", "EMR", "PIE", "TOS", "CAM", "SIC"] as const;
 
 function WorldReachAdvanced() {
   const [worldMarkup, setWorldMarkup] = useState<string | null>(null);
   const [italyMarkup, setItalyMarkup] = useState<string | null>(null);
-  const [view, setView] = useState<"world" | "italy">("world");
+  const [view] = useState<"world" | "italy">("world"); // vista fissa: world
 
   const worldRef = useRef<HTMLDivElement>(null);
   const italyRef = useRef<HTMLDivElement>(null);
@@ -178,7 +178,7 @@ function WorldReachAdvanced() {
     fetch("/world/italy-regions.svg").then(r => r.text()).then(setItalyMarkup).catch(() => setItalyMarkup(null));
   }, []);
 
-  // Stili + interazioni planisfero
+  // Stili + interazioni planisfero (niente click-to-zoom)
   useEffect(() => {
     if (!worldMarkup) return;
     const host = worldRef.current;
@@ -219,24 +219,17 @@ function WorldReachAdvanced() {
         p.setAttribute("fill", "#e5e7eb");
       }
     };
-    const click = (e: MouseEvent) => {
-      const el = (e.target as Element);
-      const p = el.closest("path") as SVGPathElement | null;
-      if (!p) return;
-      if (p.id === "ITA" || el.closest("#ITA")) setView("italy");
-    };
 
     svg.addEventListener("mouseover", over);
     svg.addEventListener("mouseout", out);
-    svg.addEventListener("click", click);
+    // 🔕 NESSUN listener di click: niente zoom
     return () => {
       svg.removeEventListener("mouseover", over);
       svg.removeEventListener("mouseout", out);
-      svg.removeEventListener("click", click);
     };
   }, [worldMarkup]);
 
-  // Stili vista Italia
+  // Stili vista Italia (manteniamo il setup, anche se la vista non si attiva mai)
   useEffect(() => {
     if (!italyMarkup) return;
     const host = italyRef.current;
@@ -271,7 +264,7 @@ function WorldReachAdvanced() {
       <header className="mb-6">
         <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
         <p className="mt-2 text-slate-600 max-w-3xl">
-          Clicca sull’Italia per ingrandire e vedere le regioni in cui siamo presenti. Usa “Indietro” per tornare alla mappa mondiale.
+          Panoramica dei Paesi in cui siamo presenti (evidenziati in verde).
         </p>
       </header>
 
@@ -294,7 +287,7 @@ function WorldReachAdvanced() {
               </div>
             )}
 
-            {/* ITALY layer */}
+            {/* ITALY layer (resta non visibile perché view è fissa su "world") */}
             <div
               ref={italyRef}
               className={`absolute inset-0 select-none transition duration-300 ease-out
@@ -302,20 +295,11 @@ function WorldReachAdvanced() {
               style={{ padding: "2% 10%" }}
               dangerouslySetInnerHTML={italyMarkup ? { __html: italyMarkup } : undefined}
             />
-            {view === "italy" && (
-              <button
-                onClick={() => setView("world")}
-                className="absolute left-3 top-3 z-10 rounded-xl bg-white/95 border px-3 py-1.5 text-sm font-semibold hover:bg-white"
-              >
-                ← Indietro
-              </button>
-            )}
+            {/* Nessun bottone "Indietro" perché la vista non cambia */}
           </div>
 
           <p className="mt-2 text-sm text-slate-500">
-            {view === "world"
-              ? "Suggerimento: clicca sull’Italia per lo zoom."
-              : "Stai visualizzando l’Italia. Clicca “Indietro” per tornare alla mappa mondiale."}
+            Mappa mondiale — aree attive in evidenza.
           </p>
         </div>
 
@@ -626,7 +610,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DOVE SIAMO ARRIVATI — zoom inline su Italia */}
+      {/* DOVE SIAMO ARRIVATI — (niente zoom su Italia) */}
       <WorldReachAdvanced />
 
       {/* VALORI */}
@@ -636,7 +620,7 @@ export default function HomePage() {
           <ValueGhost title="Partecipazione Attiva" text="Assemblee aperte, consultazioni e bilancio partecipativo per decidere insieme." colorClass="from-emerald-600 to-emerald-400" />
           <ValueGhost title="Valorizzazione Cultura Italiana" text="Promozione di diritti, pari opportunità e inclusione sociale." colorClass="from-amber-600 to-amber-400" />
           <ValueGhost title="Cultura Imprenditoriale" text="Conoscenza, responsabilità, comunicazione e apertura al cambiamento." colorClass="from-sky-600 to-sky-400" />
-          <ValueGhost title="Giovani e Innovazione" text="Collaborazione e sperimentazione per nuove generazioni protagoniste." colorClass="from-indigo-600 to-indigo-400" />
+          <ValueGhost title="Giovani e Innovazione" text="Collaborazione e sperimentazione per nuove generazioni protagoniste." colorClass="from-indigo-600 to-indo-400" />
         </div>
       </section>
 
