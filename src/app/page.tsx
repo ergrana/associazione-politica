@@ -13,64 +13,65 @@ import { EVENTS, POSTS } from "@/lib/content";
  */
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
-/* ========================= HERO: Bandiera (video) + contenuto a sinistra con ombreggiatura ========================= */
+/* ========================= HERO: Bandiera che sventola (video + logo overlay) ========================= */
 function WavingFlagHero() {
   return (
-    <section className="relative min-h-[60vh] overflow-hidden">
-      {/* Video background */}
+    <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
+      {/* Video background (ancora più scuro) */}
       <video
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
+        className="absolute inset-0 -z-20 h-full w-full object-cover brightness-50 contrast-110"
         autoPlay
         muted
         loop
         playsInline
         preload="metadata"
-        // poster="/images/flag-poster.jpg" // opzionale
+        // poster="/images/flag-poster.jpg" // facoltativo: frame statico iniziale
       >
         <source src="/video/bandiera.mp4" type="video/mp4" />
         Il tuo browser non supporta il video HTML5.
       </video>
 
-      {/* Ombreggiatura a sinistra (gradiente) */}
+      {/* Overlay uniforme più forte per aumentare il contrasto */}
+      <div className="absolute inset-0 -z-10 bg-black/55" aria-hidden />
+
+      {/* Vignettatura radiale per scurire soprattutto al centro (logo + CTA) */}
       <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-black/55 via-black/25 to-transparent"
+        className="absolute inset-0 -z-10"
         aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.35) 75%, rgba(0,0,0,0.2) 100%)",
+        }}
       />
 
-      {/* Contenuto allineato a sinistra */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center min-h-[60vh]">
-          <div className="w-full max-w-xl text-left">
-            {/* Logo */}
-            <Image
-              src="/images/logo-rotondo.png"
-              alt="La Repubblica degli Italiani nel Mondo"
-              width={420}
-              height={420}
-              priority
-              className="w-[min(62vw,360px)] md:w-[min(40vw,420px)] h-auto drop-shadow-2xl"
-            />
+      {/* LOGO overlay */}
+      <Image
+        src="/images/logo-rotondo.png"
+        alt="La Repubblica degli Italiani nel Mondo"
+        width={420}
+        height={420}
+        priority
+        className="w-[min(80vw,540px)] h-auto drop-shadow-2xl"
+      />
 
-            {/* Testo + CTA */}
-            <p className="mt-4 max-w-xl text-white/95 text-lg drop-shadow">
-              Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
-            </p>
-
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href="/partecipa"
-                className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
-              >
-                Iscriviti ora
-              </Link>
-              <Link
-                href="/partecipa#pagamento"
-                className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 bg-white/90 backdrop-blur px-5 py-3 font-semibold text-slate-900 hover:bg-white"
-              >
-                Sostienici con una donazione
-              </Link>
-            </div>
-          </div>
+      {/* CTA */}
+      <div className="mt-0.25 text-center text-slate-900 px-4">
+        <p className="max-w-2xl mx-auto text-lg">
+          Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
+        </p>
+        <div className="mt-5 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/partecipa"
+            className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
+          >
+            Iscriviti ora
+          </Link>
+          <Link
+            href="/partecipa#pagamento"
+            className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
+          >
+            Sostienici con una donazione
+          </Link>
         </div>
       </div>
     </section>
@@ -431,7 +432,7 @@ function NextEventTeaser() {
           <div className="text-xs text-slate-500">{nextEvent.city} • {fmtShortDate(nextEvent.date)}</div>
           <h3 className="mt-1 text-xl font-semibold">{nextEvent.title}</h3>
           <p className="mt-2 text-slate-600 line-clamp-3">{nextEvent.description}</p>
-          <div className="mt-3 text-sm text-slate-700">📍 {nextEvent.place} — {nextEvent.address}, {nextEvent.city}</div>
+          <div className="mt-3 text-slate-700">📍 {nextEvent.place} — {nextEvent.address}, {nextEvent.city}</div>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Partecipa</Link>
             <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">Dettagli</Link>
