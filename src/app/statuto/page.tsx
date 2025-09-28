@@ -18,30 +18,36 @@ export const metadata: Metadata = {
 export default function StatutoPage() {
   return (
     <main className="min-h-screen">
-      {/* HERO/INTRO */}
-      <section className="bg-slate-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <p className="text-xs font-medium text-slate-500">
+      {/* HERO/INTRO – stile come "Chi siamo" */}
+      <section className="relative overflow-hidden">
+        <img
+          src="/images/hero.jpg"
+          alt=""
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/55 -z-10" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-white">
+          <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 px-3 py-1 rounded-full">
             La Repubblica degli Italiani nel Mondo
-          </p>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight">
+          </span>
+          <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             Statuto dell’Associazione
           </h1>
-          <p className="mt-3 max-w-2xl text-slate-600">
+          <p className="mt-4 max-w-2xl text-white/90">
             Principi, organi sociali e norme di funzionamento.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/#"
-              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-white"
+              href="/"
+              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
             >
-              ← Torna alla pagina “Chi Siamo”
+              ← Torna alla Home
             </Link>
-            {/* opzionale: se mantieni anche il PDF */}
+            {/* opzionale: link al PDF se presente in /public/docs */}
             <a
               href="/docs/statuto.pdf"
-              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-white"
+              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
             >
               Scarica lo Statuto (PDF)
             </a>
@@ -51,7 +57,7 @@ export default function StatutoPage() {
 
       {/* CONTENUTO */}
       <section className="py-10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-slate lg:prose-lg dark:prose-invert">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-slate lg:prose-lg">
           {/* ⬇️ Sostituisci i placeholder con il testo ufficiale dello statuto */}
           <h2>Premessa</h2>
           <p>

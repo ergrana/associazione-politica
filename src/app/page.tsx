@@ -47,8 +47,8 @@ function WavingFlagHero() {
       <Image
         src="/images/logo-rotondo.png"
         alt="La Repubblica degli Italiani nel Mondo"
-        width={300}
-        height={300}
+        width={130}
+        height={130}
         priority
         className="w-[min(60vw,300px)] h-auto drop-shadow-2xl"
       />

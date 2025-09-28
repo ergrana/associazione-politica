@@ -50,18 +50,39 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <nav className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand: solo logo (niente testo visibile) */}
-        <Link href="/" className="flex items-center gap-3" aria-label="Vai alla Home">
-          <Image
-            src="/images/logo.jpg"
-            alt="Logo La Repubblica degli Italiani nel Mondo"
-            width={40}
-            height={40}
-            className="rounded-md"
-            priority
-          />
-          <span className="sr-only">La Repubblica degli Italiani nel Mondo</span>
-        </Link>
+        {/* Brand + CTA a sinistra */}
+        <div className="flex items-center gap-3">
+          {/* Brand: solo logo (niente testo visibile) */}
+          <Link href="/" className="flex items-center gap-3" aria-label="Vai alla Home">
+            <Image
+              src="/images/logo.jpg"
+              alt="Logo La Repubblica degli Italiani nel Mondo"
+              width={40}
+              height={40}
+              className="rounded-md"
+              priority
+            />
+            <span className="sr-only">La Repubblica degli Italiani nel Mondo</span>
+          </Link>
+
+          {/* CTA immediate (solo desktop) */}
+          <div className="hidden md:flex items-center gap-2 ml-2">
+            <Link
+              href="/partecipa"
+              aria-label="Iscriviti"
+              className="inline-flex items-center rounded-lg bg-slate-900 text-white px-3 py-2 text-sm font-semibold hover:opacity-90"
+            >
+              Iscriviti
+            </Link>
+            <Link
+              href="/partecipa#pagamento"
+              aria-label="Sostienici con una donazione"
+              className="inline-flex items-center rounded-lg ring-1 ring-slate-300 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/60"
+            >
+              Sostienici con una donazione
+            </Link>
+          </div>
+        </div>
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -134,6 +155,24 @@ export default function Header() {
           >
             ✕
           </button>
+        </div>
+
+        {/* CTA in alto nel drawer (mobile) */}
+        <div className="p-4 pt-3 border-b border-slate-200 dark:border-slate-700">
+          <div className="grid gap-2">
+            <Link
+              href="/partecipa"
+              className="inline-flex items-center justify-center rounded-lg bg-slate-900 text-white px-3 py-2 text-sm font-semibold hover:opacity-90"
+            >
+              Iscriviti
+            </Link>
+            <Link
+              href="/partecipa#pagamento"
+              className="inline-flex items-center justify-center rounded-lg ring-1 ring-slate-300 text-slate-900 dark:text-slate-100 px-3 py-2 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/60"
+            >
+              Sostienici con una donazione
+            </Link>
+          </div>
         </div>
 
         <nav className="p-4 space-y-1">

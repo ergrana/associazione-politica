@@ -18,26 +18,39 @@ export const metadata: Metadata = {
 export default function ManifestiPage() {
   return (
     <main className="min-h-screen">
-      {/* HERO */}
-      <section className="bg-slate-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <p className="text-xs font-medium text-slate-500">
-            La Repubblica degli Italiani nel Mondo
-          </p>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight">
+      {/* HERO – stile come "Chi siamo" */}
+      <section className="relative overflow-hidden">
+        <img
+          src="/images/hero.jpg"
+          alt=""
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/55 -z-10" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-white">
+          <span className="inline-flex items-center gap-2 text-xs font-semibold bg-white/15 px-3 py-1 rounded-full">
+            La Repubblica degli Italiani nel Mondo • Manifesto
+          </span>
+          <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             Manifesto
           </h1>
-          <p className="mt-3 max-w-2xl text-slate-600">
+          <p className="mt-4 max-w-2xl text-white/90">
             Visione, obiettivi e valori di riferimento.
           </p>
 
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/#"
-              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-white"
+              href="/"
+              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
             >
-              ← Torna alla pagina “Chi Siamo”
+              ← Torna alla Home
             </Link>
+            {/* opzionale: se mantieni anche il PDF */}
+            <a
+              href="/docs/manifesto.pdf"
+              className="inline-flex rounded-xl border px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              Scarica il manifesto (PDF)
+            </a>
           </div>
         </div>
       </section>
