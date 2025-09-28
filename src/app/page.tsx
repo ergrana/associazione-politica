@@ -13,10 +13,10 @@ import { EVENTS, POSTS } from "@/lib/content";
  */
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
-/* ========================= HERO: Bandiera che sventola (video + logo overlay) ========================= */
+/* ========================= HERO: Bandiera (video) + contenuto a sinistra con ombreggiatura ========================= */
 function WavingFlagHero() {
   return (
-    <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
+    <section className="relative min-h-[60vh] overflow-hidden">
       {/* Video background */}
       <video
         className="absolute inset-0 -z-10 h-full w-full object-cover"
@@ -25,43 +25,52 @@ function WavingFlagHero() {
         loop
         playsInline
         preload="metadata"
-        // poster="/images/flag-poster.jpg" // facoltativo: frame statico iniziale
+        // poster="/images/flag-poster.jpg" // opzionale
       >
         <source src="/video/bandiera.mp4" type="video/mp4" />
         Il tuo browser non supporta il video HTML5.
       </video>
 
-      {/* Overlay per contrasto */}
-      <div className="absolute inset-0 -z-10 bg-black/20" aria-hidden />
-
-      {/* LOGO overlay */}
-      <Image
-        src="/images/logo-rotondo.png"
-        alt="La Repubblica degli Italiani nel Mondo"
-        width={420}
-        height={420}
-        priority
-        className="w-[min(80vw,540px)] h-auto drop-shadow-2xl"
+      {/* Ombreggiatura a sinistra (gradiente) */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-black/55 via-black/25 to-transparent"
+        aria-hidden
       />
 
-      {/* CTA */}
-      <div className="mt-0.25 text-center text-slate-900 px-4">
-        <p className="max-w-2xl mx-auto text-lg">
-          Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
-        </p>
-        <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/partecipa"
-            className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
-          >
-            Iscriviti ora
-          </Link>
-          <Link
-            href="/partecipa#pagamento"
-            className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
-          >
-            Sostienici con una donazione
-          </Link>
+      {/* Contenuto allineato a sinistra */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center min-h-[60vh]">
+          <div className="w-full max-w-xl text-left">
+            {/* Logo */}
+            <Image
+              src="/images/logo-rotondo.png"
+              alt="La Repubblica degli Italiani nel Mondo"
+              width={420}
+              height={420}
+              priority
+              className="w-[min(62vw,360px)] md:w-[min(40vw,420px)] h-auto drop-shadow-2xl"
+            />
+
+            {/* Testo + CTA */}
+            <p className="mt-4 max-w-xl text-white/95 text-lg drop-shadow">
+              Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
+            </p>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link
+                href="/partecipa"
+                className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
+              >
+                Iscriviti ora
+              </Link>
+              <Link
+                href="/partecipa#pagamento"
+                className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 bg-white/90 backdrop-blur px-5 py-3 font-semibold text-slate-900 hover:bg-white"
+              >
+                Sostienici con una donazione
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
