@@ -89,7 +89,7 @@ function WavingFlagHero() {
           </Link>
           <Link
             href="/partecipa#pagamento"
-            className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
+            className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg_black/5"
           >
             Sostienici con una donazione
           </Link>
@@ -160,7 +160,7 @@ function ResponsiveYouTube({ id }: { id: string }) {
   );
 }
 
-/* ========================= MAPPE: (niente zoom su Italia al click) ========================= */
+/* ========================= MAPPE: niente zoom su Italia ========================= */
 const ACTIVE_ISO = ["USA", "CAN", "ARG", "BRA", "FRA", "CHE", "AUS", "GBR", "ITA"] as const;
 const ACTIVE_REGIONS = ["LOM", "LAZ", "VEN", "EMR", "PIE", "TOS", "CAM", "SIC"] as const;
 
@@ -172,13 +172,19 @@ function WorldReachAdvanced() {
   const worldRef = useRef<HTMLDivElement>(null);
   const italyRef = useRef<HTMLDivElement>(null);
 
-  // Carica i due SVG
+  // Carica i due SVG (con cache-buster)
   useEffect(() => {
-    fetch("/world/world.svg").then(r => r.text()).then(setWorldMarkup).catch(() => setWorldMarkup(null));
-    fetch("/world/italy-regions.svg").then(r => r.text()).then(setItalyMarkup).catch(() => setItalyMarkup(null));
+    fetch("/world/world.svg?v=2")
+      .then((r) => r.text())
+      .then(setWorldMarkup)
+      .catch(() => setWorldMarkup(null));
+    fetch("/world/italy-regions.svg?v=2")
+      .then((r) => r.text())
+      .then(setItalyMarkup)
+      .catch(() => setItalyMarkup(null));
   }, []);
 
-  // Stili + interazioni planisfero (niente click-to-zoom)
+  // Stili + interazioni planisfero (niente click-to-zoom) + forzatura colori
   useEffect(() => {
     if (!worldMarkup) return;
     const host = worldRef.current;
@@ -186,19 +192,26 @@ function WorldReachAdvanced() {
     const svg = host.querySelector("svg");
     if (!svg) return;
 
-    svg.querySelectorAll<SVGPathElement>("path").forEach((p) => {
-      if (!p.getAttribute("fill")) p.setAttribute("fill", "#e5e7eb");
-      p.setAttribute("stroke", "#94a3b8");
-      p.setAttribute("stroke-width", "0.6");
-      p.setAttribute("vector-effect", "non-scaling-stroke");
-      p.style.transition = "fill .2s ease";
+    // 1) Elimina eventuali stili interni che impongono fill: black
+    svg.querySelectorAll("style").forEach((s) => s.remove());
+
+    // 2) Normalizza TUTTE le forme: fill/stroke base forzati
+    svg.querySelectorAll<SVGElement>("path, polygon, rect").forEach((el) => {
+      el.setAttribute("fill", "#e5e7eb"); // grigio chiaro base
+      el.setAttribute("stroke", "#94a3b8");
+      el.setAttribute("stroke-width", "0.6");
+      el.setAttribute("vector-effect", "non-scaling-stroke");
+      el.setAttribute("paint-order", "stroke fill");
+      el.setAttribute("style", "transition:fill .2s ease");
     });
 
+    // 3) Evidenzia i Paesi attivi in verde
     ACTIVE_ISO.forEach((id) => {
-      const node = svg.querySelector<SVGPathElement>(`#${id}`);
+      const node = svg.querySelector<SVGElement>(`#${CSS.escape(id)}`);
       if (node) {
         node.setAttribute("fill", "#22c55e");
-        node.style.filter = "drop-shadow(0 0 6px rgba(16,185,129,.35))";
+        (node as SVGGraphicsElement).style.filter =
+          "drop-shadow(0 0 6px rgba(16,185,129,.35))";
         if (!node.querySelector("title")) {
           const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
           t.textContent = id;
@@ -207,29 +220,26 @@ function WorldReachAdvanced() {
       }
     });
 
+    // 4) Hover soft per non-attivi
     const over = (e: Event) => {
-      const p = (e.target as Element).closest("path");
-      if (p && p instanceof SVGPathElement && !ACTIVE_ISO.includes(p.id as any)) {
-        p.setAttribute("fill", "#c7e3d4");
-      }
+      const p = (e.target as Element).closest("path,polygon,rect") as SVGElement | null;
+      if (p && !ACTIVE_ISO.includes(p.id as any)) p.setAttribute("fill", "#c7e3d4");
     };
     const out = (e: Event) => {
-      const p = (e.target as Element).closest("path");
-      if (p && p instanceof SVGPathElement && !ACTIVE_ISO.includes(p.id as any)) {
-        p.setAttribute("fill", "#e5e7eb");
-      }
+      const p = (e.target as Element).closest("path,polygon,rect") as SVGElement | null;
+      if (p && !ACTIVE_ISO.includes(p.id as any)) p.setAttribute("fill", "#e5e7eb");
     };
 
     svg.addEventListener("mouseover", over);
     svg.addEventListener("mouseout", out);
-    // 🔕 NESSUN listener di click: niente zoom
+    // Nessun listener click: niente zoom
     return () => {
       svg.removeEventListener("mouseover", over);
       svg.removeEventListener("mouseout", out);
     };
   }, [worldMarkup]);
 
-  // Stili vista Italia (manteniamo il setup, anche se la vista non si attiva mai)
+  // Stili vista Italia (preparata anche se non verrà mostrata)
   useEffect(() => {
     if (!italyMarkup) return;
     const host = italyRef.current;
@@ -238,7 +248,7 @@ function WorldReachAdvanced() {
     if (!svg) return;
 
     svg.querySelectorAll<SVGPathElement>("path").forEach((p) => {
-      if (!p.getAttribute("fill")) p.setAttribute("fill", "#e5e7eb");
+      p.setAttribute("fill", "#e5e7eb");
       p.setAttribute("stroke", "#94a3b8");
       p.setAttribute("stroke-width", "0.6");
       p.setAttribute("vector-effect", "non-scaling-stroke");
@@ -277,9 +287,14 @@ function WorldReachAdvanced() {
             {/* WORLD layer */}
             <div
               ref={worldRef}
-              className={`absolute inset-0 select-none transition duration-300 ease-out
-                ${view === "world" ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
-              dangerouslySetInnerHTML={worldMarkup ? { __html: worldMarkup } : undefined}
+              className={`absolute inset-0 select-none transition duration-300 ease-out ${
+                view === "world"
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
+              dangerouslySetInnerHTML={
+                worldMarkup ? { __html: worldMarkup } : undefined
+              }
             />
             {!worldMarkup && (
               <div className="absolute inset-0 flex items-center justify-center text-slate-500">
@@ -287,15 +302,19 @@ function WorldReachAdvanced() {
               </div>
             )}
 
-            {/* ITALY layer (resta non visibile perché view è fissa su "world") */}
+            {/* ITALY layer (non usato: vista fissa su world) */}
             <div
               ref={italyRef}
-              className={`absolute inset-0 select-none transition duration-300 ease-out
-                ${view === "italy" ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"}`}
+              className={`absolute inset-0 select-none transition duration-300 ease-out ${
+                view === "italy"
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-105 pointer-events-none"
+              }`}
               style={{ padding: "2% 10%" }}
-              dangerouslySetInnerHTML={italyMarkup ? { __html: italyMarkup } : undefined}
+              dangerouslySetInnerHTML={
+                italyMarkup ? { __html: italyMarkup } : undefined
+              }
             />
-            {/* Nessun bottone "Indietro" perché la vista non cambia */}
           </div>
 
           <p className="mt-2 text-sm text-slate-500">
@@ -306,9 +325,16 @@ function WorldReachAdvanced() {
         <div>
           <h3 className="text-xl font-semibold">Una rete in espansione</h3>
           <p className="mt-2 text-slate-700 leading-relaxed">
-            Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e opportunità
-            di collaborazione tra Italia e diaspora. Se vuoi avviare un nucleo nel tuo Paese,
-            <Link href="/contatti" className="underline decoration-2 underline-offset-2 ml-1">contattaci</Link>.
+            Collegare persone e comunità è la nostra priorità: eventi, mentorship,
+            gruppi tematici e opportunità di collaborazione tra Italia e diaspora.
+            Se vuoi avviare un nucleo nel tuo Paese,
+            <Link
+              href="/contatti"
+              className="underline decoration-2 underline-offset-2 ml-1"
+            >
+              contattaci
+            </Link>
+            .
           </p>
           <ul className="mt-4 space-y-2 text-slate-700">
             <li>• Incontri culturali e imprenditoriali</li>
@@ -322,10 +348,18 @@ function WorldReachAdvanced() {
 }
 
 /* ========================= HELPERS ========================= */
-function startOfDay(d: Date) { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
+function startOfDay(d: Date) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
 function fmtShortDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString("it-IT", { year: "numeric", month: "short", day: "2-digit" });
+  return d.toLocaleDateString("it-IT", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
 }
 function fmtBadgeDate(iso: string, end?: string) {
   const s = new Date(iso);
@@ -340,10 +374,15 @@ function fmtBadgeDate(iso: string, end?: string) {
 }
 
 /* ========================= NEWS CAROUSEL ========================= */
-function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
+function NewsCarouselSection({
+  posts,
+}: {
+  posts: (typeof POSTS)[number][];
+}) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   function scrollBy(dir: "prev" | "next") {
-    const el = scrollerRef.current; if (!el) return;
+    const el = scrollerRef.current;
+    if (!el) return;
     const delta = Math.round(el.clientWidth * 0.9);
     el.scrollBy({ left: dir === "next" ? delta : -delta, behavior: "smooth" });
   }
@@ -353,31 +392,68 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-bold">Notizie in evidenza</h2>
-            <p className="mt-2 text-slate-600">Aggiornamenti dal territorio, iniziative e comunicati.</p>
+            <p className="mt-2 text-slate-600">
+              Aggiornamenti dal territorio, iniziative e comunicati.
+            </p>
           </div>
-          <Link href="/notizie" className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+          <Link
+            href="/notizie"
+            className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
             Vai alle Notizie
           </Link>
         </div>
 
         <div className="mt-6 relative">
           <div className="absolute -left-2 top-1/2 -translate-y-1/2 z-10">
-            <button onClick={() => scrollBy("prev")} aria-label="Notizie precedenti" className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white">←</button>
+            <button
+              onClick={() => scrollBy("prev")}
+              aria-label="Notizie precedenti"
+              className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white"
+            >
+              ←
+            </button>
           </div>
           <div className="absolute -right-2 top-1/2 -translate-y-1/2 z-10">
-            <button onClick={() => scrollBy("next")} aria-label="Notizie successive" className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white">→</button>
+            <button
+              onClick={() => scrollBy("next")}
+              aria-label="Notizie successive"
+              className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white"
+            >
+              →
+            </button>
           </div>
 
-          <div ref={scrollerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
+          <div
+            ref={scrollerRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2"
+          >
             {posts.map((p) => (
-              <article key={p.id} className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow">
+              <article
+                key={p.id}
+                className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow"
+              >
                 <Link href={`/notizie/${p.slug}`} className="block">
-                  <Image src={p.image} alt={p.title} width={800} height={450} className="w-full h-44 object-cover" />
+                  <Image
+                    src={p.image}
+                    alt={p.title}
+                    width={800}
+                    height={450}
+                    className="w-full h-44 object-cover"
+                  />
                   <div className="p-5">
-                    <div className="text-xs text-slate-500">{fmtShortDate(p.date)} • {p.read}</div>
-                    <h3 className="mt-1 text-lg font-semibold line-clamp-2">{p.title}</h3>
-                    <p className="mt-2 text-slate-600 line-clamp-3">{p.excerpt}</p>
-                    <div className="mt-3 text-sm font-semibold text-indigo-700">Leggi di più →</div>
+                    <div className="text-xs text-slate-500">
+                      {fmtShortDate(p.date)} • {p.read}
+                    </div>
+                    <h3 className="mt-1 text-lg font-semibold line-clamp-2">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 text-slate-600 line-clamp-3">
+                      {p.excerpt}
+                    </p>
+                    <div className="mt-3 text-sm font-semibold text-indigo-700">
+                      Leggi di più →
+                    </div>
                   </div>
                 </Link>
               </article>
@@ -385,7 +461,10 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
           </div>
 
           <div className="mt-6 sm:hidden text-center">
-            <Link href="/notizie" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+            <Link
+              href="/notizie"
+              className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
               Tutte le Notizie
             </Link>
           </div>
@@ -399,7 +478,9 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
 function NextEventTeaser() {
   const nextEvent = useMemo(() => {
     const now = startOfDay(new Date());
-    const upcoming = EVENTS.filter((e) => new Date(e.date) >= now).sort((a, b) => +new Date(a.date) - +new Date(b.date));
+    const upcoming = EVENTS.filter((e) => new Date(e.date) >= now).sort(
+      (a, b) => +new Date(a.date) - +new Date(b.date)
+    );
     return upcoming[0] ?? null;
   }, []);
   if (!nextEvent) return null;
@@ -411,14 +492,24 @@ function NextEventTeaser() {
           <h2 className="text-3xl font-bold">Vieni al prossimo evento</h2>
           <p className="mt-2 text-slate-600">Unisciti a noi e vivi la comunità.</p>
         </div>
-        <Link href="/eventi" className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+        <Link
+          href="/eventi"
+          className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+        >
           Vai agli Eventi
         </Link>
       </div>
 
       <article className="rounded-2xl border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         <Link href={`/eventi/${nextEvent.id}`} className="block relative">
-          <Image src={nextEvent.cover} alt={nextEvent.title} width={1200} height={630} className="w-full h-64 object-cover" priority />
+          <Image
+            src={nextEvent.cover}
+            alt={nextEvent.title}
+            width={1200}
+            height={630}
+            className="w-full h-64 object-cover"
+            priority
+          />
           <div className="absolute top-3 left-3 rounded-xl bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">
             {fmtBadgeDate(nextEvent.date, nextEvent.end)}
           </div>
@@ -427,19 +518,38 @@ function NextEventTeaser() {
           </div>
         </Link>
         <div className="p-6">
-          <div className="text-xs text-slate-500">{nextEvent.city} • {fmtShortDate(nextEvent.date)}</div>
+          <div className="text-xs text-slate-500">
+            {nextEvent.city} • {fmtShortDate(nextEvent.date)}
+          </div>
           <h3 className="mt-1 text-xl font-semibold">{nextEvent.title}</h3>
-          <p className="mt-2 text-slate-600 line-clamp-3">{nextEvent.description}</p>
-          <div className="mt-3 text-sm text-slate-700">📍 {nextEvent.place} — {nextEvent.address}, {nextEvent.city}</div>
+          <p className="mt-2 text-slate-600 line-clamp-3">
+            {nextEvent.description}
+          </p>
+          <div className="mt-3 text-sm text-slate-700">
+            📍 {nextEvent.place} — {nextEvent.address}, {nextEvent.city}
+          </div>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Partecipa</Link>
-            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">Dettagli</Link>
+            <Link
+              href={`/eventi/${nextEvent.id}`}
+              className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+            >
+              Partecipa
+            </Link>
+            <Link
+              href={`/eventi/${nextEvent.id}`}
+              className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+            >
+              Dettagli
+            </Link>
           </div>
         </div>
       </article>
 
       <div className="mt-6 sm:hidden text-center">
-        <Link href="/eventi" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+        <Link
+          href="/eventi"
+          className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+        >
           Vai agli Eventi
         </Link>
       </div>
@@ -455,17 +565,30 @@ function BookingCTA() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-bold">Prenota uno spazio della nostra sede</h2>
-            <p className="mt-2 text-slate-600">Ufficio per 1–2 postazioni o Sala riunioni fino a 10 persone. Importo libero (con minimo orario).</p>
+            <p className="mt-2 text-slate-600">
+              Ufficio per 1–2 postazioni o Sala riunioni fino a 10 persone. Importo libero (con minimo orario).
+            </p>
           </div>
-          <Link href="/prenotazioni" className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+          <Link
+            href="/prenotazioni"
+            className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
             Vai alle Prenotazioni
           </Link>
         </div>
 
         <div className="mt-8 grid sm:grid-cols-2 gap-6">
           {[
-            { title: "Ufficio (1–2 postazioni)", img: "/images/sede/ufficio-thumb.jpg", chips: ["Capienza 2", "Min 15 €/h", "Wi-Fi", "Scrivania", "Prese"] },
-            { title: "Sala riunioni (fino a 10 persone)", img: "/images/sede/sala-thumb.jpg", chips: ["Capienza 10", "Min 30 €/h", "Wi-Fi", "Schermo/TV", "Lavagna"] },
+            {
+              title: "Ufficio (1–2 postazioni)",
+              img: "/images/sede/ufficio-thumb.jpg",
+              chips: ["Capienza 2", "Min 15 €/h", "Wi-Fi", "Scrivania", "Prese"],
+            },
+            {
+              title: "Sala riunioni (fino a 10 persone)",
+              img: "/images/sede/sala-thumb.jpg",
+              chips: ["Capienza 10", "Min 30 €/h", "Wi-Fi", "Schermo/TV", "Lavagna"],
+            },
           ].map((o) => (
             <div key={o.title} className="rounded-2xl border bg-white overflow-hidden shadow-sm">
               <div className="relative h-48">
@@ -475,10 +598,15 @@ function BookingCTA() {
                 <h3 className="text-lg font-semibold">{o.title}</h3>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {o.chips.map((c) => (
-                    <span key={c} className="text-xs rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">{c}</span>
+                    <span key={c} className="text-xs rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">
+                      {c}
+                    </span>
                   ))}
                 </div>
-                <Link href="/prenotazioni" className="mt-4 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
+                <Link
+                  href="/prenotazioni"
+                  className="mt-4 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+                >
                   Prenota questo spazio →
                 </Link>
               </div>
@@ -487,7 +615,10 @@ function BookingCTA() {
         </div>
 
         <div className="mt-6 sm:hidden text-center">
-          <Link href="/prenotazioni" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+          <Link
+            href="/prenotazioni"
+            className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
             Vai alle Prenotazioni
           </Link>
         </div>
@@ -497,7 +628,17 @@ function BookingCTA() {
 }
 
 /* ========================= CARD + FORM ========================= */
-function Card({ title, children, className = "", id }: { title: string; children: React.ReactNode; className?: string; id?: string; }) {
+function Card({
+  title,
+  children,
+  className = "",
+  id,
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}) {
   return (
     <section id={id} className={`rounded-2xl bg-white p-6 shadow-sm border ${className}`}>
       <h3 className="text-lg font-semibold">{title}</h3>
@@ -505,32 +646,73 @@ function Card({ title, children, className = "", id }: { title: string; children
     </section>
   );
 }
-function Input({ name, label, type = "text", required = false }: { name: string; label: string; type?: string; required?: boolean; }) {
+function Input({
+  name,
+  label,
+  type = "text",
+  required = false,
+}: {
+  name: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+}) {
   return (
     <label className="text-sm">
       <span className="block text-slate-700 mb-1">
         {label} {required ? <span className="text-rose-600" aria-hidden>*</span> : null}
       </span>
-      <input name={name} type={type} required={required} className="w-full rounded-xl border px-4 py-2.5" aria-required={required} />
+      <input
+        name={name}
+        type={type}
+        required={required}
+        className="w-full rounded-xl border px-4 py-2.5"
+        aria-required={required}
+      />
     </label>
   );
 }
-function Select({ name, label, children }: { name: string; label: string; children: React.ReactNode }) {
+function Select({
+  name,
+  label,
+  children,
+}: {
+  name: string;
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="text-sm">
       <span className="block text-slate-700 mb-1">{label}</span>
-      <select name={name} className="w-full rounded-xl border px-4 py-2.5">{children}</select>
+      <select name={name} className="w-full rounded-xl border px-4 py-2.5">
+        {children}
+      </select>
     </label>
   );
 }
-function CopyRow({ label, value, className = "" }: { label: string; value: string; className?: string }) {
+function CopyRow({
+  label,
+  value,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
   return (
     <div className={className}>
       <div className="flex items-center justify-between gap-3">
         <span className="text-slate-600 text-sm">{label}</span>
         <button
-          onClick={() => { navigator.clipboard?.writeText(value).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1100); }); }}
+          onClick={() => {
+            navigator.clipboard
+              ?.writeText(value)
+              .then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1100);
+              });
+          }}
           className="rounded-lg border px-2 py-1 text-xs hover:bg-slate-50"
         >
           {copied ? "Copiato ✓" : "Copia"}
@@ -547,16 +729,36 @@ function IscrizioneForm() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setErr(null); setOk(false);
+    setErr(null);
+    setOk(false);
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
-    if (!data.nome || !data.cognome || !data.email || !data.comune || !data.consent) { alert("Compila i campi obbligatori e accetta la privacy."); return; }
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<
+      string,
+      string
+    >;
+    if (!data.nome || !data.cognome || !data.email || !data.comune || !data.consent) {
+      alert("Compila i campi obbligatori e accetta la privacy.");
+      return;
+    }
     setLoading(true);
     try {
-      const res = await fetch(FORMCARRY_URL, { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
-      if (res.ok) { setOk(true); form.reset(); } else { const j = await res.json().catch(() => null); setErr(j?.message || "Invio non riuscito. Riprova più tardi."); }
-    } catch { setErr("Connessione non riuscita. Controlla la rete e riprova."); }
-    finally { setLoading(false); }
+      const res = await fetch(FORMCARRY_URL, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form),
+      });
+      if (res.ok) {
+        setOk(true);
+        form.reset();
+      } else {
+        const j = await res.json().catch(() => null);
+        setErr(j?.message || "Invio non riuscito. Riprova più tardi.");
+      }
+    } catch {
+      setErr("Connessione non riuscita. Controlla la rete e riprova.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -567,19 +769,39 @@ function IscrizioneForm() {
       <Input name="telefono" type="tel" label="Telefono (opzionale)" />
       <Input name="comune" label="Comune di residenza *" required />
       <Select name="fascia" label="Fascia di età">
-        <option value="">Seleziona…</option><option>18–25</option><option>26–35</option><option>36–50</option><option>51+</option>
+        <option value="">Seleziona…</option>
+        <option>18–25</option>
+        <option>26–35</option>
+        <option>36–50</option>
+        <option>51+</option>
       </Select>
-      <label className="hidden">Non compilare questo campo: <input name="_gotcha" tabIndex={-1} autoComplete="off" /></label>
+      <label className="hidden">
+        Non compilare questo campo:{" "}
+        <input name="_gotcha" tabIndex={-1} autoComplete="off" />
+      </label>
       <input type="hidden" name="_subject" value="Nuova iscrizione dal sito" />
-      <label className="md:col-span-2 text-sm text-slate-600"><input type="checkbox" name="consent" className="mr-2" /> Ho letto e accetto l’informativa privacy *</label>
+      <label className="md:col-span-2 text-sm text-slate-600">
+        <input type="checkbox" name="consent" className="mr-2" /> Ho letto e accetto
+        l’informativa privacy *
+      </label>
       <div className="md:col-span-2 flex flex-wrap items-center gap-3">
-        <button type="submit" disabled={loading} className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60" aria-busy={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+          aria-busy={loading}
+        >
           {loading ? "Invio in corso..." : "Invia adesione"}
         </button>
-        <a href="mailto:info@cittafutura.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!" className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50">
+        <a
+          href="mailto:info@cittafutura.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!"
+          className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50"
+        >
           Oppure scrivici via email
         </a>
-        <span className="sr-only" aria-live="polite">{ok ? "Invio riuscito" : err ? "Errore di invio" : ""}</span>
+        <span className="sr-only" aria-live="polite">
+          {ok ? "Invio riuscito" : err ? "Errore di invio" : ""}
+        </span>
         {ok && <span className="text-sm text-emerald-600">Ricevuto! Ti contatteremo a breve.</span>}
         {err && <span className="text-sm text-rose-600">{err}</span>}
       </div>
@@ -589,7 +811,10 @@ function IscrizioneForm() {
 
 /* ========================= PAGE ========================= */
 export default function HomePage() {
-  const topPosts = useMemo(() => [...POSTS].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10), []);
+  const topPosts = useMemo(
+    () => [...POSTS].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10),
+    []
+  );
 
   return (
     <main className="min-h-screen">
@@ -601,26 +826,55 @@ export default function HomePage() {
           <div>
             <h2 className="text-3xl font-bold">La nostra missione</h2>
             <div className="mt-3 space-y-4 text-slate-600 leading-relaxed">
-              <p>La Repubblica degli Italiani nel Mondo nasce per unire tutti coloro che, fino ad oggi spettatori di una crescente crisi internazionale, comprendono sia giunto il momento di partecipare alla sfida del cambiamento.</p>
-              <p>L’obiettivo è riunire le teste pensanti del nostro Paese – in Italia e all’estero – per costruire un percorso capace di coniugare presente e futuro e restituire fiducia alle nuove generazioni.</p>
-              <p>Vogliamo essere uno strumento aggregativo e partecipativo: un luogo di sintesi delle idee e delle iniziative che ognuno di voi vorrà proporre.</p>
+              <p>
+                La Repubblica degli Italiani nel Mondo nasce per unire tutti coloro
+                che, fino ad oggi spettatori di una crescente crisi internazionale,
+                comprendono sia giunto il momento di partecipare alla sfida del cambiamento.
+              </p>
+              <p>
+                L’obiettivo è riunire le teste pensanti del nostro Paese – in Italia e
+                all’estero – per costruire un percorso capace di coniugare presente e
+                futuro e restituire fiducia alle nuove generazioni.
+              </p>
+              <p>
+                Vogliamo essere uno strumento aggregativo e partecipativo: un luogo di
+                sintesi delle idee e delle iniziative che ognuno di voi vorrà proporre.
+              </p>
             </div>
           </div>
-          <div><ResponsiveYouTube id="7qmZoXRg_QY" /></div>
+          <div>
+            <ResponsiveYouTube id="7qmZoXRg_QY" />
+          </div>
         </div>
       </section>
 
-      {/* DOVE SIAMO ARRIVATI — (niente zoom su Italia) */}
+      {/* DOVE SIAMO ARRIVATI — niente zoom su Italia */}
       <WorldReachAdvanced />
 
       {/* VALORI */}
       <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="sr-only">I nostri valori</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ValueGhost title="Partecipazione Attiva" text="Assemblee aperte, consultazioni e bilancio partecipativo per decidere insieme." colorClass="from-emerald-600 to-emerald-400" />
-          <ValueGhost title="Valorizzazione Cultura Italiana" text="Promozione di diritti, pari opportunità e inclusione sociale." colorClass="from-amber-600 to-amber-400" />
-          <ValueGhost title="Cultura Imprenditoriale" text="Conoscenza, responsabilità, comunicazione e apertura al cambiamento." colorClass="from-sky-600 to-sky-400" />
-          <ValueGhost title="Giovani e Innovazione" text="Collaborazione e sperimentazione per nuove generazioni protagoniste." colorClass="from-indigo-600 to-indo-400" />
+          <ValueGhost
+            title="Partecipazione Attiva"
+            text="Assemblee aperte, consultazioni e bilancio partecipativo per decidere insieme."
+            colorClass="from-emerald-600 to-emerald-400"
+          />
+          <ValueGhost
+            title="Valorizzazione Cultura Italiana"
+            text="Promozione di diritti, pari opportunità e inclusione sociale."
+            colorClass="from-amber-600 to-amber-400"
+          />
+          <ValueGhost
+            title="Cultura Imprenditoriale"
+            text="Conoscenza, responsabilità, comunicazione e apertura al cambiamento."
+            colorClass="from-sky-600 to-sky-400"
+          />
+          <ValueGhost
+            title="Giovani e Innovazione"
+            text="Collaborazione e sperimentazione per nuove generazioni protagoniste."
+            colorClass="from-indigo-600 to-indigo-400"
+          />
         </div>
       </section>
 
@@ -629,18 +883,64 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold">Gli assi strategici</h2>
         <div className="mt-8 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
           {[
-            { icon: "🌍", title: "Legami Italia–Mondo & Cultura italiana", points: ["Progetti di scambio con comunità italiane all’estero", "Valorizzazione delle tradizioni e della storia", "Eventi di promozione della cultura italiana"], desc: "Iniziative per accrescere e rafforzare i legami tra l’Italia e le comunità italiane nel mondo." },
-            { icon: "🎭", title: "Attività culturali, artistiche, ricreative ed editoriali", points: ["Rassegne culturali e artistiche aperte a tutti", "Laboratori e attività a impatto sociale", "Progetti editoriali e divulgativi"], desc: "Organizzazione di attività di interesse sociale, incluse iniziative editoriali." },
-            { icon: "⚖️", title: "Diritti, pari opportunità & aiuto reciproco", points: ["Sportelli informativi e campagne", "Programmi per l’inclusione", "Reti di solidarietà e mutuo aiuto"], desc: "Promozione e tutela dei diritti umani, civili e sociali; sostegno alle pari opportunità." },
-            { icon: "💡", title: "Cultura d’impresa aperta all’innovazione", points: ["Percorsi formativi", "Responsabilità sociale d’impresa", "Tavoli su innovazione e comunicazione"], desc: "Diffondere una cultura d’impresa basata su conoscenza e responsabilità." },
+            {
+              icon: "🌍",
+              title: "Legami Italia–Mondo & Cultura italiana",
+              points: [
+                "Progetti di scambio con comunità italiane all’estero",
+                "Valorizzazione delle tradizioni e della storia",
+                "Eventi di promozione della cultura italiana",
+              ],
+              desc:
+                "Iniziative per accrescere e rafforzare i legami tra l’Italia e le comunità italiane nel mondo.",
+            },
+            {
+              icon: "🎭",
+              title: "Attività culturali, artistiche, ricreative ed editoriali",
+              points: [
+                "Rassegne culturali e artistiche aperte a tutti",
+                "Laboratori e attività a impatto sociale",
+                "Progetti editoriali e divulgativi",
+              ],
+              desc:
+                "Organizzazione di attività di interesse sociale, incluse iniziative editoriali.",
+            },
+            {
+              icon: "⚖️",
+              title: "Diritti, pari opportunità & aiuto reciproco",
+              points: [
+                "Sportelli informativi e campagne",
+                "Programmi per l’inclusione",
+                "Reti di solidarietà e mutuo aiuto",
+              ],
+              desc:
+                "Promozione e tutela dei diritti umani, civili e sociali; sostegno alle pari opportunità.",
+            },
+            {
+              icon: "💡",
+              title: "Cultura d’impresa aperta all’innovazione",
+              points: [
+                "Percorsi formativi",
+                "Responsabilità sociale d’impresa",
+                "Tavoli su innovazione e comunicazione",
+              ],
+              desc:
+                "Diffondere una cultura d’impresa basata su conoscenza e responsabilità.",
+            },
           ].map((p) => (
-            <div key={p.title} className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div
+              key={p.title}
+              className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
               <div className="text-2xl">{p.icon}</div>
               <h3 className="mt-2 text-xl font-semibold">{p.title}</h3>
               <p className="mt-2 text-slate-600">{p.desc}</p>
               <ul className="mt-4 space-y-2 text-sm text-slate-700">
                 {p.points.map((pt) => (
-                  <li key={pt} className="flex gap-2"><span aria-hidden>•</span><span>{pt}</span></li>
+                  <li key={pt} className="flex gap-2">
+                    <span aria-hidden>•</span>
+                    <span>{pt}</span>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -653,18 +953,42 @@ export default function HomePage() {
         <div className="grid lg:grid-cols-3 gap-10">
           <div>
             <h2 className="text-3xl font-bold">Roadmap per il futuro</h2>
-            <p className="mt-3 text-slate-600">Le prossime tappe per rafforzare i legami con la diaspora, promuovere cultura e diritti e diffondere una cultura d’impresa aperta all’innovazione.</p>
+            <p className="mt-3 text-slate-600">
+              Le prossime tappe per rafforzare i legami con la diaspora, promuovere cultura e diritti e diffondere una cultura d’impresa aperta all’innovazione.
+            </p>
             <div className="mt-6 rounded-2xl overflow-hidden">
-              <Image src="/images/program/roadmap.jpg" alt="Roadmap" width={1600} height={900} className="w-full h-64 object-cover" />
+              <Image
+                src="/images/program/roadmap.jpg"
+                alt="Roadmap"
+                width={1600}
+                height={900}
+                className="w-full h-64 object-cover"
+              />
             </div>
           </div>
           <div className="lg:col-span-2 relative">
             <div className="absolute left-1.5 top-0 bottom-0 w-px bg-slate-200" />
             <div className="space-y-8">
-              <RoadmapStep when="Q1" title="Reti & progettazione" text="Co-progettazione con le comunità italiane all’estero ed avvio sportelli informativi." />
-              <RoadmapStep when="Q2" title="Cultura & pari opportunità" text="Rassegne artistiche, progetti editoriali e programmi per l’inclusione." />
-              <RoadmapStep when="Q3" title="Mutuo aiuto & formazione" text="Iniziative di aiuto reciproco e percorsi formativi su innovazione e responsabilità." />
-              <RoadmapStep when="Q4" title="Valutazione & programmazione" text="Sintesi dei risultati e definizione delle priorità per l’anno successivo." />
+              <RoadmapStep
+                when="Q1"
+                title="Reti & progettazione"
+                text="Co-progettazione con le comunità italiane all’estero ed avvio sportelli informativi."
+              />
+              <RoadmapStep
+                when="Q2"
+                title="Cultura & pari opportunità"
+                text="Rassegne artistiche, progetti editoriali e programmi per l’inclusione."
+              />
+              <RoadmapStep
+                when="Q3"
+                title="Mutuo aiuto & formazione"
+                text="Iniziative di aiuto reciproco e percorsi formativi su innovazione e responsabilità."
+              />
+              <RoadmapStep
+                when="Q4"
+                title="Valutazione & programmazione"
+                text="Sintesi dei risultati e definizione delle priorità per l’anno successivo."
+              />
             </div>
           </div>
         </div>
@@ -675,13 +999,27 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-10">
             <h2 className="text-3xl font-bold">Domande frequenti</h2>
-            <p className="mt-3 text-slate-600">Risposte rapide su attività e volontariato.</p>
+            <p className="mt-3 text-slate-600">
+              Risposte rapide su attività e volontariato.
+            </p>
           </header>
           <div className="grid md:grid-cols-2 gap-6">
-            <FaqItem q="Come posso partecipare alle attività?" a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa." />
-            <FaqItem q="Che tipo di iniziative editoriali realizzate?" a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese." />
-            <FaqItem q="Chi partecipa all'associazione?" a="Imprenditori, professionisti, studenti e giovani interessati a crescere insieme." />
-            <FaqItem q="Collaborate con le comunità italiane all’estero?" a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora." />
+            <FaqItem
+              q="Come posso partecipare alle attività?"
+              a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa."
+            />
+            <FaqItem
+              q="Che tipo di iniziative editoriali realizzate?"
+              a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese."
+            />
+            <FaqItem
+              q="Chi partecipa all'associazione?"
+              a="Imprenditori, professionisti, studenti e giovani interessati a crescere insieme."
+            />
+            <FaqItem
+              q="Collaborate con le comunità italiane all’estero?"
+              a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora."
+            />
           </div>
         </div>
       </section>
@@ -692,12 +1030,22 @@ export default function HomePage() {
           <div className="rounded-2xl border p-8 bg-white shadow-sm">
             <h3 className="text-2xl font-bold">Il nostro Manifesto</h3>
             <p className="mt-2 text-slate-600">Una visione chiara e un percorso definito.</p>
-            <Link href="/manifesto" className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">Apri il Manifesto</Link>
+            <Link
+              href="/manifesto"
+              className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Apri il Manifesto
+            </Link>
           </div>
           <div className="rounded-2xl border p-8 bg-white shadow-sm">
             <h3 className="text-2xl font-bold">Statuto e governance</h3>
             <p className="mt-2 text-slate-600">Consulta lo Statuto completo online.</p>
-            <Link href="/statuto" className="mt-6 inline-flex rounded-2xl border px-5 py-3 font-semibold hover:bg-slate-50">Apri lo Statuto</Link>
+            <Link
+              href="/statuto"
+              className="mt-6 inline-flex rounded-2xl border px-5 py-3 font-semibold hover:bg-slate-50"
+            >
+              Apri lo Statuto
+            </Link>
           </div>
         </div>
       </section>
@@ -718,36 +1066,69 @@ export default function HomePage() {
         </header>
 
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
-          <Card id="iscrizione" title="Iscrizione — Modulo di adesione" className="h-full flex flex-col">
+          <Card
+            id="iscrizione"
+            title="Iscrizione — Modulo di adesione"
+            className="h-full flex flex-col"
+          >
             <div className="flex-1">
               <IscrizioneForm />
               <p className="mt-3 text-xs text-slate-500">
-                Gli invii arrivano alla nostra email tramite Formcarry. Per assistenza: <a className="underline" href="mailto:info@cittafutura.it">info@cittafutura.it</a>.
+                Gli invii arrivano alla nostra email tramite Formcarry. Per assistenza:{" "}
+                <a className="underline" href="mailto:info@cittafutura.it">
+                  info@cittafutura.it
+                </a>
+                .
               </p>
             </div>
             <div className="mt-6 pt-6 border-t">
               <h4 className="font-semibold">Privacy</h4>
-              <p className="text-sm text-slate-700">Trattiamo i dati esclusivamente per finalità associative.</p>
-              <Link href="/privacy" className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
+              <p className="text-sm text-slate-700">
+                Trattiamo i dati esclusivamente per finalità associative.
+              </p>
+              <Link
+                href="/privacy"
+                className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+              >
                 Leggi l’informativa privacy
               </Link>
             </div>
           </Card>
 
-          <Card id="pagamento" title="Pagamento — Donazione / Quota annuale" className="h-full flex flex-col">
+          <Card
+            id="pagamento"
+            title="Pagamento — Donazione / Quota annuale"
+            className="h-full flex flex-col"
+          >
             <div className="flex-1">
               <h4 className="font-semibold">Dona online (coming soon)</h4>
-              <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-              <button disabled className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed" title="In arrivo">
+              <p className="text-sm text-slate-600">
+                Il pulsante sarà collegato a Stripe Checkout nella fase 2.
+              </p>
+              <button
+                disabled
+                className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
+                title="In arrivo"
+              >
                 Dona ora — In arrivo
               </button>
-              <p className="mt-2 text-xs text-slate-500">Al go-live: carta e Apple/Google Pay. Importo libero con minimo suggerito.</p>
+              <p className="mt-2 text-xs text-slate-500">
+                Al go-live: carta e Apple/Google Pay. Importo libero con minimo suggerito.
+              </p>
               <div className="my-6 h-px bg-slate-200" />
               <h4 className="font-semibold">Bonifico bancario</h4>
               <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
-              <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
+              <CopyRow
+                label="Causale"
+                value={'Donazione liberale — "Città Futura"'}
+                className="mt-4"
+              />
               <p className="mt-3 text-xs text-slate-500">
-                Per ricevuta fiscale scrivi a <a className="underline" href="mailto:tesoreria@cittafutura.it">tesoreria@cittafutura.it</a> indicando data e importo.
+                Per ricevuta fiscale scrivi a{" "}
+                <a className="underline" href="mailto:tesoreria@cittafutura.it">
+                  tesoreria@cittafutura.it
+                </a>{" "}
+                indicando data e importo.
               </p>
             </div>
           </Card>
@@ -762,11 +1143,28 @@ export default function HomePage() {
       <section className="py-16 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Entra nella comunità</h2>
-          <p className="mt-2 text-slate-600">Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.</p>
+          <p className="mt-2 text-slate-600">
+            Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.
+          </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/partecipa" className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">Iscriviti</Link>
-            <Link href="/eventi" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Vedi Eventi</Link>
-            <Link href="/prenotazioni" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Prenota la sede</Link>
+            <Link
+              href="/partecipa"
+              className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Iscriviti
+            </Link>
+            <Link
+              href="/eventi"
+              className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+            >
+              Vedi Eventi
+            </Link>
+            <Link
+              href="/prenotazioni"
+              className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+            >
+              Prenota la sede
+            </Link>
           </div>
         </div>
       </section>
