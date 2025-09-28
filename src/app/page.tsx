@@ -160,25 +160,25 @@ function ResponsiveYouTube({ id }: { id: string }) {
   );
 }
 
-/* ========================= MAPPE: reset forzato + niente zoom ========================= */
+/* ========================= MAPPE: niente zoom + "nuke & repaint" ========================= */
 const ACTIVE_ISO = ["USA", "CAN", "ARG", "BRA", "FRA", "CHE", "AUS", "GBR", "ITA"] as const;
 const ACTIVE_REGIONS = ["LOM", "LAZ", "VEN", "EMR", "PIE", "TOS", "CAM", "SIC"] as const;
 
 function WorldReachAdvanced() {
   const [worldMarkup, setWorldMarkup] = useState<string | null>(null);
   const [italyMarkup, setItalyMarkup] = useState<string | null>(null);
-  const [view] = useState<"world" | "italy">("world"); // vista fissa: world
+  const [view] = useState<"world" | "italy">("world"); // vista fissa su world
 
   const worldRef = useRef<HTMLDivElement>(null);
   const italyRef = useRef<HTMLDivElement>(null);
 
-  // Carica i due SVG con cache-buster
+  // Carica gli SVG con cache-buster
   useEffect(() => {
-    fetch("/world/world.svg?v=3").then(r => r.text()).then(setWorldMarkup).catch(() => setWorldMarkup(null));
-    fetch("/world/italy-regions.svg?v=3").then(r => r.text()).then(setItalyMarkup).catch(() => setItalyMarkup(null));
+    fetch("/world/world.svg?v=4").then(r => r.text()).then(setWorldMarkup).catch(() => setWorldMarkup(null));
+    fetch("/world/italy-regions.svg?v=4").then(r => r.text()).then(setItalyMarkup).catch(() => setItalyMarkup(null));
   }, []);
 
-  // Stili + interazioni planisfero: reset via <style> !important
+  // Stili + interazioni planisfero — rimuove fill/stroke inline e applica i nostri
   useEffect(() => {
     if (!worldMarkup) return;
     const host = worldRef.current;
@@ -186,29 +186,56 @@ function WorldReachAdvanced() {
     const svg = host.querySelector("svg");
     if (!svg) return;
 
-    // Rimuovi stili interni che impongono fill neri
+    // fallback per mappe che usano currentColor
+    svg.setAttribute("color", "#e5e7eb");
+
+    // elimina qualsiasi <style> interno che imposti fill/stroke
     svg.querySelectorAll("style").forEach(s => s.remove());
 
-    // Inietta uno style che resetta tutto e colora i Paesi attivi
-    const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
-    style.textContent = `
-      * {
-        fill: #e5e7eb !important;
-        stroke: #94a3b8 !important;
-        stroke-width: .6 !important;
-        vector-effect: non-scaling-stroke;
-        transition: fill .2s ease;
-        paint-order: stroke fill;
-      }
-      .ocean, #ocean, [data-ocean] {
-        fill: transparent !important;
-        stroke: none !important;
-      }
-      ${ACTIVE_ISO.map(id => `#${CSS.escape(id)} { fill:#22c55e !important; }`).join("\n")}
-    `;
-    svg.appendChild(style);
+    // ripulisci TUTTI i nodi da fill/stroke inline (attributi e inline-style)
+    svg.querySelectorAll<SVGElement>("*").forEach((el) => {
+      el.removeAttribute("fill");
+      el.removeAttribute("stroke");
+      el.removeAttribute("stroke-width");
 
-    // Hover soft (solo non-attivi)
+      const st = el.getAttribute("style");
+      if (st) {
+        const cleaned = st
+          .replace(/(^|;)\s*fill\s*:[^;!]+!?[^;]*;?/gi, "$1")
+          .replace(/(^|;)\s*stroke\s*:[^;!]+!?[^;]*;?/gi, "$1")
+          .replace(/(^|;)\s*stroke-width\s*:[^;!]+!?[^;]*;?/gi, "$1")
+          .replace(/;;+/g, ";")
+          .replace(/^\s*;|;\s*$/g, "");
+        if (cleaned.trim()) el.setAttribute("style", cleaned);
+        else el.removeAttribute("style");
+      }
+    });
+
+    // applica i colori base
+    svg.querySelectorAll<SVGElement>("path, polygon, rect, use").forEach((el) => {
+      el.setAttribute("fill", "#e5e7eb");
+      el.setAttribute("stroke", "#94a3b8");
+      el.setAttribute("stroke-width", "0.6");
+      el.setAttribute("vector-effect", "non-scaling-stroke");
+      el.setAttribute("paint-order", "stroke fill");
+      (el as SVGElement).style.transition = "fill .2s ease";
+    });
+
+    // evidenzia i Paesi attivi
+    ACTIVE_ISO.forEach((id) => {
+      const el = svg.querySelector<SVGElement>(`#${CSS.escape(id)}`);
+      if (el) {
+        el.setAttribute("fill", "#22c55e");
+        (el as SVGGraphicsElement).style.filter = "drop-shadow(0 0 6px rgba(16,185,129,.35))";
+        if (!el.querySelector("title")) {
+          const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          t.textContent = id;
+          el.appendChild(t);
+        }
+      }
+    });
+
+    // hover soft per non-attivi
     const over = (e: Event) => {
       const el = (e.target as Element).closest("path,polygon,rect,use") as SVGElement | null;
       if (el && !ACTIVE_ISO.includes(el.id as any)) el.setAttribute("fill", "#c7e3d4");
@@ -226,7 +253,7 @@ function WorldReachAdvanced() {
     };
   }, [worldMarkup]);
 
-  // Stili vista Italia (preparata, anche se non visibile)
+  // Stili vista Italia (preparata ma non visibile)
   useEffect(() => {
     if (!italyMarkup) return;
     const host = italyRef.current;
@@ -606,7 +633,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DOVE SIAMO ARRIVATI — reset colore + niente zoom */}
+      {/* DOVE SIAMO ARRIVATI — nuke & repaint + niente zoom */}
       <WorldReachAdvanced />
 
       {/* VALORI */}
@@ -616,7 +643,7 @@ export default function HomePage() {
           <ValueGhost title="Partecipazione Attiva" text="Assemblee aperte, consultazioni e bilancio partecipativo per decidere insieme." colorClass="from-emerald-600 to-emerald-400" />
           <ValueGhost title="Valorizzazione Cultura Italiana" text="Promozione di diritti, pari opportunità e inclusione sociale." colorClass="from-amber-600 to-amber-400" />
           <ValueGhost title="Cultura Imprenditoriale" text="Conoscenza, responsabilità, comunicazione e apertura al cambiamento." colorClass="from-sky-600 to-sky-400" />
-          <ValueGhost title="Giovani e Innovazione" text="Collaborazione e sperimentazione per nuove generazioni protagoniste." colorClass="from-indigo-600 to-indi go-400" />
+          <ValueGhost title="Giovani e Innovazione" text="Collaborazione e sperimentazione per nuove generazioni protagoniste." colorClass="from-indigo-600 to-indigo-400" />
         </div>
       </section>
 
