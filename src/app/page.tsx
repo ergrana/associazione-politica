@@ -19,7 +19,7 @@ function WavingFlagHero() {
     <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
       {/* Video background (ancora più scuro) */}
       <video
-        className="absolute inset-0 -z-20 h-full w-full object-cover brightness-50 contrast-110"
+        className="absolute inset-0 -z-20 h-full w-full object-cover brightness-160 contrast-110"
         autoPlay
         muted
         loop
@@ -32,7 +32,7 @@ function WavingFlagHero() {
       </video>
 
       {/* Overlay uniforme più forte per aumentare il contrasto */}
-      <div className="absolute inset-0 -z-10 bg-black/55" aria-hidden />
+      <div className="absolute inset-0 -z-10 bg-black/20" aria-hidden />
 
       {/* Vignettatura radiale per scurire soprattutto al centro (logo + CTA) */}
       <div
@@ -44,18 +44,18 @@ function WavingFlagHero() {
         }}
       />
 
-      {/* LOGO overlay */}
+      {/* LOGO overlay — RIDOTTO */}
       <Image
         src="/images/logo-rotondo.png"
         alt="La Repubblica degli Italiani nel Mondo"
-        width={420}
-        height={420}
+        width={300}
+        height={300}
         priority
-        className="w-[min(80vw,540px)] h-auto drop-shadow-2xl"
+        className="w-[min(60vw,300px)] h-auto drop-shadow-2xl"
       />
 
       {/* CTA */}
-      <div className="mt-0.25 text-center text-slate-900 px-4">
+      <div className="mt-0.25 text-center text-white px-4">
         <p className="max-w-2xl mx-auto text-lg">
           Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
         </p>
@@ -68,7 +68,7 @@ function WavingFlagHero() {
           </Link>
           <Link
             href="/partecipa#pagamento"
-            className="inline-flex items-center justify-center rounded-xl ring-2 ring-slate-900/85 text-slate-900 px-5 py-3 font-semibold hover:bg-black/5"
+            className="inline-flex items-center justify-center rounded-xl ring-2 ring-white/85 text-white px-5 py-3 font-semibold hover:bg-white/10"
           >
             Sostienici con una donazione
           </Link>
@@ -762,7 +762,7 @@ export default function HomePage() {
       <BookingCTA />
 
       <section className="py-16 bg-slate-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-**w**-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Entra nella comunità</h2>
           <p className="mt-2 text-slate-600">Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
