@@ -158,7 +158,7 @@ export default function EventTicketForm({
 
       {/* Nota trust */}
       <div className="rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
-        Pagamento gestito da Stripe. I dati della tua carta non sono gestiti dai nostri server; il totale si aggiorna in base
+        Pagamento gestito da Stripe. Il totale si aggiorna in base
         al numero di partecipanti. Dopo il pagamento riceverai via email il
         <strong> biglietto con QR code</strong> che funge da ricevuta.
       </div>
