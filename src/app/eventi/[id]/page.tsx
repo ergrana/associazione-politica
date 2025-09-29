@@ -15,9 +15,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }): Promise<Metadata> {
-  const { id } = await params;
+  const { id } = params;
   const e = EVENTS.find((x) => x.id === id);
   if (!e) return {};
 
@@ -44,9 +44,9 @@ export async function generateMetadata({
 export default async function EventoPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
   const e = EVENTS.find((x) => x.id === id);
   if (!e) return notFound();
 
@@ -87,18 +87,22 @@ export default async function EventoPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
       />
 
-      {/* HERO — stile “Chi siamo”: altezza a contenuto, bg assoluto + overlay */}
+      {/* HERO — stile “Chi siamo” (padding responsive, bg assoluto, overlay) */}
       <header className="relative overflow-hidden">
+        {/* Background image */}
         <Image
           src={e.cover}
           alt={e.title}
           fill
           priority
           sizes="100vw"
-          className="object-cover -z-10"
+          className="absolute inset-0 z-0 object-cover"
         />
-        <div className="absolute inset-0 bg-black/55 -z-10" />
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16 text-white">
+        {/* Overlay scuro per leggibilità */}
+        <div className="absolute inset-0 z-0 bg-black/55" />
+
+        {/* Contenuto */}
+        <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-white">
           <span className="inline-flex items-center gap-2 text-xs font-medium bg-white/15 ring-1 ring-white/30 px-3 py-1 rounded-full backdrop-blur">
             {e.category ?? "Evento"} • {e.district ?? e.city}
           </span>
@@ -151,7 +155,7 @@ export default async function EventoPage({
                 title="Condividi su X/Twitter"
               >
                 <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
-                  <path className="text-white" d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+                  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
                 </svg>
               </a>
 
@@ -165,7 +169,7 @@ export default async function EventoPage({
                 title="Condividi su Facebook"
               >
                 <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
-                  <path className="text-white" d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+                  <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
                 </svg>
               </a>
 
@@ -179,7 +183,7 @@ export default async function EventoPage({
                 title="Condividi su WhatsApp"
               >
                 <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
-                  <path className="text-white" d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+                  <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
                 </svg>
               </a>
 
@@ -193,7 +197,7 @@ export default async function EventoPage({
                 title="Condividi su Telegram"
               >
                 <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
-                  <path className="text-white" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09" />
                 </svg>
               </a>
             </div>
@@ -230,14 +234,18 @@ export default async function EventoPage({
                       <p className="font-bold leading-6">{step.title}</p>
 
                       {step.description && (
-                        <p className="text-slate-600 text-sm mt-1">{step.description}</p>
+                        <p className="text-slate-600 text-sm mt-1">
+                          {step.description}
+                        </p>
                       )}
                     </li>
                   )
                 )}
               </ol>
             ) : (
-              <p className="mt-2 text-slate-600 text-sm">Il programma sarà pubblicato a breve.</p>
+              <p className="mt-2 text-slate-600 text-sm">
+                Il programma sarà pubblicato a breve.
+              </p>
             )}
           </div>
 
@@ -245,7 +253,8 @@ export default async function EventoPage({
           <div className="bg-white shadow-sm rounded-2xl p-5 min-h-[420px] flex flex-col">
             <h2 className="text-lg font-semibold">Prenota i biglietti</h2>
             <p className="text-sm text-slate-700 mt-1">
-              Prezzo a persona: <strong>{formatCurrency(pricePerPerson, currency)}</strong>
+              Prezzo a persona:{" "}
+              <strong>{formatCurrency(pricePerPerson, currency)}</strong>
             </p>
 
             <div className="mt-4" id="iscriviti">
@@ -260,7 +269,8 @@ export default async function EventoPage({
             </div>
 
             <div className="mt-auto rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
-              Pagamento sicuro su Stripe; i dati della carta non transitano sui nostri server.
+              Pagamento sicuro su Stripe; i dati della carta non transitano sui
+              nostri server.
             </div>
           </div>
 
@@ -284,7 +294,10 @@ export default async function EventoPage({
         </div>
 
         <div className="mt-12">
-          <Link href="/eventi" className="text-sm font-semibold text-violet-700 hover:underline">
+          <Link
+            href="/eventi"
+            className="text-sm font-semibold text-violet-700 hover:underline"
+          >
             ← Torna agli Eventi
           </Link>
         </div>
@@ -308,7 +321,10 @@ function formatDateTime(start: Date, end?: Date) {
   const s = start.toLocaleString("it-IT", opts);
   if (!end) return s;
   const sameDay = start.toDateString() === end.toDateString();
-  const e = end.toLocaleString("it-IT", sameDay ? { hour: "2-digit", minute: "2-digit" } : opts);
+  const e = end.toLocaleString(
+    "it-IT",
+    sameDay ? { hour: "2-digit", minute: "2-digit" } : opts
+  );
   return sameDay ? `${s} – ${e}` : `${s} → ${e}`;
 }
 
@@ -350,7 +366,11 @@ function buildIcs(e: {
   city: string;
 }) {
   const dtStart = toIcsDate(new Date(e.date));
-  const dtEnd = toIcsDate(e.end ? new Date(e.end) : new Date(new Date(e.date).getTime() + 60 * 60 * 1000));
+  const dtEnd = toIcsDate(
+    e.end
+      ? new Date(e.end)
+      : new Date(new Date(e.date).getTime() + 60 * 60 * 1000)
+  );
   const loc = `${e.place} — ${e.address}, ${e.city}`;
   const ics = [
     "BEGIN:VCALENDAR",
@@ -385,7 +405,9 @@ function buildGoogleCalUrl(e: {
   const details = encodeURIComponent(e.description ?? "");
   const location = encodeURIComponent(`${e.place} — ${e.address}, ${e.city}`);
   const dates = `${toIcsDate(new Date(e.date)).replace(/[-:]/g, "")}/${toIcsDate(
-    e.end ? new Date(e.end) : new Date(new Date(e.date).getTime() + 60 * 60 * 1000),
+    e.end
+      ? new Date(e.end)
+      : new Date(new Date(e.date).getTime() + 60 * 60 * 1000)
   ).replace(/[-:]/g, "")}`;
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&location=${location}&details=${details}`;
 }
@@ -403,12 +425,15 @@ function buildOutlookWebUrl(e: {
   const body = encodeURIComponent(e.description ?? "");
   const location = encodeURIComponent(`${e.place} — ${e.address}, ${e.city}`);
   const fmt = (d: Date) =>
-    `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(
-      2,
-      "0",
-    )}T${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}:00`;
+    `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(
+      d.getUTCDate()
+    ).padStart(2, "0")}T${String(d.getUTCHours()).padStart(2, "0")}:${String(
+      d.getUTCMinutes()
+    ).padStart(2, "0")}:00`;
   const start = fmt(new Date(e.date));
-  const end = fmt(e.end ? new Date(e.end) : new Date(new Date(e.date).getTime() + 60 * 60 * 1000));
+  const end = fmt(
+    e.end ? new Date(e.end) : new Date(new Date(e.date).getTime() + 60 * 60 * 1000)
+  );
   return `https://outlook.live.com/calendar/0/deeplink/compose?subject=${subject}&startdt=${start}&enddt=${end}&location=${location}&body=${body}`;
 }
 
@@ -425,7 +450,9 @@ function formatCurrency(n: number, currency = "EUR") {
 
 /* --------- Share helpers --------- */
 function shareTwitter(url: string, text: string) {
-  return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+  return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(
+    text
+  )}`;
 }
 function shareFacebook(url: string) {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
