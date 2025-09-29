@@ -54,8 +54,8 @@ export default async function EventoPage({
   const end = e.end ? new Date(e.end) : undefined;
 
   const currency = e.currency ?? "EUR";
-  // prezzo a persona: usa ticketPrice se presente, altrimenti donationMin, altrimenti 5€
-  const pricePerPerson = e.ticketPrice ?? e.donationMin ?? 5;
+  // Prezzo a persona: usa donationMin se presente, fallback 5 €
+  const pricePerPerson = e.donationMin ?? 5;
 
   const addressFull = `${e.address}, ${e.city}`;
   const mapsQuery = encodeURIComponent(addressFull);
@@ -140,11 +140,10 @@ export default async function EventoPage({
                 Outlook Web
               </a>
 
-              {/* Condividi: icone social */}
+              {/* Condividi */}
               <div className="ml-1 flex items-center gap-2">
                 <span className="text-xs text-white/80">Condividi:</span>
 
-                {/* X/Twitter */}
                 <a
                   href={shareTwitter(pageUrl, e.title)}
                   target="_blank"
@@ -158,7 +157,6 @@ export default async function EventoPage({
                   </svg>
                 </a>
 
-                {/* Facebook */}
                 <a
                   href={shareFacebook(pageUrl)}
                   target="_blank"
@@ -172,7 +170,6 @@ export default async function EventoPage({
                   </svg>
                 </a>
 
-                {/* WhatsApp */}
                 <a
                   href={shareWhatsApp(pageUrl, e.title)}
                   target="_blank"
@@ -186,7 +183,6 @@ export default async function EventoPage({
                   </svg>
                 </a>
 
-                {/* Telegram */}
                 <a
                   href={shareTelegram(pageUrl, e.title)}
                   target="_blank"
@@ -245,19 +241,21 @@ export default async function EventoPage({
             )}
           </div>
 
-          {/* CENTRO — Biglietti (form + pagamento) */}
+          {/* CENTRO — Prenotazione & pagamento */}
           <div className="bg-white shadow-sm rounded-2xl p-5 min-h-[420px] flex flex-col">
             <h2 className="text-lg font-semibold">Prenota i biglietti</h2>
             <p className="text-sm text-slate-700 mt-1">
-              Prezzo a persona: <strong>{formatCurrency(pricePerPerson, currency)}</strong>.
+              Prezzo a persona: <strong>{formatCurrency(pricePerPerson, currency)}</strong>
             </p>
 
-            <div className="mt-4" id="biglietti">
+            <div className="mt-4" id="iscriviti">
               <EventTicketForm
                 eventId={e.id}
                 title={e.title}
                 pricePerPerson={pricePerPerson}
                 currency={currency}
+                successUrl={`https://example.com/eventi/${e.id}?ok=1`}
+                cancelUrl={`https://example.com/eventi/${e.id}?canceled=1`}
               />
             </div>
 
