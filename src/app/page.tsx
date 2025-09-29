@@ -33,7 +33,7 @@ function WavingFlagHero() {
       {/* Overlay uniforme più forte per aumentare il contrasto */}
       <div className="absolute inset-0 -z-10 bg-black/20" aria-hidden />
 
-      {/* Vignettatura radiale per scurire soprattutto al centro (logo + CTA) */}
+      {/* Vignettatura radiale */}
       <div
         className="absolute inset-0 -z-10"
         aria-hidden
@@ -102,13 +102,12 @@ function ValueGhost({
   );
 }
 
-function RoadmapStep({ when, title, text }: { when: string; title: string; text: string }) {
+function RoadmapStep({ when, title }: { when: string; title: string }) {
   return (
     <div className="relative pl-8">
       <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-indigo-600" />
       <div className="text-sm font-semibold text-indigo-600">{when}</div>
       <div className="mt-1 font-semibold">{title}</div>
-      <p className="mt-1 text-slate-600">{text}</p>
     </div>
   );
 }
@@ -140,16 +139,13 @@ function ResponsiveYouTube({ id }: { id: string }) {
 
 /* ========================= DOVE SIAMO ARRIVATI — immagini statiche asimmetriche ========================= */
 function WorldReachSection() {
-  // Altezza uguale per entrambe, responsiva
-  const commonHeight =
-    "h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem]";
+  const commonHeight = "h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem]";
 
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <header className="mb-6">
         <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
 
-        {/* Testo subito sotto il titolo */}
         <h3 className="mt-3 text-xl font-semibold">Una rete in espansione</h3>
         <p className="mt-2 text-slate-700 leading-relaxed max-w-3xl">
           Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e opportunità
@@ -163,9 +159,7 @@ function WorldReachSection() {
         </ul>
       </header>
 
-      {/* Due immagini senza riquadro, stessa altezza, layout asimmetrico */}
       <div className="grid grid-cols-12 gap-6 items-stretch">
-        {/* Planisfero: più largo, sinistra (7/12) */}
         <div className={`relative col-span-12 lg:col-span-7 ${commonHeight}`}>
           <Image
             src="/images/maps/world.jpg"
@@ -177,7 +171,6 @@ function WorldReachSection() {
           />
         </div>
 
-        {/* Italia: meno della metà, destra (5/12) */}
         <div className={`relative col-span-12 lg:col-span-5 ${commonHeight}`}>
           <Image
             src="/images/maps/italy.jpg"
@@ -240,7 +233,7 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
             <button onClick={() => scrollBy("next")} aria-label="Notizie successive" className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white">→</button>
           </div>
 
-        <div ref={scrollerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
+          <div ref={scrollerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
             {posts.map((p) => (
               <article key={p.id} className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow">
                 <Link href={`/notizie/${p.slug}`} className="block">
@@ -448,7 +441,7 @@ function IscrizioneForm() {
         <button type="submit" disabled={loading} className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60" aria-busy={loading}>
           {loading ? "Invio in corso..." : "Invia adesione"}
         </button>
-        <a href="mailto:info@cittafutura.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!" className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50">
+        <a href="mailto:info@dominio.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!" className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50">
           Oppure scrivici via email
         </a>
         <span className="sr-only" aria-live="polite">{ok ? "Invio riuscito" : err ? "Errore di invio" : ""}</span>
@@ -467,6 +460,9 @@ export default function HomePage() {
     <main className="min-h-screen">
       <WavingFlagHero />
 
+      {/* NOTIZIE IN EVIDENZA (spostato subito sotto la hero) */}
+      <NewsCarouselSection posts={topPosts} />
+
       {/* MISSIONE + VIDEO */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 items-start">
@@ -482,17 +478,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DOVE SIAMO ARRIVATI — immagini statiche asimmetriche */}
+      {/* DOVE SIAMO ARRIVATI */}
       <WorldReachSection />
 
       {/* VALORI */}
       <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="sr-only">I nostri valori</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ValueGhost title="Partecipazione Attiva" text="Assemblee aperte, consultazioni e bilancio partecipativo per decidere insieme." colorClass="from-emerald-600 to-emerald-400" />
-          <ValueGhost title="Valorizzazione Cultura Italiana" text="Promozione di diritti, pari opportunità e inclusione sociale." colorClass="from-amber-600 to-amber-400" />
-          <ValueGhost title="Cultura Imprenditoriale" text="Conoscenza, responsabilità, comunicazione e apertura al cambiamento." colorClass="from-sky-600 to-sky-400" />
-          <ValueGhost title="Giovani e Innovazione" text="Collaborazione e sperimentazione per nuove generazioni protagoniste." colorClass="from-indigo-600 to-indigo-400" />
+          <ValueGhost title="Partecipazione Attiva" text="Partecipare attivamente significa essere un membro della'Associazione e contribuire concretamente alle sue attività ed al raggiungimento dei suoi obiettivi. Iscriversi è il primo passo, così potrai partecipare alle assemblee, proporre iniziative e contribuire così alla crescita della comunità e alla realizzazione del fine comune dell'ente." colorClass="from-emerald-600 to-emerald-400" />
+          <ValueGhost title="Valorizzazione Cultura Italiana" text="L'Associazione intende promuovere la conoscenza e la conservazione del patrimonio culturale italiano, materiale e immateriale, assicurandosi che venga tramandato il loro alto valore culturale alle generazioni future. Questo processo coinvolge necessariamente istituzioni pubbliche, enti privati, imprese e tutti i cittadini italiani, sia in Italia che all'estero." colorClass="from-amber-600 to-amber-400" />
+          <ValueGhost title="Cultura Imprenditoriale" text="Obiettivo cruciale dell'associazione è quello di sostenere lo sviluppo dell’imprenditoria e la diffusione di nuove idee. Lo scopo è creare un ambiente dinamico in cui creatività, innovazione e collaborazione possano tradursi in opportunità concrete di crescita personale e professionale soprattuto per i giovani." colorClass="from-sky-600 to-sky-400" />
+          <ValueGhost title="Giovani e Innovazione" text="L'Associazione intende valorizzare il ruolo dei giovani come motore dell’innovazione, sostenendo iniziative che favoriscano la ricerca, la creatività e l’uso consapevole delle nuove tecnologie. L’obiettivo è stimolare un ecosistema capace di trasformare le idee in progetti concreti, contribuendo così allo sviluppo culturale, sociale ed economico del Paese." colorClass="from-sky-600 to-sky-400" />
         </div>
       </section>
 
@@ -520,25 +516,81 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ROADMAP */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-3 gap-10">
-          <div>
-            <h2 className="text-3xl font-bold">Roadmap per il futuro</h2>
-            <p className="mt-3 text-slate-600">Le prossime tappe per rafforzare i legami con la diaspora, promuovere cultura e diritti e diffondere una cultura d’impresa aperta all’innovazione.</p>
-            <div className="mt-6 rounded-2xl overflow-hidden">
-              <Image src="/images/program/roadmap.jpg" alt="Roadmap" width={1600} height={900} className="w-full h-64 object-cover" />
+      {/* IL NOSTRO CAMMINO — immagine full-bleed + titolo in overlay + elenco puntato a destra */}
+      <section className="relative mx-4 sm:mx-6 lg:mx-8 max-w-7xl xl:mx-auto rounded-3xl overflow-hidden">
+        <div className="relative h-[420px] sm:h-[460px] md:h-[520px]">
+          <Image
+            src="/images/program/roadmap.png"
+            alt="Il nostro cammino"
+            fill
+            priority
+            className="object-cover"
+            sizes="(max-width: 1280px) 100vw, 1200px"
+          />
+          <div
+            className="absolute inset-0"
+            aria-hidden
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.35) 100%)",
+            }}
+          />
+          <div className="absolute left-6 top-6 sm:left-8 sm:top-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">
+              Il nostro cammino
+            </h2>
+          </div>
+
+          <div className="absolute inset-y-6 right-6 sm:inset-y-8 sm:right-8 flex items-stretch">
+            <div className="w-[min(100vw-3rem,640px)] sm:w-[500px] md:w-[560px] bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl ring-1 ring-black/5 p-5 sm:p-6">
+              <ul className="space-y-4 text-slate-800">
+                <li className="flex gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">30 ottobre 2024</div>
+                    <div className="font-medium">Nasce la Repubblica degli Italiani nel Mondo.</div>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">6 novembre 2024</div>
+                    <div className="font-medium">Viene inaugurata la prima sede dell&apos;associazione.</div>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">5 febbraio 2025</div>
+                    <div className="font-medium">L&apos;associazione incontra CEPI Confederazione Europea delle piccole imprese.</div>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">28 marzo 2025</div>
+                    <div className="font-medium">Incontro con la fondazione università degli studi della dieta mediterranea e della longevità.</div>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">12 maggio 2025</div>
+                    <div className="font-medium">L&apos;associazione si trasferisce nel nuovo ufficio di via Cicerone 49.</div>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">23 settembre 2025</div>
+                    <div className="font-medium">Via libera al primo tesseramento associativo.</div>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
-          <div className="lg:col-span-2 relative">
-            <div className="absolute left-1.5 top-0 bottom-0 w-px bg-slate-200" />
-            <div className="space-y-8">
-              <RoadmapStep when="Q1" title="Reti & progettazione" text="Co-progettazione con le comunità italiane all’estero ed avvio sportelli informativi." />
-              <RoadmapStep when="Q2" title="Cultura & pari opportunità" text="Rassegne artistiche, progetti editoriali e programmi per l’inclusione." />
-              <RoadmapStep when="Q3" title="Mutuo aiuto & formazione" text="Iniziative di aiuto reciproco e percorsi formativi su innovazione e responsabilità." />
-              <RoadmapStep when="Q4" title="Valutazione & programmazione" text="Sintesi dei risultati e definizione delle priorità per l’anno successivo." />
-            </div>
-          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 h-6 sm:h-8" aria-hidden />
         </div>
       </section>
 
@@ -626,8 +678,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Notizie, Eventi, CTA finale */}
-      <NewsCarouselSection posts={topPosts} />
+      {/* Eventi e CTA finale */}
       <NextEventTeaser />
       <BookingCTA />
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import DonationForm from "@/components/DonationForm";
+import EventTicketForm from "@/components/EventTicketForm";
 
 /* ------------------------------- STATIC ----------------------------------- */
 
@@ -53,8 +53,9 @@ export default async function EventoPage({
   const start = new Date(e.date);
   const end = e.end ? new Date(e.end) : undefined;
 
-  const minDonation = e.donationMin ?? 5;
   const currency = e.currency ?? "EUR";
+  // prezzo a persona: usa ticketPrice se presente, altrimenti donationMin, altrimenti 5€
+  const pricePerPerson = e.ticketPrice ?? e.donationMin ?? 5;
 
   const addressFull = `${e.address}, ${e.city}`;
   const mapsQuery = encodeURIComponent(addressFull);
@@ -216,7 +217,6 @@ export default async function EventoPage({
 
             {e.agenda?.length ? (
               <ol className="mt-6 relative">
-                {/* linea verticale tenue a sinistra */}
                 <span className="absolute left-3 top-0 bottom-0 w-px bg-slate-200" />
                 {e.agenda.map(
                   (
@@ -224,12 +224,10 @@ export default async function EventoPage({
                     idx: number
                   ) => (
                     <li key={idx} className="relative pl-10 py-5">
-                      {/* pallino viola */}
                       <span className="absolute left-0 top-6 -translate-y-1/2 inline-flex items-center justify-center w-6 h-6 rounded-full">
                         <span className="w-3 h-3 rounded-full bg-violet-600" />
                       </span>
 
-                      {/* orario + titolo */}
                       <p className="text-violet-700 font-semibold text-sm leading-5">
                         {step.time ?? ""}
                       </p>
@@ -247,27 +245,24 @@ export default async function EventoPage({
             )}
           </div>
 
-          {/* CENTRO — Iscrizione/Donazione */}
+          {/* CENTRO — Biglietti (form + pagamento) */}
           <div className="bg-white shadow-sm rounded-2xl p-5 min-h-[420px] flex flex-col">
-            <h2 className="text-lg font-semibold">Iscriviti e sostieni</h2>
+            <h2 className="text-lg font-semibold">Prenota i biglietti</h2>
             <p className="text-sm text-slate-700 mt-1">
-              Donazione minima: <strong>{formatCurrency(minDonation, currency)}</strong>. Puoi
-              donare di più.
+              Prezzo a persona: <strong>{formatCurrency(pricePerPerson, currency)}</strong>.
             </p>
 
-            <div className="mt-4" id="iscriviti">
-              <DonationForm
+            <div className="mt-4" id="biglietti">
+              <EventTicketForm
                 eventId={e.id}
                 title={e.title}
-                min={minDonation}
+                pricePerPerson={pricePerPerson}
                 currency={currency}
-                successUrl={`https://example.com/eventi/${e.id}?ok=1`}
-                cancelUrl={`https://example.com/eventi/${e.id}?canceled=1`}
               />
             </div>
 
             <div className="mt-auto rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
-              Pagamento sicuro sul provider; i dati della carta non transitano sui nostri server.
+              Pagamento sicuro su Stripe; i dati della carta non transitano sui nostri server.
             </div>
           </div>
 
