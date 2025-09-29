@@ -15,9 +15,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
   const e = EVENTS.find((x) => x.id === id);
   if (!e) return {};
 
@@ -44,9 +44,9 @@ export async function generateMetadata({
 export default async function EventoPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
   const e = EVENTS.find((x) => x.id === id);
   if (!e) return notFound();
 
@@ -87,7 +87,7 @@ export default async function EventoPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
       />
 
-      {/* HERO — stile “Chi siamo” (padding responsive, bg assoluto, overlay) */}
+      {/* HERO — stile “Chi siamo” */}
       <header className="relative overflow-hidden">
         {/* Background image */}
         <Image
@@ -98,7 +98,7 @@ export default async function EventoPage({
           sizes="100vw"
           className="absolute inset-0 z-0 object-cover"
         />
-        {/* Overlay scuro per leggibilità */}
+        {/* Overlay scuro */}
         <div className="absolute inset-0 z-0 bg-black/55" />
 
         {/* Contenuto */}
