@@ -1,6 +1,5 @@
 // src/app/notizie/[slug]/page.tsx
 import { POSTS } from "@/lib/content";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -32,14 +31,7 @@ export async function generateMetadata({
       url,
       title,
       description,
-      images: [
-        {
-          url: absoluteAsset(p.image),
-          width: 1200,
-          height: 630,
-          alt: p.title,
-        },
-      ],
+      images: [{ url: absoluteAsset(p.image), width: 1200, height: 630, alt: p.title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -88,24 +80,21 @@ export default async function PostPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* HERO — stesso pattern degli Eventi/Chi siamo: immagine+overlay assoluti e altezza via padding */}
+      {/* HERO — immagine + overlay assoluti (-z-10) e altezza gestita da padding */}
       <header className="relative overflow-hidden">
-        {/* Layer sfondo (immagine + overlay scuro) */}
+        {/* Background image come CSS, robusto anche con URL esterni */}
         <div className="absolute inset-0 -z-10">
-          <Image
-            src={p.image}
-            alt={p.title}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
+          <div
+            className="absolute inset-0 bg-center bg-cover"
+            style={{ backgroundImage: `url(${p.image})` }}
+            aria-hidden="true"
           />
           <div className="absolute inset-0 bg-black/55" />
         </div>
 
-        {/* Contenuto: regola l’altezza con il padding (py-*) */}
+        {/* Contenuto: regola l’altezza variando py-12 / sm:py-16 */}
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-white">
-          {/* NASCONDI il badge se la categoria è "Trasparenza" */}
+          {/* Nascondi il badge per categoria 'Trasparenza' */}
           {p.category && p.category !== "Trasparenza" && (
             <span className="inline-flex items-center gap-2 text-xs font-semibold bg-white/15 px-3 py-1 rounded-full">
               {p.category}
@@ -130,9 +119,7 @@ export default async function PostPage({
 
         {/* Share */}
         <div className="mt-12">
-          <p className="text-sm font-medium text-slate-500 mb-3">
-            Condividi la notizia
-          </p>
+          <p className="text-sm font-medium text-slate-500 mb-3">Condividi la notizia</p>
           <div className="flex gap-4">
             {/* X / Twitter */}
             <a
@@ -202,10 +189,7 @@ export default async function PostPage({
 
         {/* Torna alle notizie */}
         <div className="mt-12">
-          <Link
-            href="/notizie"
-            className="text-sm font-semibold text-violet-700 hover:underline"
-          >
+          <Link href="/notizie" className="text-sm font-semibold text-violet-700 hover:underline">
             ← Torna alle notizie
           </Link>
         </div>
