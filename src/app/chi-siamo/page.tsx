@@ -2,12 +2,128 @@
 import Image from "next/image";
 import Link from "next/link";
 
+/* ========================= METADATA ========================= */
 export const metadata = {
   title: "Chi siamo — La Repubblica degli Italiani nel Mondo",
-  description: "Volti, ruoli e contatti diretti dell’associazione.",
+  description:
+    "Missione, risultati, valori, assi strategici, tappe, volti dell’associazione e risposte rapide.",
 };
 
+/* ========================= COMPONENTI PRESI DALLA HOME ========================= */
+// Missione: video responsive YouTube
+function ResponsiveYouTube({ id }: { id: string }) {
+  return (
+    <div
+      className="relative w-full overflow-hidden rounded-2xl"
+      style={{ paddingTop: "56.25%" }}
+    >
+      <iframe
+        className="absolute inset-0 h-full w-full"
+        src={`https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`}
+        title="Video — La Repubblica degli Italiani nel Mondo"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        loading="lazy"
+      />
+    </div>
+  );
+}
+
+// Dove siamo arrivati: blocco con mappe
+function WorldReachSection() {
+  const commonHeight =
+    "h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem]";
+
+  return (
+    <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <header className="mb-6">
+        <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
+        <h3 className="mt-3 text-xl font-semibold">Una rete in espansione</h3>
+        <p className="mt-2 text-slate-700 leading-relaxed max-w-3xl">
+          Collegare persone e comunità è la nostra priorità: eventi, mentorship,
+          gruppi tematici e opportunità di collaborazione tra Italia e diaspora.
+          Se vuoi avviare un nucleo nel tuo Paese,
+          <Link
+            href="/contatti"
+            className="underline decoration-2 underline-offset-2 ml-1"
+          >
+            contattaci
+          </Link>
+          .
+        </p>
+        <ul className="mt-3 space-y-2 text-slate-700">
+          <li>• Incontri culturali e imprenditoriali</li>
+          <li>• Progetti con associazioni italiane all’estero</li>
+          <li>• Reti professionali e supporto alla mobilità</li>
+        </ul>
+      </header>
+
+      <div className="grid grid-cols-12 gap-6 items-stretch">
+        <div className={`relative col-span-12 lg:col-span-7 ${commonHeight}`}>
+          <Image
+            src="/images/maps/world.jpg"
+            alt="Mappa del mondo — presenza internazionale"
+            fill
+            className="object-contain"
+            sizes="(max-width: 1024px) 100vw, 58vw"
+            priority
+          />
+        </div>
+
+        <div className={`relative col-span-12 lg:col-span-5 ${commonHeight}`}>
+          <Image
+            src="/images/maps/italy.jpg"
+            alt="Mappa dell’Italia — reti e iniziative sul territorio"
+            fill
+            className="object-contain"
+            sizes="(max-width: 1024px) 100vw, 42vw"
+            priority
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Valori: 4 card “Partecipazione attiva, Cultura imprenditoriale, …”
+function ValueGhost({
+  title,
+  text,
+  colorClass,
+}: {
+  title: string;
+  text: string;
+  colorClass: string;
+}) {
+  return (
+    <div className="group relative rounded-2xl bg-white/70 backdrop-blur-sm p-5 sm:p-6 hover:bg-white transition shadow-sm hover:shadow-md">
+      <span
+        aria-hidden
+        className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`}
+      />
+      <h3 className="font-semibold text-lg">{title}</h3>
+      <p className="mt-2 text-slate-600 leading-relaxed">{text}</p>
+      <span className="absolute right-4 top-4 text-slate-300 transition-transform group-hover:translate-x-0.5">
+        →
+      </span>
+    </div>
+  );
+}
+
+// FAQ item
+function FaqItem({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="rounded-2xl border bg-white p-5 sm:p-6 shadow-sm open:shadow-md transition-shadow">
+      <summary className="cursor-pointer list-none font-semibold">{q}</summary>
+      <p className="mt-3 text-slate-700 leading-relaxed">{a}</p>
+    </details>
+  );
+}
+
+/* ========================= VOLTI DELL’ASSOCIAZIONE ========================= */
 type Member = {
+  id: string; // key stabile e univoca
   name: string;
   role: string;
   img: string;
@@ -21,6 +137,7 @@ type Member = {
 
 const TEAM: Member[] = [
   {
+    id: "pres",
     name: "Nome Cognome",
     role: "Presidente",
     img: "/images/about/Presidente.jpg",
@@ -32,6 +149,7 @@ const TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/username/",
   },
   {
+    id: "vice",
     name: "Nome Cognome",
     role: "Vice-Presidente",
     img: "/images/about/Vice-Presidente.jpg",
@@ -43,6 +161,7 @@ const TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/username/",
   },
   {
+    id: "segr",
     name: "Nome Cognome",
     role: "Segretario Generale",
     img: "/images/about/Segretario Generale.jpg",
@@ -54,6 +173,7 @@ const TEAM: Member[] = [
     linkedin: "https://www.linkedin.com/in/username/",
   },
   {
+    id: "rev",
     name: "Nome Cognome",
     role: "Revisore dei Conti",
     img: "/images/about/Revisore dei Conti.jpg",
@@ -66,7 +186,6 @@ const TEAM: Member[] = [
   },
 ];
 
-/* ===== Helpers ===== */
 const telHref = (pretty?: string) =>
   pretty ? "tel:" + pretty.replace(/[^\d+]/g, "") : undefined;
 
@@ -77,7 +196,6 @@ const waHref = (pretty?: string) =>
       )}`
     : undefined;
 
-/* ===== Icone (SVG) ===== */
 const IconMail = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
     <path
@@ -86,7 +204,6 @@ const IconMail = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-
 const IconPhone = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
     <path
@@ -95,7 +212,6 @@ const IconPhone = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-
 const IconWhatsApp = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
     <path
@@ -104,7 +220,6 @@ const IconWhatsApp = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-
 const IconFacebook = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
     <path
@@ -113,7 +228,6 @@ const IconFacebook = (props: React.SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-
 const IconLinkedIn = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
     <path
@@ -123,14 +237,6 @@ const IconLinkedIn = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-/* Icona check per i punti chiave del preambolo */
-const IconCheck = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
-    <path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
-  </svg>
-);
-
-/* ===== UI ===== */
 function IconButton({
   href,
   label,
@@ -159,83 +265,90 @@ function IconButton({
   );
 }
 
+/* ====== CARD VERTICALE (rettangolare alta): foto sopra, contenuti sotto ====== */
 function PersonCard({ m }: { m: Member }) {
   return (
-    <article className="rounded-2xl border bg-white dark:bg-slate-900 dark:border-slate-700 p-6 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex flex-col sm:flex-row gap-6">
-        <div className="sm:w-44 sm:flex-shrink-0">
-          <div className="overflow-hidden rounded-2xl">
-            <Image
-              src={m.img}
-              alt={`${m.name} — ${m.role}`}
-              width={352}
-              height={352}
-              className="w-full h-44 sm:h-44 object-cover"
-            />
-          </div>
+    <article className="flex flex-col h-full rounded-2xl border bg-white dark:bg-slate-900 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+      {/* Foto in alto */}
+      <div className="relative w-full h-64 sm:h-72">
+        <Image
+          src={m.img}
+          alt={`${m.name} — ${m.role}`}
+          fill
+          sizes="(max-width: 1024px) 100vw, 25vw"
+          className="object-cover"
+          priority={false}
+        />
+      </div>
+
+      {/* Testo sotto la foto */}
+      <div className="p-6 flex flex-col gap-3 flex-1">
+        <div>
+          <h3 className="text-lg font-bold">{m.name}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            {m.role}
+          </p>
         </div>
 
-        <div className="min-w-0">
-          <h3 className="text-xl font-bold">{m.name}</h3>
-          <p className="text-sm text-slate-600 dark:text-slate-300">{m.role}</p>
+        <p className="text-slate-700 dark:text-slate-200 leading-relaxed">
+          {m.bio}
+        </p>
 
-          <p className="mt-3 text-slate-700 dark:text-slate-200 leading-relaxed">{m.bio}</p>
+        {/* Azioni in fondo alla card */}
+        <div className="mt-auto pt-2 flex flex-wrap gap-2">
+          <IconButton
+            href={m.email ? `mailto:${m.email}` : undefined}
+            label={`Scrivi a ${m.name}`}
+            bgClass="bg-rose-600"
+          >
+            <IconMail className="h-5 w-5" />
+          </IconButton>
 
-          {/* Solo icone cliccabili */}
-          <div className="mt-4 flex flex-wrap gap-2">
-            <IconButton
-              href={m.email ? `mailto:${m.email}` : undefined}
-              label={`Scrivi a ${m.name}`}
-              bgClass="bg-rose-600"
-            >
-              <IconMail className="h-5 w-5" />
-            </IconButton>
+          <IconButton
+            href={telHref(m.phone)}
+            label={`Chiama ${m.name}`}
+            bgClass="bg-emerald-600"
+          >
+            <IconPhone className="h-5 w-5" />
+          </IconButton>
 
-            <IconButton
-              href={telHref(m.phone)}
-              label={`Chiama ${m.name}`}
-              bgClass="bg-emerald-600"
-            >
-              <IconPhone className="h-5 w-5" />
-            </IconButton>
+          <IconButton
+            href={waHref(m.whatsapp)}
+            label={`WhatsApp ${m.name}`}
+            bgClass="bg-green-600"
+            external
+          >
+            <IconWhatsApp className="h-5 w-5" />
+          </IconButton>
 
-            <IconButton
-              href={waHref(m.whatsapp)}
-              label={`WhatsApp ${m.name}`}
-              bgClass="bg-green-600"
-              external
-            >
-              <IconWhatsApp className="h-5 w-5" />
-            </IconButton>
+          <IconButton
+            href={m.facebook}
+            label={`Facebook di ${m.name}`}
+            bgClass="bg-blue-600"
+            external
+          >
+            <IconFacebook className="h-5 w-5" />
+          </IconButton>
 
-            <IconButton
-              href={m.facebook}
-              label={`Facebook di ${m.name}`}
-              bgClass="bg-blue-600"
-              external
-            >
-              <IconFacebook className="h-5 w-5" />
-            </IconButton>
-
-            <IconButton
-              href={m.linkedin}
-              label={`LinkedIn di ${m.name}`}
-              bgClass="bg-sky-600"
-              external
-            >
-              <IconLinkedIn className="h-5 w-5" />
-            </IconButton>
-          </div>
+          <IconButton
+            href={m.linkedin}
+            label={`LinkedIn di ${m.name}`}
+            bgClass="bg-sky-600"
+            external
+          >
+            <IconLinkedIn className="h-5 w-5" />
+          </IconButton>
         </div>
       </div>
     </article>
   );
 }
 
-export default function Page() {
+/* ========================= PAGINA ========================= */
+export default function ChiSiamoPage() {
   return (
     <main className="min-h-screen">
-      {/* HERO — stesso stile delle altre pagine */}
+      {/* HERO — identica all’attuale Chi siamo */}
       <section className="relative overflow-hidden">
         <img
           src="/images/hero.jpg"
@@ -251,55 +364,242 @@ export default function Page() {
             Chi siamo
           </h1>
           <p className="mt-4 max-w-2xl text-white/90">
-            Volti, ruoli e contatti diretti della nostra comunità globale.
+            Missione, risultati, valori e volti della nostra comunità globale.
           </p>
         </div>
       </section>
 
-      {/* CONTENUTO */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Preambolo */}
-        <section className="mb-10 rounded-2xl border bg-gradient-to-br from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-900/60 p-6 sm:p-8 shadow-sm">
-          <h2 className="text-xl font-bold">Il nostro impegno</h2>
-          <p className="mt-3 text-slate-700 dark:text-slate-200 leading-relaxed">
-            Promuoviamo partecipazione, cultura e opportunità tra Italia e
-            diaspora. Lavoriamo con approccio civile, non partitico, costruendo
-            reti tra persone, associazioni, imprese e istituzioni. Qui sotto
-            trovi i <strong>volti dell’associazione</strong>: contattaci
-            direttamente quando vuoi.
-          </p>
+      {/* LA NOSTRA MISSIONE */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+          <div>
+            <h2 className="text-3xl font-bold">La nostra missione</h2>
+            <div className="mt-3 space-y-4 text-slate-600 leading-relaxed">
+              <p>
+                La Repubblica degli Italiani nel Mondo nasce per unire tutti
+                coloro che, fino ad oggi spettatori di una crescente crisi
+                internazionale, comprendono sia giunto il momento di
+                partecipare alla sfida del cambiamento.
+              </p>
+              <p>
+                L’obiettivo è riunire le teste pensanti del nostro Paese – in
+                Italia e all’estero – per costruire un percorso capace di
+                coniugare presente e futuro e restituire fiducia alle nuove
+                generazioni.
+              </p>
+              <p>
+                Vogliamo essere uno strumento aggregativo e partecipativo: un
+                luogo di sintesi delle idee e delle iniziative che ognuno di voi
+                vorrà proporre.
+              </p>
+            </div>
+          </div>
+          <div>
+            <ResponsiveYouTube id="7qmZoXRg_QY" />
+          </div>
+        </div>
+      </section>
 
-          <ul className="mt-5 grid sm:grid-cols-3 gap-3">
-            <li className="flex items-start gap-2 rounded-xl bg-white/70 dark:bg-slate-900/40 border p-3">
-              <IconCheck className="h-5 w-5 text-emerald-600 mt-0.5" />
-              <span className="text-sm">
-                Reti tra comunità italiane in Italia e all’estero
-              </span>
-            </li>
-            <li className="flex items-start gap-2 rounded-xl bg-white/70 dark:bg-slate-900/40 border p-3">
-              <IconCheck className="h-5 w-5 text-indigo-600 mt-0.5" />
-              <span className="text-sm">
-                Progetti culturali, formazione e inclusione sociale
-              </span>
-            </li>
-            <li className="flex items-start gap-2 rounded-xl bg-white/70 dark:bg-slate-900/40 border p-3">
-              <IconCheck className="h-5 w-5 text-amber-600 mt-0.5" />
-              <span className="text-sm">
-                Trasparenza e responsabilità verso i soci
-              </span>
-            </li>
-          </ul>
-        </section>
+      {/* DOVE SIAMO ARRIVATI */}
+      <WorldReachSection />
 
-        {/* Volti dell’associazione */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {TEAM.map((m) => (
-            <PersonCard key={m.name} m={m} />
+      {/* VALORI (Partecipazione attiva, Cultura imprenditoriale, …) */}
+      <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 className="sr-only">I nostri valori</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ValueGhost
+            title="Partecipazione Attiva"
+            text="Iscriversi è il primo passo: partecipa alle assemblee, proponi iniziative e contribuisci alla crescita della comunità."
+            colorClass="from-emerald-600 to-emerald-400"
+          />
+          <ValueGhost
+            title="Valorizzazione Cultura Italiana"
+            text="Promuoviamo e tramandiamo il patrimonio culturale italiano, in Italia e all’estero."
+            colorClass="from-amber-600 to-amber-400"
+          />
+          <ValueGhost
+            title="Cultura Imprenditoriale"
+            text="Sosteniamo lo sviluppo dell’imprenditoria e la diffusione di nuove idee, soprattutto tra i giovani."
+            colorClass="from-sky-600 to-sky-400"
+          />
+          <ValueGhost
+            title="Giovani e Innovazione"
+            text="Valorizziamo i giovani come motore dell’innovazione: ricerca, creatività e tecnologie al servizio del Paese."
+            colorClass="from-sky-600 to-sky-400"
+          />
+        </div>
+      </section>
+
+      {/* ASSI STRATEGICI */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold">Gli assi strategici</h2>
+        <div className="mt-8 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {[
+            {
+              icon: "🌍",
+              title: "Legami Italia–Mondo & Cultura italiana",
+              points: [
+                "Progetti di scambio con comunità italiane all’estero",
+                "Valorizzazione delle tradizioni e della storia",
+                "Eventi di promozione della cultura italiana",
+              ],
+              desc: "Iniziative per accrescere e rafforzare i legami tra l’Italia e le comunità italiane nel mondo.",
+            },
+            {
+              icon: "🎭",
+              title:
+                "Attività culturali, artistiche, ricreative ed editoriali",
+              points: [
+                "Rassegne culturali e artistiche aperte a tutti",
+                "Laboratori e attività a impatto sociale",
+                "Progetti editoriali e divulgativi",
+              ],
+              desc: "Organizzazione di attività di interesse sociale, incluse iniziative editoriali.",
+            },
+            {
+              icon: "⚖️",
+              title: "Diritti, pari opportunità & aiuto reciproco",
+              points: [
+                "Sportelli informativi e campagne",
+                "Programmi per l’inclusione",
+                "Reti di solidarietà e mutuo aiuto",
+              ],
+              desc: "Promozione e tutela dei diritti umani, civili e sociali; sostegno alle pari opportunità.",
+            },
+            {
+              icon: "💡",
+              title: "Cultura d’impresa aperta all’innovazione",
+              points: [
+                "Percorsi formativi",
+                "Responsabilità sociale d’impresa",
+                "Tavoli su innovazione e comunicazione",
+              ],
+              desc: "Diffondere una cultura d’impresa basata su conoscenza e responsabilità.",
+            },
+          ].map((p) => (
+            <div
+              key={p.title}
+              className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="text-2xl">{p.icon}</div>
+              <h3 className="mt-2 text-xl font-semibold">{p.title}</h3>
+              <p className="mt-2 text-slate-600">{p.desc}</p>
+              <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                {p.points.map((pt) => (
+                  <li key={pt} className="flex gap-2">
+                    <span aria-hidden>•</span>
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* CTA finale — stesso stile delle altre pagine */}
+      {/* IL NOSTRO CAMMINO — nuova versione responsive, stessa altezza su md+ */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <header className="mb-8">
+          <h2 className="text-3xl font-bold">Il nostro cammino</h2>
+          <p className="mt-2 text-slate-600 max-w-3xl">
+            Le tappe principali del progetto, tra crescita organizzativa,
+            collaborazioni e attivazione dei soci.
+          </p>
+        </header>
+
+        {/* Griglia: su md+ due colonne con riquadri della stessa altezza */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+          {/* Immagine (riquadro sx) */}
+          <div className="rounded-2xl overflow-hidden border bg-white md:h-[520px]">
+            <div className="relative w-full h-[240px] md:h-full">
+              <Image
+                src="/images/program/roadmap.png"
+                alt="Roadmap dell’associazione"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 48vw"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Elenco puntato (riquadro dx) */}
+          <div className="rounded-2xl border bg-white p-6 shadow-sm md:h-[520px] flex">
+            <ul className="space-y-5 text-slate-800 overflow-y-auto pr-1 w-full">
+              {[
+                { date: "30 ottobre 2024", text: "Nasce la Repubblica degli Italiani nel Mondo." },
+                { date: "6 novembre 2024", text: "Inaugurata la prima sede dell’associazione." },
+                { date: "5 febbraio 2025", text: "Incontro con CEPI — Confederazione Europea delle Piccole Imprese." },
+                { date: "28 marzo 2025", text: "Incontro con la Fondazione Università degli Studi della dieta mediterranea e della longevità." },
+                { date: "12 maggio 2025", text: "Trasferimento nel nuovo ufficio di via Cicerone 49." },
+                { date: "23 settembre 2025", text: "Via libera al primo tesseramento associativo." },
+              ].map((it) => (
+                <li key={it.date} className="flex items-start gap-3">
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600 flex-shrink-0" />
+                  <div>
+                    <div className="text-sm font-semibold text-emerald-700">
+                      {it.date}
+                    </div>
+                    <div className="font-medium">{it.text}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Spazio extra solo su mobile */}
+        <div className="mt-6 md:hidden" />
+      </section>
+
+      {/* VOLTI DELL’ASSOCIAZIONE — 4 card sulla stessa riga (desktop) */}
+      <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <header className="mb-6">
+          <h2 className="text-3xl font-bold">I volti dell’associazione</h2>
+          <p className="mt-2 text-slate-600">
+            Contatta direttamente i referenti: email, telefono o WhatsApp.
+          </p>
+        </header>
+
+        {/* Su mobile 1 colonna, tablet 2, desktop 4 (tutte sulla stessa riga) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {TEAM.map((m) => (
+            <PersonCard key={m.id} m={m} />
+          ))}
+        </div>
+      </section>
+
+      {/* DOMANDE FREQUENTI */}
+      <section className="py-16 bg-slate-50 border-y">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <header className="mb-10">
+            <h2 className="text-3xl font-bold">Domande frequenti</h2>
+            <p className="mt-3 text-slate-600">
+              Risposte rapide su attività e volontariato.
+            </p>
+          </header>
+          <div className="grid md:grid-cols-2 gap-6">
+            <FaqItem
+              q="Come posso partecipare alle attività?"
+              a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa."
+            />
+            <FaqItem
+              q="Che tipo di iniziative editoriali realizzate?"
+              a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese."
+            />
+            <FaqItem
+              q="Chi partecipa all'associazione?"
+              a="Imprenditori, professionisti, studenti e giovani interessati a crescere insieme."
+            />
+            <FaqItem
+              q="Collaborate con le comunità italiane all’estero?"
+              a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINALE — come nell’attuale Chi siamo */}
       <section className="py-16 bg-slate-50 border-y">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Vuoi entrare nella rete?</h2>

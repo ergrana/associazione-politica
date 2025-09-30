@@ -3,21 +3,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { EVENTS, POSTS } from "@/lib/content";
-
-/** ========================= CONFIG =========================
- * Salva i file immagini in:
- *  - public/images/maps/world.jpg (o .png)
- *  - public/images/maps/italy.jpg (o .png)
- */
-const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
 
 /* ========================= HERO: Bandiera che sventola (video + logo overlay) ========================= */
 function WavingFlagHero() {
   return (
     <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
-      {/* Video background (ancora più scuro) */}
+      {/* Video background */}
       <video
         className="absolute inset-0 -z-20 h-full w-full object-cover brightness-160 contrast-110"
         autoPlay
@@ -30,10 +23,8 @@ function WavingFlagHero() {
         Il tuo browser non supporta il video HTML5.
       </video>
 
-      {/* Overlay uniforme più forte per aumentare il contrasto */}
+      {/* Overlay */}
       <div className="absolute inset-0 -z-10 bg-black/20" aria-hidden />
-
-      {/* Vignettatura radiale */}
       <div
         className="absolute inset-0 -z-10"
         aria-hidden
@@ -43,7 +34,7 @@ function WavingFlagHero() {
         }}
       />
 
-      {/* LOGO overlay — RIDOTTO */}
+      {/* Logo */}
       <Image
         src="/images/logo-rotondo.png"
         alt="La Repubblica degli Italiani nel Mondo"
@@ -54,7 +45,7 @@ function WavingFlagHero() {
       />
 
       {/* CTA */}
-      <div className="mt-0.25 text-center text-white px-4">
+      <div className="mt-1 text-center text-white px-4">
         <p className="max-w-2xl mx-auto text-lg">
           Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
         </p>
@@ -66,10 +57,10 @@ function WavingFlagHero() {
             Iscriviti ora
           </Link>
           <Link
-            href="/partecipa#pagamento"
+            href="/chi-siamo"
             className="inline-flex items-center justify-center rounded-xl ring-2 ring-white/85 text-white px-5 py-3 font-semibold hover:bg-white/10"
           >
-            Sostienici con una donazione
+            Scopri la nostra missione
           </Link>
         </div>
       </div>
@@ -77,117 +68,12 @@ function WavingFlagHero() {
   );
 }
 
-/* ========================= Utility / Mini componenti ========================= */
-function ValueGhost({
-  title,
-  text,
-  colorClass,
-}: {
-  title: string;
-  text: string;
-  colorClass: string;
-}) {
-  return (
-    <div className="group relative rounded-2xl bg-white/70 backdrop-blur-sm p-5 sm:p-6 hover:bg-white transition shadow-sm hover:shadow-md">
-      <span
-        aria-hidden
-        className={`pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-gradient-to-b ${colorClass}`}
-      />
-      <h3 className="font-semibold text-lg">{title}</h3>
-      <p className="mt-2 text-slate-600 leading-relaxed">{text}</p>
-      <span className="absolute right-4 top-4 text-slate-300 transition-transform group-hover:translate-x-0.5">
-        →
-      </span>
-    </div>
-  );
-}
-
-function RoadmapStep({ when, title }: { when: string; title: string }) {
-  return (
-    <div className="relative pl-8">
-      <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-indigo-600" />
-      <div className="text-sm font-semibold text-indigo-600">{when}</div>
-      <div className="mt-1 font-semibold">{title}</div>
-    </div>
-  );
-}
-
-function FaqItem({ q, a }: { q: string; a: string }) {
-  return (
-    <details className="rounded-2xl border bg-white p-5 sm:p-6 shadow-sm open:shadow-md transition-shadow">
-      <summary className="cursor-pointer list-none font-semibold">{q}</summary>
-      <p className="mt-3 text-slate-700 leading-relaxed">{a}</p>
-    </details>
-  );
-}
-
-function ResponsiveYouTube({ id }: { id: string }) {
-  return (
-    <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingTop: "56.25%" }}>
-      <iframe
-        className="absolute inset-0 h-full w-full"
-        src={`https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`}
-        title="Video — La Repubblica degli Italiani nel Mondo"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-        loading="lazy"
-      />
-    </div>
-  );
-}
-
-/* ========================= DOVE SIAMO ARRIVATI — immagini statiche asimmetriche ========================= */
-function WorldReachSection() {
-  const commonHeight = "h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem]";
-
-  return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <header className="mb-6">
-        <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
-
-        <h3 className="mt-3 text-xl font-semibold">Una rete in espansione</h3>
-        <p className="mt-2 text-slate-700 leading-relaxed max-w-3xl">
-          Collegare persone e comunità è la nostra priorità: eventi, mentorship, gruppi tematici e opportunità
-          di collaborazione tra Italia e diaspora. Se vuoi avviare un nucleo nel tuo Paese,
-          <Link href="/contatti" className="underline decoration-2 underline-offset-2 ml-1">contattaci</Link>.
-        </p>
-        <ul className="mt-3 space-y-2 text-slate-700">
-          <li>• Incontri culturali e imprenditoriali</li>
-          <li>• Progetti con associazioni italiane all’estero</li>
-          <li>• Reti professionali e supporto alla mobilità</li>
-        </ul>
-      </header>
-
-      <div className="grid grid-cols-12 gap-6 items-stretch">
-        <div className={`relative col-span-12 lg:col-span-7 ${commonHeight}`}>
-          <Image
-            src="/images/maps/world.jpg"
-            alt="Mappa del mondo — presenza internazionale"
-            fill
-            className="object-contain"
-            sizes="(max-width: 1024px) 100vw, 58vw"
-            priority
-          />
-        </div>
-
-        <div className={`relative col-span-12 lg:col-span-5 ${commonHeight}`}>
-          <Image
-            src="/images/maps/italy.jpg"
-            alt="Mappa dell’Italia — reti e iniziative sul territorio"
-            fill
-            className="object-contain"
-            sizes="(max-width: 1024px) 100vw, 42vw"
-            priority
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ========================= HELPERS ========================= */
-function startOfDay(d: Date) { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
+function startOfDay(d: Date) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  return x;
+}
 function fmtShortDate(iso: string) {
   const d = new Date(iso);
   return d.toLocaleDateString("it-IT", { year: "numeric", month: "short", day: "2-digit" });
@@ -204,11 +90,12 @@ function fmtBadgeDate(iso: string, end?: string) {
   return same ? `${day} ${mon}` : `${day} ${mon} → ${day2} ${mon2}`;
 }
 
-/* ========================= NEWS CAROUSEL ========================= */
+/* ========================= NOTIZIE IN EVIDENZA ========================= */
 function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   function scrollBy(dir: "prev" | "next") {
-    const el = scrollerRef.current; if (!el) return;
+    const el = scrollerRef.current;
+    if (!el) return;
     const delta = Math.round(el.clientWidth * 0.9);
     el.scrollBy({ left: dir === "next" ? delta : -delta, behavior: "smooth" });
   }
@@ -220,29 +107,60 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
             <h2 className="text-3xl font-bold">Notizie in evidenza</h2>
             <p className="mt-2 text-slate-600">Aggiornamenti dal territorio, iniziative e comunicati.</p>
           </div>
-          <Link href="/notizie" className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+          <Link
+            href="/notizie"
+            className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
             Vai alle Notizie
           </Link>
         </div>
 
         <div className="mt-6 relative">
           <div className="absolute -left-2 top-1/2 -translate-y-1/2 z-10">
-            <button onClick={() => scrollBy("prev")} aria-label="Notizie precedenti" className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white">←</button>
+            <button
+              onClick={() => scrollBy("prev")}
+              aria-label="Notizie precedenti"
+              className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white"
+            >
+              ←
+            </button>
           </div>
           <div className="absolute -right-2 top-1/2 -translate-y-1/2 z-10">
-            <button onClick={() => scrollBy("next")} aria-label="Notizie successive" className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white">→</button>
+            <button
+              onClick={() => scrollBy("next")}
+              aria-label="Notizie successive"
+              className="rounded-full border bg-white/90 px-3 py-2 shadow hover:bg-white"
+            >
+              →
+            </button>
           </div>
 
-          <div ref={scrollerRef} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
+          <div
+            ref={scrollerRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2"
+          >
             {posts.map((p) => (
-              <article key={p.id} className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow">
+              <article
+                key={p.id}
+                className="min-w-[280px] sm:min-w-[340px] lg:min-w-[380px] snap-start rounded-2xl border bg-white overflow-hidden hover:shadow-md transition-shadow"
+              >
                 <Link href={`/notizie/${p.slug}`} className="block">
-                  <Image src={p.image} alt={p.title} width={800} height={450} className="w-full h-44 object-cover" />
+                  <Image
+                    src={p.image}
+                    alt={p.title}
+                    width={800}
+                    height={450}
+                    className="w-full h-44 object-cover"
+                  />
                   <div className="p-5">
-                    <div className="text-xs text-slate-500">{fmtShortDate(p.date)} • {p.read}</div>
+                    <div className="text-xs text-slate-500">
+                      {fmtShortDate(p.date)} • {p.read}
+                    </div>
                     <h3 className="mt-1 text-lg font-semibold line-clamp-2">{p.title}</h3>
                     <p className="mt-2 text-slate-600 line-clamp-3">{p.excerpt}</p>
-                    <div className="mt-3 text-sm font-semibold text-indigo-700">Leggi di più →</div>
+                    <div className="mt-3 text-sm font-semibold text-indigo-700">
+                      Leggi di più →
+                    </div>
                   </div>
                 </Link>
               </article>
@@ -250,7 +168,10 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
           </div>
 
           <div className="mt-6 sm:hidden text-center">
-            <Link href="/notizie" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+            <Link
+              href="/notizie"
+              className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
               Tutte le Notizie
             </Link>
           </div>
@@ -260,11 +181,13 @@ function NewsCarouselSection({ posts }: { posts: (typeof POSTS)[number][] }) {
   );
 }
 
-/* ========================= NEXT EVENT TEASER ========================= */
+/* ========================= PROSSIMO EVENTO ========================= */
 function NextEventTeaser() {
   const nextEvent = useMemo(() => {
     const now = startOfDay(new Date());
-    const upcoming = EVENTS.filter((e) => new Date(e.date) >= now).sort((a, b) => +new Date(a.date) - +new Date(b.date));
+    const upcoming = EVENTS
+      .filter((e) => new Date(e.date) >= now)
+      .sort((a, b) => +new Date(a.date) - +new Date(b.date));
     return upcoming[0] ?? null;
   }, []);
   if (!nextEvent) return null;
@@ -276,14 +199,24 @@ function NextEventTeaser() {
           <h2 className="text-3xl font-bold">Vieni al prossimo evento</h2>
           <p className="mt-2 text-slate-600">Unisciti a noi e vivi la comunità.</p>
         </div>
-        <Link href="/eventi" className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+        <Link
+          href="/eventi"
+          className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+        >
           Vai agli Eventi
         </Link>
       </div>
 
       <article className="rounded-2xl border bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         <Link href={`/eventi/${nextEvent.id}`} className="block relative">
-          <Image src={nextEvent.cover} alt={nextEvent.title} width={1200} height={630} className="w-full h-64 object-cover" priority />
+          <Image
+            src={nextEvent.cover}
+            alt={nextEvent.title}
+            width={1200}
+            height={630}
+            className="w-full h-64 object-cover"
+            priority
+          />
           <div className="absolute top-3 left-3 rounded-xl bg-white/95 text-slate-900 px-3 py-1 text-xs font-semibold shadow">
             {fmtBadgeDate(nextEvent.date, nextEvent.end)}
           </div>
@@ -292,19 +225,33 @@ function NextEventTeaser() {
           </div>
         </Link>
         <div className="p-6">
-          <div className="text-xs text-slate-500">{nextEvent.city} • {fmtShortDate(nextEvent.date)}</div>
+          <div className="text-xs text-slate-500">
+            {nextEvent.city} • {fmtShortDate(nextEvent.date)}
+          </div>
           <h3 className="mt-1 text-xl font-semibold">{nextEvent.title}</h3>
           <p className="mt-2 text-slate-600 line-clamp-3">{nextEvent.description}</p>
-          <div className="mt-3 text-slate-700">📍 {nextEvent.place} — {nextEvent.address}, {nextEvent.city}</div>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Partecipa</Link>
-            <Link href={`/eventi/${nextEvent.id}`} className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">Dettagli</Link>
+            <Link
+              href={`/eventi/${nextEvent.id}`}
+              className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+            >
+              Partecipa
+            </Link>
+            <Link
+              href={`/eventi/${nextEvent.id}`}
+              className="rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+            >
+              Dettagli
+            </Link>
           </div>
         </div>
       </article>
 
       <div className="mt-6 sm:hidden text-center">
-        <Link href="/eventi" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+        <Link
+          href="/eventi"
+          className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+        >
           Vai agli Eventi
         </Link>
       </div>
@@ -320,17 +267,30 @@ function BookingCTA() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-bold">Prenota uno spazio della nostra sede</h2>
-            <p className="mt-2 text-slate-600">Ufficio per 1–2 postazioni o Sala riunioni fino a 10 persone. Importo libero (con minimo orario).</p>
+            <p className="mt-2 text-slate-600">
+              Ufficio per 1–2 postazioni o Sala riunioni fino a 10 persone. Importo libero (con minimo orario).
+            </p>
           </div>
-          <Link href="/prenotazioni" className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+          <Link
+            href="/prenotazioni"
+            className="hidden sm:inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
             Vai alle Prenotazioni
           </Link>
         </div>
 
         <div className="mt-8 grid sm:grid-cols-2 gap-6">
           {[
-            { title: "Ufficio (1–2 postazioni)", img: "/images/sede/ufficio-thumb.jpg", chips: ["Capienza 2", "Min 15 €/h", "Wi-Fi", "Scrivania", "Prese"] },
-            { title: "Sala riunioni (fino a 10 persone)", img: "/images/sede/sala-thumb.jpg", chips: ["Capienza 10", "Min 30 €/h", "Wi-Fi", "Schermo/TV", "Lavagna"] },
+            {
+              title: "Ufficio (1–2 postazioni)",
+              img: "/images/sede/ufficio-thumb.jpg",
+              chips: ["Capienza 2", "Min 15 €/h", "Wi-Fi", "Scrivania", "Prese"],
+            },
+            {
+              title: "Sala riunioni (fino a 10 persone)",
+              img: "/images/sede/sala-thumb.jpg",
+              chips: ["Capienza 10", "Min 30 €/h", "Wi-Fi", "Schermo/TV", "Lavagna"],
+            },
           ].map((o) => (
             <div key={o.title} className="rounded-2xl border bg-white overflow-hidden shadow-sm">
               <div className="relative h-48">
@@ -340,10 +300,15 @@ function BookingCTA() {
                 <h3 className="text-lg font-semibold">{o.title}</h3>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {o.chips.map((c) => (
-                    <span key={c} className="text-xs rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">{c}</span>
+                    <span key={c} className="text-xs rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">
+                      {c}
+                    </span>
                   ))}
                 </div>
-                <Link href="/prenotazioni" className="mt-4 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
+                <Link
+                  href="/prenotazioni"
+                  className="mt-4 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+                >
                   Prenota questo spazio →
                 </Link>
               </div>
@@ -352,7 +317,10 @@ function BookingCTA() {
         </div>
 
         <div className="mt-6 sm:hidden text-center">
-          <Link href="/prenotazioni" className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">
+          <Link
+            href="/prenotazioni"
+            className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
             Vai alle Prenotazioni
           </Link>
         </div>
@@ -361,335 +329,222 @@ function BookingCTA() {
   );
 }
 
-/* ========================= CARD + FORM ========================= */
-function Card({ title, children, className = "", id }: { title: string; children: React.ReactNode; className?: string; id?: string; }) {
+/* ========================= Come funziona — NUOVI BOTTONI ========================= */
+
+/** Icone semplici */
+const IconArrow = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    <path
+      d="M13.5 5.5L20 12l-6.5 6.5M20 12H4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+const IconUser = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    <path
+      d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm7 8a7 7 0 0 0-14 0"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+const IconCalendar = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    <path
+      d="M7 3v4M17 3v4M4 9h16M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+const IconBuilding = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    <path
+      d="M3 21h18M6 21V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14M9 10h6M9 14h6M9 18h6"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+const IconHeart = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
+    <path
+      d="M20.8 11.1 12 20 3.2 11.1A5.3 5.3 0 1 1 12 4.3a5.3 5.3 0 1 1 8.8 6.8Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+/** Tile con bordo sfumato e interazione */
+function ActionTile({
+  href,
+  title,
+  desc,
+  icon,
+}: {
+  href: string;
+  title: string;
+  desc: string;
+  icon: React.ReactNode;
+}) {
   return (
-    <section id={id} className={`rounded-2xl bg-white p-6 shadow-sm border ${className}`}>
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <div className="mt-3">{children}</div>
+    <Link
+      href={href}
+      className="group relative block rounded-2xl p-[1px] overflow-hidden"
+    >
+      {/* bordo sfumato “soft” */}
+      <div
+        className="absolute inset-0 rounded-2xl opacity-80 transition-opacity group-hover:opacity-100"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(30,144,255,0.35), rgba(30,144,255,0.08) 35%, rgba(30,144,255,0.0) 60%)",
+        }}
+        aria-hidden
+      />
+      {/* contenuto */}
+      <div className="relative h-full rounded-2xl bg-white ring-1 ring-sky-200/70 p-5 shadow-sm transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5">
+        <div className="flex items-start gap-4 min-h-[88px]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 ring-1 ring-sky-200 text-sky-700">
+            {icon}
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-semibold text-sky-800">{title}</h3>
+            <p className="mt-1 text-sm text-slate-600">{desc}</p>
+          </div>
+          <IconArrow className="ml-auto mt-1 h-5 w-5 text-sky-500 opacity-0 translate-x-[-4px] transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
+        </div>
+
+        {/* focus ring accessibile */}
+        <span className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-sky-400/0 group-focus-visible:ring-2 group-focus-visible:ring-sky-400/70" />
+      </div>
+    </Link>
+  );
+}
+
+function HowItWorks() {
+  return (
+    <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <header className="mb-8 text-center max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold">Come funziona l’associazione</h2>
+        <p className="mt-2 text-slate-700">
+          Siamo una realtà no-profit che unisce italiani in Italia e nel mondo. Partecipi tramite{" "}
+          <strong>iscrizioni</strong> ed <strong>eventi</strong>, puoi <strong>prenotare spazi</strong> nella nostra sede
+          e sostenere le attività con una <strong>donazione</strong>.
+        </p>
+
+        {/* Bottoni: Statuto / Manifesto / Chi siamo */}
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/statuto"
+            className="inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+          >
+            Apri lo Statuto
+          </Link>
+          <Link
+            href="/manifesti"
+            className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+          >
+            Apri il Manifesto
+          </Link>
+          <Link
+            href="/chi-siamo"
+            className="inline-flex rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+          >
+            Scopri chi siamo
+          </Link>
+        </div>
+      </header>
+
+      {/* 4 azioni — estetica migliorata */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <ActionTile
+          href="/partecipa"
+          title="Iscrizione"
+          desc="Entra in rete e ricevi aggiornamenti."
+          icon={<IconUser className="h-5 w-5" />}
+        />
+        <ActionTile
+          href="/eventi"
+          title="Eventi"
+          desc="Incontri, rassegne, formazione."
+          icon={<IconCalendar className="h-5 w-5" />}
+        />
+        <ActionTile
+          href="/prenotazioni"
+          title="Spazi"
+          desc="Ufficio o sala riunioni prenotabili."
+          icon={<IconBuilding className="h-5 w-5" />}
+        />
+        <ActionTile
+          href="/partecipa#pagamento"
+          title="Donazioni"
+          desc="Sostieni i progetti dell’associazione."
+          icon={<IconHeart className="h-5 w-5" />}
+        />
+      </div>
     </section>
-  );
-}
-function Input({ name, label, type = "text", required = false }: { name: string; label: string; type?: string; required?: boolean; }) {
-  return (
-    <label className="text-sm">
-      <span className="block text-slate-700 mb-1">
-        {label} {required ? <span className="text-rose-600" aria-hidden>*</span> : null}
-      </span>
-      <input name={name} type={type} required={required} className="w-full rounded-xl border px-4 py-2.5" aria-required={required} />
-    </label>
-  );
-}
-function Select({ name, label, children }: { name: string; label: string; children: React.ReactNode }) {
-  return (
-    <label className="text-sm">
-      <span className="block text-slate-700 mb-1">{label}</span>
-      <select name={name} className="w-full rounded-xl border px-4 py-2.5">{children}</select>
-    </label>
-  );
-}
-function CopyRow({ label, value, className = "" }: { label: string; value: string; className?: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <div className={className}>
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-slate-600 text-sm">{label}</span>
-        <button
-          onClick={() => { navigator.clipboard?.writeText(value).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1100); }); }}
-          className="rounded-lg border px-2 py-1 text-xs hover:bg-slate-50"
-        >
-          {copied ? "Copiato ✓" : "Copia"}
-        </button>
-      </div>
-      <div className="font-mono text-sm mt-1 select-all">{value}</div>
-    </div>
-  );
-}
-function IscrizioneForm() {
-  const [loading, setLoading] = useState(false);
-  const [ok, setOk] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setErr(null); setOk(false);
-    const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
-    if (!data.nome || !data.cognome || !data.email || !data.comune || !data.consent) { alert("Compila i campi obbligatori e accetta la privacy."); return; }
-    setLoading(true);
-    try {
-      const res = await fetch(FORMCARRY_URL, { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
-      if (res.ok) { setOk(true); form.reset(); } else { const j = await res.json().catch(() => null); setErr(j?.message || "Invio non riuscito. Riprova più tardi."); }
-    } catch { setErr("Connessione non riuscita. Controlla la rete e riprova."); }
-    finally { setLoading(false); }
-  }
-
-  return (
-    <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-4" noValidate>
-      <Input name="nome" label="Nome *" required />
-      <Input name="cognome" label="Cognome *" required />
-      <Input name="email" type="email" label="Email *" required />
-      <Input name="telefono" type="tel" label="Telefono (opzionale)" />
-      <Input name="comune" label="Comune di residenza *" required />
-      <Select name="fascia" label="Fascia di età">
-        <option value="">Seleziona…</option><option>18–25</option><option>26–35</option><option>36–50</option><option>51+</option>
-      </Select>
-      <label className="hidden">Non compilare questo campo: <input name="_gotcha" tabIndex={-1} autoComplete="off" /></label>
-      <input type="hidden" name="_subject" value="Nuova iscrizione dal sito" />
-      <label className="md:col-span-2 text-sm text-slate-600"><input type="checkbox" name="consent" className="mr-2" /> Ho letto e accetto l’informativa privacy *</label>
-      <div className="md:col-span-2 flex flex-wrap items-center gap-3">
-        <button type="submit" disabled={loading} className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60" aria-busy={loading}>
-          {loading ? "Invio in corso..." : "Invia adesione"}
-        </button>
-        <a href="mailto:info@dominio.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!" className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50">
-          Oppure scrivici via email
-        </a>
-        <span className="sr-only" aria-live="polite">{ok ? "Invio riuscito" : err ? "Errore di invio" : ""}</span>
-        {ok && <span className="text-sm text-emerald-600">Ricevuto! Ti contatteremo a breve.</span>}
-        {err && <span className="text-sm text-rose-600">{err}</span>}
-      </div>
-    </form>
   );
 }
 
 /* ========================= PAGE ========================= */
 export default function HomePage() {
-  const topPosts = useMemo(() => [...POSTS].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10), []);
+  const topPosts = useMemo(
+    () => [...POSTS].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 10),
+    []
+  );
 
   return (
     <main className="min-h-screen">
       <WavingFlagHero />
-
-      {/* NOTIZIE IN EVIDENZA (spostato subito sotto la hero) */}
       <NewsCarouselSection posts={topPosts} />
-
-      {/* MISSIONE + VIDEO */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-10 items-start">
-          <div>
-            <h2 className="text-3xl font-bold">La nostra missione</h2>
-            <div className="mt-3 space-y-4 text-slate-600 leading-relaxed">
-              <p>La Repubblica degli Italiani nel Mondo nasce per unire tutti coloro che, fino ad oggi spettatori di una crescente crisi internazionale, comprendono sia giunto il momento di partecipare alla sfida del cambiamento.</p>
-              <p>L’obiettivo è riunire le teste pensanti del nostro Paese – in Italia e all’estero – per costruire un percorso capace di coniugare presente e futuro e restituire fiducia alle nuove generazioni.</p>
-              <p>Vogliamo essere uno strumento aggregativo e partecipativo: un luogo di sintesi delle idee e delle iniziative che ognuno di voi vorrà proporre.</p>
-            </div>
-          </div>
-          <div><ResponsiveYouTube id="7qmZoXRg_QY" /></div>
-        </div>
-      </section>
-
-      {/* DOVE SIAMO ARRIVATI */}
-      <WorldReachSection />
-
-      {/* VALORI */}
-      <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <h2 className="sr-only">I nostri valori</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ValueGhost title="Partecipazione Attiva" text="Partecipare attivamente significa essere un membro della'Associazione e contribuire concretamente alle sue attività ed al raggiungimento dei suoi obiettivi. Iscriversi è il primo passo, così potrai partecipare alle assemblee, proporre iniziative e contribuire così alla crescita della comunità e alla realizzazione del fine comune dell'ente." colorClass="from-emerald-600 to-emerald-400" />
-          <ValueGhost title="Valorizzazione Cultura Italiana" text="L'Associazione intende promuovere la conoscenza e la conservazione del patrimonio culturale italiano, materiale e immateriale, assicurandosi che venga tramandato il loro alto valore culturale alle generazioni future. Questo processo coinvolge necessariamente istituzioni pubbliche, enti privati, imprese e tutti i cittadini italiani, sia in Italia che all'estero." colorClass="from-amber-600 to-amber-400" />
-          <ValueGhost title="Cultura Imprenditoriale" text="Obiettivo cruciale dell'associazione è quello di sostenere lo sviluppo dell’imprenditoria e la diffusione di nuove idee. Lo scopo è creare un ambiente dinamico in cui creatività, innovazione e collaborazione possano tradursi in opportunità concrete di crescita personale e professionale soprattuto per i giovani." colorClass="from-sky-600 to-sky-400" />
-          <ValueGhost title="Giovani e Innovazione" text="L'Associazione intende valorizzare il ruolo dei giovani come motore dell’innovazione, sostenendo iniziative che favoriscano la ricerca, la creatività e l’uso consapevole delle nuove tecnologie. L’obiettivo è stimolare un ecosistema capace di trasformare le idee in progetti concreti, contribuendo così allo sviluppo culturale, sociale ed economico del Paese." colorClass="from-sky-600 to-sky-400" />
-        </div>
-      </section>
-
-      {/* ASSI STRATEGICI */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold">Gli assi strategici</h2>
-        <div className="mt-8 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {[
-            { icon: "🌍", title: "Legami Italia–Mondo & Cultura italiana", points: ["Progetti di scambio con comunità italiane all’estero", "Valorizzazione delle tradizioni e della storia", "Eventi di promozione della cultura italiana"], desc: "Iniziative per accrescere e rafforzare i legami tra l’Italia e le comunità italiane nel mondo." },
-            { icon: "🎭", title: "Attività culturali, artistiche, ricreative ed editoriali", points: ["Rassegne culturali e artistiche aperte a tutti", "Laboratori e attività a impatto sociale", "Progetti editoriali e divulgativi"], desc: "Organizzazione di attività di interesse sociale, incluse iniziative editoriali." },
-            { icon: "⚖️", title: "Diritti, pari opportunità & aiuto reciproco", points: ["Sportelli informativi e campagne", "Programmi per l’inclusione", "Reti di solidarietà e mutuo aiuto"], desc: "Promozione e tutela dei diritti umani, civili e sociali; sostegno alle pari opportunità." },
-            { icon: "💡", title: "Cultura d’impresa aperta all’innovazione", points: ["Percorsi formativi", "Responsabilità sociale d’impresa", "Tavoli su innovazione e comunicazione"], desc: "Diffondere una cultura d’impresa basata su conoscenza e responsabilità." },
-          ].map((p) => (
-            <div key={p.title} className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-2xl">{p.icon}</div>
-              <h3 className="mt-2 text-xl font-semibold">{p.title}</h3>
-              <p className="mt-2 text-slate-600">{p.desc}</p>
-              <ul className="mt-4 space-y-2 text-sm text-slate-700">
-                {p.points.map((pt) => (
-                  <li key={pt} className="flex gap-2"><span aria-hidden>•</span><span>{pt}</span></li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* IL NOSTRO CAMMINO — immagine full-bleed + titolo in overlay + elenco puntato a destra */}
-      <section className="relative mx-4 sm:mx-6 lg:mx-8 max-w-7xl xl:mx-auto rounded-3xl overflow-hidden">
-        <div className="relative h-[420px] sm:h-[460px] md:h-[520px]">
-          <Image
-            src="/images/program/roadmap.png"
-            alt="Il nostro cammino"
-            fill
-            priority
-            className="object-cover"
-            sizes="(max-width: 1280px) 100vw, 1200px"
-          />
-          <div
-            className="absolute inset-0"
-            aria-hidden
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.35) 100%)",
-            }}
-          />
-          <div className="absolute left-6 top-6 sm:left-8 sm:top-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">
-              Il nostro cammino
-            </h2>
-          </div>
-
-          <div className="absolute inset-y-6 right-6 sm:inset-y-8 sm:right-8 flex items-stretch">
-            <div className="w-[min(100vw-3rem,640px)] sm:w-[500px] md:w-[560px] bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl ring-1 ring-black/5 p-5 sm:p-6">
-              <ul className="space-y-4 text-slate-800">
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                  <div>
-                    <div className="text-sm font-semibold text-emerald-700">30 ottobre 2024</div>
-                    <div className="font-medium">Nasce la Repubblica degli Italiani nel Mondo.</div>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                  <div>
-                    <div className="text-sm font-semibold text-emerald-700">6 novembre 2024</div>
-                    <div className="font-medium">Viene inaugurata la prima sede dell&apos;associazione.</div>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                  <div>
-                    <div className="text-sm font-semibold text-emerald-700">5 febbraio 2025</div>
-                    <div className="font-medium">L&apos;associazione incontra CEPI Confederazione Europea delle piccole imprese.</div>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                  <div>
-                    <div className="text-sm font-semibold text-emerald-700">28 marzo 2025</div>
-                    <div className="font-medium">Incontro con la fondazione università degli studi della dieta mediterranea e della longevità.</div>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                  <div>
-                    <div className="text-sm font-semibold text-emerald-700">12 maggio 2025</div>
-                    <div className="font-medium">L&apos;associazione si trasferisce nel nuovo ufficio di via Cicerone 49.</div>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                  <div>
-                    <div className="text-sm font-semibold text-emerald-700">23 settembre 2025</div>
-                    <div className="font-medium">Via libera al primo tesseramento associativo.</div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 h-6 sm:h-8" aria-hidden />
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-16 bg-slate-50 border-y">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header className="mb-10">
-            <h2 className="text-3xl font-bold">Domande frequenti</h2>
-            <p className="mt-3 text-slate-600">Risposte rapide su attività e volontariato.</p>
-          </header>
-          <div className="grid md:grid-cols-2 gap-6">
-            <FaqItem q="Come posso partecipare alle attività?" a="Iscriviti come socio o volontario e scegli un asse: cultura, diritti/pari opportunità, aiuto reciproco o innovazione d’impresa." />
-            <FaqItem q="Che tipo di iniziative editoriali realizzate?" a="Pubblicazioni, podcast e contenuti digitali per raccontare la cultura italiana e la storia del Paese." />
-            <FaqItem q="Chi partecipa all'associazione?" a="Imprenditori, professionisti, studenti e giovani interessati a crescere insieme." />
-            <FaqItem q="Collaborate con le comunità italiane all’estero?" a="Sì: progetti di scambio, eventi con i circoli locali e reti della diaspora." />
-          </div>
-        </div>
-      </section>
-
-      {/* Manifesto / Statuto */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-          <div className="rounded-2xl border p-8 bg-white shadow-sm">
-            <h3 className="text-2xl font-bold">Il nostro Manifesto</h3>
-            <p className="mt-2 text-slate-600">Una visione chiara e un percorso definito.</p>
-            <Link href="/manifesto" className="mt-6 inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">Apri il Manifesto</Link>
-          </div>
-          <div className="rounded-2xl border p-8 bg-white shadow-sm">
-            <h3 className="text-2xl font-bold">Statuto e governance</h3>
-            <p className="mt-2 text-slate-600">Consulta lo Statuto completo online.</p>
-            <Link href="/statuto" className="mt-6 inline-flex rounded-2xl border px-5 py-3 font-semibold hover:bg-slate-50">Apri lo Statuto</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Come funziona + moduli */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <header className="mb-8">
-          <h2 className="text-3xl font-bold">Come funziona l’associazione</h2>
-          <p className="mt-2 text-slate-700 max-w-3xl">
-            Siamo una realtà no-profit che unisce italiani in Italia e nel mondo. Partecipi tramite <strong>iscrizioni</strong> ed <strong>eventi</strong>, puoi <strong>prenotare spazi</strong> nella nostra sede e, se vuoi, sostenere le attività con una <strong>donazione</strong>.
-          </p>
-          <ul className="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-slate-700">
-            <li className="rounded-xl border bg-white p-3">• Iscrizione: entri in rete e ricevi aggiornamenti</li>
-            <li className="rounded-xl border bg-white p-3">• Eventi: incontri, rassegne, formazione</li>
-            <li className="rounded-xl border bg-white p-3">• Spazi prenotabili: ufficio o sala riunioni</li>
-            <li className="rounded-xl border bg-white p-3">• Donazioni: importo libero per progetti e attività</li>
-          </ul>
-        </header>
-
-        <div className="grid md:grid-cols-2 gap-8 items-stretch">
-          <Card id="iscrizione" title="Iscrizione — Modulo di adesione" className="h-full flex flex-col">
-            <div className="flex-1">
-              <IscrizioneForm />
-              <p className="mt-3 text-xs text-slate-500">
-                Gli invii arrivano alla nostra email tramite Formcarry. Per assistenza: <a className="underline" href="mailto:info@cittafutura.it">info@cittafutura.it</a>.
-              </p>
-            </div>
-            <div className="mt-6 pt-6 border-t">
-              <h4 className="font-semibold">Privacy</h4>
-              <p className="text-sm text-slate-700">Trattiamo i dati esclusivamente per finalità associative.</p>
-              <Link href="/privacy" className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50">
-                Leggi l’informativa privacy
-              </Link>
-            </div>
-          </Card>
-
-          <Card id="pagamento" title="Pagamento — Donazione / Quota annuale" className="h-full flex flex-col">
-            <div className="flex-1">
-              <h4 className="font-semibold">Dona online (coming soon)</h4>
-              <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-              <button disabled className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed" title="In arrivo">
-                Dona ora — In arrivo
-              </button>
-              <p className="mt-2 text-xs text-slate-500">Al go-live: carta e Apple/Google Pay. Importo libero con minimo suggerito.</p>
-              <div className="my-6 h-px bg-slate-200" />
-              <h4 className="font-semibold">Bonifico bancario</h4>
-              <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
-              <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
-              <p className="mt-3 text-xs text-slate-500">
-                Per ricevuta fiscale scrivi a <a className="underline" href="mailto:tesoreria@cittafutura.it">tesoreria@cittafutura.it</a> indicando data e importo.
-              </p>
-            </div>
-          </Card>
-        </div>
-      </section>
-
-      {/* Eventi e CTA finale */}
       <NextEventTeaser />
       <BookingCTA />
+      <HowItWorks />
 
+      {/* CTA finale */}
       <section className="py-16 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold">Entra nella comunità</h2>
-          <p className="mt-2 text-slate-600">Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.</p>
+          <p className="mt-2 text-slate-600">
+            Iscriviti, partecipa ai prossimi eventi o prenota uno spazio in sede per incontrare la rete.
+          </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/partecipa" className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700">Iscriviti</Link>
-            <Link href="/eventi" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Vedi Eventi</Link>
-            <Link href="/prenotazioni" className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50">Prenota la sede</Link>
+            <Link
+              href="/partecipa"
+              className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Iscriviti
+            </Link>
+            <Link
+              href="/eventi"
+              className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+            >
+              Vedi Eventi
+            </Link>
+            <Link
+              href="/prenotazioni"
+              className="rounded-xl border px-5 py-3 font-semibold hover:bg-slate-50"
+            >
+              Prenota la sede
+            </Link>
           </div>
         </div>
       </section>
