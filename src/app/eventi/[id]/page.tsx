@@ -64,6 +64,12 @@ export default async function EventoPage({
 
   const pageUrl = `https://example.com/eventi/${e.id}`; // ← aggiorna dominio
 
+  // Contatti organizzatore (fallback se mancanti nei dati evento)
+  const organizerName = e.organizer?.name ?? "Organizzatore dell’evento";
+  const email = e.organizer?.email ?? "info@cittafutura.it";
+  const phone = e.organizer?.phone ?? "+39 06 000 000";
+  const whatsapp = e.organizer?.whatsapp ?? "+39 333 000 0000";
+
   // JSON-LD
   const eventJsonLd = {
     "@context": "https://schema.org",
@@ -207,6 +213,46 @@ export default async function EventoPage({
 
       {/* Spazio sotto hero */}
       <div className="h-8 lg:h-10" />
+
+      {/* CTA CONTATTO ORGANIZZATORE */}
+      <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border bg-white shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold">Hai domande sull’evento?</h2>
+            <p className="text-sm text-slate-700">
+              Contatta <strong>{organizerName}</strong> per approfondimenti su programma, accessi e logistica.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href={`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Info evento: " + e.title)}`}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold hover:opacity-90"
+              aria-label="Invia email all'organizzatore"
+            >
+              ✉️ Email
+            </a>
+            <a
+              href={waHref(whatsapp, `Ciao! Ti scrivo per informazioni su: ${e.title}`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold hover:bg-emerald-700"
+              aria-label="Scrivi su WhatsApp all'organizzatore"
+            >
+              💬 WhatsApp
+            </a>
+            <a
+              href={telHref(phone)}
+              className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+              aria-label="Chiama l'organizzatore"
+            >
+              ☎️ Telefono
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Spazio piccolo prima dei riquadri */}
+      <div className="h-6" />
 
       {/* 3 riquadri */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -462,4 +508,13 @@ function shareWhatsApp(url: string, text: string) {
 }
 function shareTelegram(url: string, text: string) {
   return `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+}
+
+/* --------- Contact helpers --------- */
+function telHref(pretty: string) {
+  return "tel:" + pretty.replace(/[^\d+]/g, "");
+}
+function waHref(pretty: string, text: string) {
+  const num = pretty.replace(/[^\d]/g, "");
+  return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 }
