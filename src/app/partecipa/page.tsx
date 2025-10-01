@@ -1,4 +1,3 @@
-// src/app/partecipa/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -60,11 +59,11 @@ export default function PartecipaPage() {
                 <IconCheck className="mt-0.5 text-emerald-600" /> Compili il modulo con i tuoi dati essenziali.
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Entri nella rete: newsletter dedicata, inviti a incontri
-                ed eventi, possibilità di contribuire ai tavoli tematici.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Scegli la <strong>quota annuale ricorrente</strong> (minimo 25€).
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Nessun vincolo politico: partecipazione civile e aperta.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Entri nella rete: newsletter dedicata, inviti a incontri
+                ed eventi, possibilità di contribuire ai tavoli tematici.
               </li>
             </ul>
           </div>
@@ -77,13 +76,13 @@ export default function PartecipaPage() {
             </div>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Importo libero (minimo suggerito), una tantum o ricorrente quando disponibile.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Importo libero (minimo 5€), pagamento online sicuro.
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Metodi: bonifico subito; pagamento online in arrivo (Stripe, Apple/Google Pay).
+                <IconCheck className="mt-0.5 text-emerald-600" /> Carte, Apple/Google Pay tramite Stripe Checkout.
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Ricevuta su richiesta all’indirizzo di tesoreria.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Ricevuta automatica via email.
               </li>
             </ul>
           </div>
@@ -96,14 +95,13 @@ export default function PartecipaPage() {
             </div>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> I fondi coprono esclusivamente attività associative:
-                eventi, progetti culturali, strumenti digitali, supporto ai gruppi territoriali/esteri.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Attività associative: eventi, progetti culturali, strumenti digitali, gruppi territoriali.
               </li>
               <li className="flex gap-2">
                 <IconCheck className="mt-0.5 text-emerald-600" /> Nessuna distribuzione di utili: ogni euro torna nella missione.
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Le priorità sono definite annualmente con il programma attività.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Priorità definite annualmente con il programma attività.
               </li>
             </ul>
           </div>
@@ -132,7 +130,7 @@ export default function PartecipaPage() {
                 Trattiamo i dati esclusivamente per finalità associative (iscrizione e comunicazioni).
               </p>
               <Link
-                href="/privacy" // ← apre app/privacy/page.tsx
+                href="/privacy"
                 className="mt-3 inline-flex rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
               >
                 Leggi l’informativa privacy
@@ -141,24 +139,11 @@ export default function PartecipaPage() {
           </Card>
 
           {/* DESTRA — PAGAMENTO */}
-          <Card id="pagamento" title="Pagamento — Donazione / Quota annuale" className="h-full flex flex-col">
+          <Card id="pagamento" title="Pagamento — Donazione singola" className="h-full flex flex-col">
             <div className="flex-1">
-              <h4 className="font-semibold">Dona online (coming soon)</h4>
-              <p className="text-sm text-slate-600">Il pulsante sarà collegato a Stripe Checkout nella fase 2.</p>
-              <button
-                disabled
-                className="mt-3 inline-flex rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white cursor-not-allowed"
-                title="In arrivo"
-              >
-                Dona ora — In arrivo
-              </button>
-              <p className="mt-2 text-xs text-slate-500">
-                Al go-live abiliteremo carta e Apple/Google Pay. Importo libero con minimo suggerito.
-              </p>
-
+              <DonationForm />
               <div className="my-6 h-px bg-slate-200" />
-
-              <h4 className="font-semibold">Bonifico bancario</h4>
+              <h4 className="font-semibold">Bonifico bancario (alternativa)</h4>
               <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
               <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
               <p className="mt-3 text-xs text-slate-500">
@@ -169,7 +154,6 @@ export default function PartecipaPage() {
                 indicando data e importo.
               </p>
             </div>
-            {/* (Nessun riferimento alla trasparenza dei conti) */}
           </Card>
         </div>
       </section>
@@ -214,7 +198,7 @@ function Card({
   );
 }
 
-/** Modulo iscrizione — invio diretto via Formcarry (no backend) */
+/** === Modulo iscrizione: invio a Formcarry + avvio Checkout ricorrente (min 25€) === */
 function IscrizioneForm() {
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(false);
@@ -229,28 +213,52 @@ function IscrizioneForm() {
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
     // Validazione minima
+    const amount = Number(String(data.quota || "").replace(",", "."));
     if (!data.nome || !data.cognome || !data.email || !data.comune || !data.consent) {
       alert("Compila i campi obbligatori e accetta la privacy.");
+      return;
+    }
+    if (!Number.isFinite(amount) || amount < 25) {
+      alert("La quota annuale deve essere almeno 25€.");
       return;
     }
 
     setLoading(true);
     try {
+      // 1) invio dati al form (per registrare l'adesione)
       const res = await fetch(FORMCARRY_URL, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(form),
       });
-
-      if (res.ok) {
-        setOk(true);
-        form.reset();
-      } else {
+      if (!res.ok) {
         const j = await res.json().catch(() => null);
-        setErr(j?.message || "Invio non riuscito. Riprova più tardi.");
+        throw new Error(j?.message || "Invio non riuscito. Riprova più tardi.");
       }
-    } catch {
-      setErr("Connessione non riuscita. Controlla la rete e riprova.");
+      setOk(true);
+
+      // 2) avvio pagamento ricorrente (subscription annuale)
+      const fullName = `${data.nome} ${data.cognome}`.trim();
+      const checkout = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "subscription",
+          amountEuro: amount,
+          customer: { name: fullName, email: data.email },
+          metadata: { tipo: "iscrizione", comune: data.comune },
+          productName: "Quota associativa annuale",
+          interval: "year",
+        }),
+      }).then((r) => r.json());
+
+      if (checkout?.url) {
+        window.location.href = checkout.url; // redirect a Stripe Checkout
+      } else {
+        throw new Error(checkout?.error || "Errore durante la creazione del pagamento.");
+      }
+    } catch (e: any) {
+      setErr(e?.message || "Errore imprevisto.");
     } finally {
       setLoading(false);
     }
@@ -271,12 +279,14 @@ function IscrizioneForm() {
         <option>51+</option>
       </Select>
 
+      {/* Quota annuale (ricorrente) */}
+      <Input name="quota" type="number" label="Quota annuale (€/anno, min 25) *" required />
+      <input type="hidden" name="ricorrenza" value="annuale" />
+
       {/* Honeypot antispam (nascosto via CSS) */}
       <label className="hidden">
         Non compilare questo campo: <input name="_gotcha" tabIndex={-1} autoComplete="off" />
       </label>
-
-      {/* Opzionale: soggetto personalizzato */}
       <input type="hidden" name="_subject" value="Nuova iscrizione dal sito" />
 
       <label className="md:col-span-2 text-sm text-slate-600">
@@ -290,21 +300,83 @@ function IscrizioneForm() {
           className="rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
           aria-busy={loading}
         >
-          {loading ? "Invio in corso..." : "Invia adesione"}
+          {loading ? "Reindirizzamento al pagamento..." : "Iscriviti e paga la quota"}
         </button>
-
-        <a
-          href="mailto:info@cittafutura.it?subject=Richiesta%20iscrizione&body=Ciao%2C%20vorrei%20iscrivermi.%0ANome%3A%20%0ACognome%3A%20%0AEmail%3A%20%0AComune%3A%20%0AGrazie!"
-          className="rounded-xl border px-4 py-3 text-sm font-semibold hover:bg-slate-50"
-        >
-          Oppure scrivici via email
-        </a>
 
         <span className="sr-only" aria-live="polite">
           {ok ? "Invio riuscito" : err ? "Errore di invio" : ""}
         </span>
-        {ok && <span className="text-sm text-emerald-600">Ricevuto! Ti contatteremo a breve.</span>}
+        {ok && <span className="text-sm text-emerald-600">Dati ricevuti! Ora verrai indirizzato al pagamento.</span>}
         {err && <span className="text-sm text-rose-600">{err}</span>}
+      </div>
+    </form>
+  );
+}
+
+/** === Donazioni singole: pagamento immediato (min 5€) === */
+function DonationForm() {
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setErr(null);
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+    const amount = Number(String(data.importo || "").replace(",", "."));
+    if (!data.nome || !data.cognome || !data.email) {
+      alert("Compila nome, cognome ed email.");
+      return;
+    }
+    if (!Number.isFinite(amount) || amount < 5) {
+      alert("L’importo minimo è 5€.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const fullName = `${data.nome} ${data.cognome}`.trim();
+      const checkout = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "payment",
+          amountEuro: amount,
+          customer: { name: fullName, email: data.email },
+          metadata: { tipo: "donazione_singola" },
+          productName: "Donazione singola all’associazione",
+        }),
+      }).then((r) => r.json());
+
+      if (checkout?.url) {
+        window.location.href = checkout.url;
+      } else {
+        throw new Error(checkout?.error || "Errore durante la creazione del pagamento.");
+      }
+    } catch (e: any) {
+      setErr(e?.message || "Errore imprevisto.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-4" noValidate>
+      <Input name="nome" label="Nome *" required />
+      <Input name="cognome" label="Cognome *" required />
+      <Input name="email" type="email" label="Email *" required />
+      <Input name="importo" type="number" label="Importo (€, min 5) *" required />
+
+      <div className="md:col-span-2">
+        <button
+          type="submit"
+          disabled={loading}
+          className="rounded-xl bg-rose-600 px-5 py-3 font-semibold text-white hover:bg-rose-700 disabled:opacity-60"
+        >
+          {loading ? "Apro il pagamento..." : "Dona ora"}
+        </button>
+        {err && <span className="ml-3 text-sm text-rose-600">{err}</span>}
       </div>
     </form>
   );
@@ -355,6 +427,7 @@ function Input({
         name={name}
         type={type}
         required={required}
+        min={type === "number" ? (label.includes("25") ? 25 : label.includes("5") ? 5 : undefined) : undefined}
         className="w-full rounded-xl border px-4 py-2.5"
         aria-required={required}
       />
