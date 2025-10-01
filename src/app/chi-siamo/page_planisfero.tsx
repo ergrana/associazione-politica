@@ -30,6 +30,62 @@ function ResponsiveYouTube({ id }: { id: string }) {
   );
 }
 
+// Dove siamo arrivati: blocco con mappe
+function WorldReachSection() {
+  const commonHeight =
+    "h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem]";
+
+  return (
+    <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <header className="mb-6">
+        <h2 className="text-3xl font-bold">Dove siamo arrivati</h2>
+        <h3 className="mt-3 text-xl font-semibold">Una rete in espansione</h3>
+        <p className="mt-2 text-slate-700 leading-relaxed max-w-3xl">
+          Collegare persone e comunità è la nostra priorità: eventi, mentorship,
+          gruppi tematici e opportunità di collaborazione tra Italia e diaspora.
+          Se vuoi avviare un nucleo nel tuo Paese,
+          <Link
+            href="/contatti"
+            className="underline decoration-2 underline-offset-2 ml-1"
+          >
+            contattaci
+          </Link>
+          .
+        </p>
+        <ul className="mt-3 space-y-2 text-slate-700">
+          <li>• Incontri culturali e imprenditoriali</li>
+          <li>• Progetti con associazioni italiane all’estero</li>
+          <li>• Reti professionali e supporto alla mobilità</li>
+        </ul>
+      </header>
+
+      <div className="grid grid-cols-12 gap-6 items-stretch">
+        <div className={`relative col-span-12 lg:col-span-7 ${commonHeight}`}>
+          <Image
+            src="/images/maps/world.jpg"
+            alt="Mappa del mondo — presenza internazionale"
+            fill
+            className="object-contain"
+            sizes="(max-width: 1024px) 100vw, 58vw"
+            priority
+          />
+        </div>
+
+        <div className={`relative col-span-12 lg:col-span-5 ${commonHeight}`}>
+          <Image
+            src="/images/maps/italy.jpg"
+            alt="Mappa dell’Italia — reti e iniziative sul territorio"
+            fill
+            className="object-contain"
+            sizes="(max-width: 1024px) 100vw, 42vw"
+            priority
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Valori: 4 card “Partecipazione attiva, Cultura imprenditoriale, …”
 function ValueGhost({
   title,
@@ -343,6 +399,9 @@ export default function ChiSiamoPage() {
           </div>
         </div>
       </section>
+
+      {/* DOVE SIAMO ARRIVATI */}
+      <WorldReachSection />
 
       {/* VALORI (Partecipazione attiva, Cultura imprenditoriale, …) */}
       <section className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
