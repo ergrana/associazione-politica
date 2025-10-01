@@ -64,11 +64,18 @@ export default async function EventoPage({
 
   const pageUrl = `https://example.com/eventi/${e.id}`; // ← aggiorna dominio
 
-  // Contatti organizzatore (fallback se mancanti nei dati evento)
-  const organizerName = e.organizer?.name ?? "Organizzatore dell’evento";
-  const email = e.organizer?.email ?? "info@cittafutura.it";
-  const phone = e.organizer?.phone ?? "+39 06 000 000";
-  const whatsapp = e.organizer?.whatsapp ?? "+39 333 000 0000";
+  // Contatti organizzatore (senza modificare i tipi globali)
+  type Organizer = Partial<{
+    name: string;
+    email: string;
+    phone: string;
+    whatsapp: string;
+  }>;
+  const org = ((e as any)?.organizer ?? {}) as Organizer;
+  const organizerName = org.name ?? "Organizzatore dell’evento";
+  const email = org.email ?? "info@cittafutura.it";
+  const phone = org.phone ?? "+39 06 000 000";
+  const whatsapp = org.whatsapp ?? "+39 333 000 0000";
 
   // JSON-LD
   const eventJsonLd = {
