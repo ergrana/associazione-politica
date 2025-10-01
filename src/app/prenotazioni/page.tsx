@@ -82,18 +82,15 @@ export default function PrenotazioniPage() {
             <h2 className="text-2xl font-bold">Come funziona</h2>
             <div className="mt-3 text-slate-700 leading-relaxed">
               <p>
-                Scegli lo <strong>spazio</strong>, la <strong>data</strong> e l’<strong>orario</strong>. Indica un{" "}
-                <strong>contributo libero</strong> a tua scelta: il minimo si calcola in base alle ore prenotate
-                (<em>Ufficio da 15 €/h</em>, <em>Sala riunioni da 30 €/h</em>). Dopo l’invio, ti scriveremo per
-                confermare disponibilità e dettagli.
+                Offri un <strong>Indirizzo Professionale</strong> alla tua azienda per <strong>Riunioni ed Appuntamenti</strong>. <strong>Prenota</strong> per tempo il tuo spazio direttamente dal nostro sito.{" "}
               </p>
               <ul className="mt-3 list-disc pl-5 space-y-1 text-sm">
                 <li>Fasce prenotabili: lun–ven, 9:00–19:00 (salvo eventi interni).</li>
-                <li>Ufficio: 1–2 persone, Wi-Fi, prese, acqua/caffè.</li>
+                <li>Ufficio: 1–2 persone, Wi-Fi, prese, acqua/caffè e comodo divano.</li>
                 <li>Sala riunioni: fino a 10 persone, TV/HDMI, Wi-Fi, tavolo riunioni.</li>
               </ul>
               <p className="mt-3 text-sm text-slate-500">
-                Puoi versare in sede o via bonifico; il pagamento online (Stripe) arriverà prossimamente.
+                Puoi versare anticipatamente a mezzo bonifico oppure direttamente mediante pagamento online dal nostro sito.
               </p>
             </div>
           </div>
