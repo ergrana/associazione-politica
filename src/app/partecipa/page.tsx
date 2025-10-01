@@ -1,3 +1,4 @@
+// src/app/partecipa/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,6 +8,13 @@ import Image from "next/image";
 /** ============================== CONFIG ============================== */
 // Inserisci qui il tuo endpoint Formcarry (solo l'ID finale o l'intera URL)
 const FORMCARRY_URL = "https://formcarry.com/s/IL_TUO_ENDPOINT";
+
+// Dati bonifico centralizzati (così li cambi una volta sola)
+const BANK = {
+  beneficiario: 'Associazione "La Repubblica degli Italiani nel Mondo"', // ← denominazione legale esatta
+  iban: "IT00 X000 0000 0000 0000 0000 000", // ← IBAN reale
+  causale: 'Donazione liberale — "Città Futura"', // es: “Quota associativa {anno}”
+};
 
 /* ============================== PAGE ============================== */
 
@@ -29,9 +37,7 @@ export default function PartecipaPage() {
           <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight">
             Partecipa, iscriviti, sostieni
           </h1>
-          <p className="mt-3 max-w-2xl text-white/90">
-            Benefici, modulo di adesione e donazioni.
-          </p>
+          <p className="mt-3 max-w-2xl text-white/90">Benefici, modulo di adesione e donazioni.</p>
         </div>
       </section>
 
@@ -40,10 +46,9 @@ export default function PartecipaPage() {
         <div className="max-w-3xl">
           <h2 className="text-2xl font-bold tracking-tight">Prima di iniziare</h2>
           <p className="mt-3 text-slate-700 leading-relaxed">
-            Siamo un’associazione <strong>no-profit</strong>: esistiamo per rafforzare la rete degli italiani
-            nel mondo a livello <em>culturale</em>, <em>imprenditoriale</em> e <em>civico</em>. Iscriversi
-            significa entrare in una comunità che progetta eventi, scambi, formazione e opportunità
-            tra Italia e diaspora.
+            Siamo un’associazione <strong>no-profit</strong>: esistiamo per rafforzare la rete degli italiani nel mondo a
+            livello <em>culturale</em>, <em>imprenditoriale</em> e <em>civico</em>. Iscriversi significa entrare in una
+            comunità che progetta eventi, scambi, formazione e opportunità tra Italia e diaspora.
           </p>
         </div>
 
@@ -59,11 +64,12 @@ export default function PartecipaPage() {
                 <IconCheck className="mt-0.5 text-emerald-600" /> Compili il modulo con i tuoi dati essenziali.
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Scegli la <strong>quota annuale ricorrente</strong> (minimo 25€).
+                <IconCheck className="mt-0.5 text-emerald-600" /> Scegli la{" "}
+                <strong>quota annuale ricorrente</strong> (minimo <strong>25€</strong>).
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Entri nella rete: newsletter dedicata, inviti a incontri
-                ed eventi, possibilità di contribuire ai tavoli tematici.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Entri nella rete: newsletter, inviti a incontri ed eventi,
+                tavoli tematici.
               </li>
             </ul>
           </div>
@@ -76,7 +82,8 @@ export default function PartecipaPage() {
             </div>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Importo libero (minimo 5€), pagamento online sicuro.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Importo libero (minimo <strong>5€</strong>) con pagamento
+                online sicuro.
               </li>
               <li className="flex gap-2">
                 <IconCheck className="mt-0.5 text-emerald-600" /> Carte, Apple/Google Pay tramite Stripe Checkout.
@@ -95,10 +102,12 @@ export default function PartecipaPage() {
             </div>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Attività associative: eventi, progetti culturali, strumenti digitali, gruppi territoriali.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Eventi, progetti culturali, strumenti digitali, gruppi
+                territoriali/esteri.
               </li>
               <li className="flex gap-2">
-                <IconCheck className="mt-0.5 text-emerald-600" /> Nessuna distribuzione di utili: ogni euro torna nella missione.
+                <IconCheck className="mt-0.5 text-emerald-600" /> Nessuna distribuzione di utili: ogni euro torna nella
+                missione.
               </li>
               <li className="flex gap-2">
                 <IconCheck className="mt-0.5 text-emerald-600" /> Priorità definite annualmente con il programma attività.
@@ -119,7 +128,8 @@ export default function PartecipaPage() {
                 Gli invii arrivano direttamente alla nostra email tramite Formcarry. Per assistenza:{" "}
                 <a className="underline" href="mailto:info@cittafutura.it">
                   info@cittafutura.it
-                </a>.
+                </a>
+                .
               </p>
             </div>
 
@@ -142,10 +152,13 @@ export default function PartecipaPage() {
           <Card id="pagamento" title="Pagamento — Donazione singola" className="h-full flex flex-col">
             <div className="flex-1">
               <DonationForm />
+
               <div className="my-6 h-px bg-slate-200" />
-              <h4 className="font-semibold">Bonifico bancario (alternativa)</h4>
-              <CopyRow label="IBAN" value="IT00 X000 0000 0000 0000 0000 000" />
-              <CopyRow label="Causale" value={'Donazione liberale — "Città Futura"'} className="mt-4" />
+
+              <h4 className="font-semibold">Bonifico bancario</h4>
+              <CopyRow label="Beneficiario" value={BANK.beneficiario} />
+              <CopyRow label="IBAN" value={BANK.iban} className="mt-4" />
+              <CopyRow label="Causale" value={BANK.causale} className="mt-4" />
               <p className="mt-3 text-xs text-slate-500">
                 Per ricevuta fiscale scrivi a{" "}
                 <a className="underline" href="mailto:tesoreria@cittafutura.it">
@@ -237,7 +250,7 @@ function IscrizioneForm() {
       }
       setOk(true);
 
-      // 2) avvio pagamento ricorrente (subscription annuale)
+      // 2) avvio pagamento ricorrente (subscription annuale via Stripe Checkout)
       const fullName = `${data.nome} ${data.cognome}`.trim();
       const checkout = await fetch("/api/checkout", {
         method: "POST",
@@ -280,7 +293,7 @@ function IscrizioneForm() {
       </Select>
 
       {/* Quota annuale (ricorrente) */}
-      <Input name="quota" type="number" label="Quota annuale (€/anno, min 25) *" required />
+      <Input name="quota" type="number" label="Quota annuale (€/anno, min 25) *" required min={25} />
       <input type="hidden" name="ricorrenza" value="annuale" />
 
       {/* Honeypot antispam (nascosto via CSS) */}
@@ -366,7 +379,7 @@ function DonationForm() {
       <Input name="nome" label="Nome *" required />
       <Input name="cognome" label="Cognome *" required />
       <Input name="email" type="email" label="Email *" required />
-      <Input name="importo" type="number" label="Importo (€, min 5) *" required />
+      <Input name="importo" type="number" label="Importo (€, min 5) *" required min={5} />
 
       <div className="md:col-span-2">
         <button
@@ -412,11 +425,13 @@ function Input({
   label,
   type = "text",
   required = false,
+  min,
 }: {
   name: string;
   label: string;
   type?: string;
   required?: boolean;
+  min?: number;
 }) {
   return (
     <label className="text-sm">
@@ -427,7 +442,7 @@ function Input({
         name={name}
         type={type}
         required={required}
-        min={type === "number" ? (label.includes("25") ? 25 : label.includes("5") ? 5 : undefined) : undefined}
+        min={min}
         className="w-full rounded-xl border px-4 py-2.5"
         aria-required={required}
       />
