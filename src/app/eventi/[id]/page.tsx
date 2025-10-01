@@ -230,31 +230,34 @@ export default async function EventoPage({
               Contatta <strong>{organizerName}</strong> per approfondimenti su programma, accessi e logistica.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <a
-              href={`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Info evento: " + e.title)}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold hover:opacity-90"
-              aria-label="Invia email all'organizzatore"
-            >
-              ✉️ Email
-            </a>
-            <a
-              href={waHref(whatsapp, `Ciao! Ti scrivo per informazioni su: ${e.title}`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold hover:bg-emerald-700"
-              aria-label="Scrivi su WhatsApp all'organizzatore"
-            >
-              💬 WhatsApp
-            </a>
-            <a
-              href={telHref(phone)}
-              className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold hover:bg-slate-50"
-              aria-label="Chiama l'organizzatore"
-            >
-              ☎️ Telefono
-            </a>
-          </div>
+          {/* Bottoni contatto */}
+<div className="flex items-center gap-2 flex-wrap md:flex-nowrap">
+  <a
+    href={`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Info evento: " + e.title)}`}
+    className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:opacity-90 whitespace-nowrap"
+    aria-label="Invia email all'organizzatore"
+  >
+    ✉️ Email
+  </a>
+
+  <a
+    href={waHref(whatsapp, `Ciao! Ti scrivo per informazioni su: ${e.title}`)}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 whitespace-nowrap"
+    aria-label="Scrivi su WhatsApp all'organizzatore"
+  >
+    💬 WhatsApp
+  </a>
+
+  <a
+    href={telHref(phone)}
+    className="inline-flex items-center justify-center h-10 px-4 rounded-xl border text-sm font-semibold hover:bg-slate-50 whitespace-nowrap"
+    aria-label="Chiama l'organizzatore"
+  >
+    ☎️ Telefono
+  </a>
+</div>
         </div>
       </section>
 
