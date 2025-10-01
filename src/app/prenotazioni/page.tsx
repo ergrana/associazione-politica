@@ -10,7 +10,7 @@ import Link from "next/link";
 const FORMCARRY_URL_BOOKING = "https://formcarry.com/s/IL_TUO_ENDPOINT_PRENOTAZIONI";
 
 // Indirizzo sede
-const ADDRESS = "Viale Giuseppe Mazzini 73, 00195 Roma";
+const ADDRESS = "Via Cicerone 49, 00193 Roma";
 
 type SpaceType = "ufficio" | "sala";
 type SpaceCfg = {
@@ -82,7 +82,8 @@ export default function PrenotazioniPage() {
             <h2 className="text-2xl font-bold">Come funziona</h2>
             <div className="mt-3 text-slate-700 leading-relaxed">
               <p>
-                Offri un <strong>Indirizzo Professionale</strong> alla tua azienda per <strong>Riunioni ed Appuntamenti</strong>. <strong>Prenota</strong> per tempo il tuo spazio direttamente dal nostro sito.{" "}
+                Offri un <strong>Indirizzo Professionale</strong> alla tua azienda per{" "}
+                <strong>Riunioni ed Appuntamenti</strong>. Prenota per tempo il tuo spazio direttamente dal nostro sito.
               </p>
               <ul className="mt-3 list-disc pl-5 space-y-1 text-sm">
                 <li>Fasce prenotabili: lun–ven, 9:00–19:00 (salvo eventi interni).</li>
@@ -115,10 +116,10 @@ export default function PrenotazioniPage() {
             <ClickableMap address={ADDRESS} />
           </div>
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold">Viale Giuseppe Mazzini 73</h3>
+            <h3 className="text-lg font-semibold">Via Cicerone 49</h3>
             <p className="mt-2 text-slate-700 leading-relaxed">
-              Siamo a <strong>Roma, quartiere Prati</strong>, lungo Viale Mazzini. Ben collegati con metro e bus,
-              a pochi minuti da Piazzale Clodio e dal Lungotevere. Nelle vicinanze sono disponibili parcheggi e
+              Siamo a <strong>Roma, quartiere Prati</strong>, in Via Cicerone. Ben collegati con metro e bus,
+              a pochi minuti dal Lungotevere e da Piazza Cavour. Nelle vicinanze sono disponibili parcheggi e
               servizi di ristorazione.
             </p>
             <div className="mt-4 text-sm text-slate-700">
