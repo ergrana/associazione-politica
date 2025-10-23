@@ -1,4 +1,4 @@
-// src/app/manifesti/page.tsx
+// src/app/manifesto/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ManifestiPage() {
+export default function ManifestoPage() {
   return (
     <main className="min-h-screen">
       {/* HERO – stile come "Chi siamo" */}

@@ -6,10 +6,25 @@ import Link from "next/link";
 import { useMemo, useRef } from "react";
 import { EVENTS, POSTS } from "@/lib/content";
 
+/* ========================= Embed YouTube responsive ========================= */
+function ResponsiveYouTube({ id }: { id: string }) {
+  return (
+    <div className="relative w-full overflow-hidden rounded-2xl" style={{ paddingTop: "56.25%" }}>
+      <iframe
+        className="absolute inset-0 h-full w-full"
+        src={`https://www.youtube.com/embed/${id}`}
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      />
+    </div>
+  );
+}
+
 /* ========================= HERO: Bandiera che sventola (video + logo overlay) ========================= */
 function WavingFlagHero() {
   return (
-    <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden pb-10">
+    <section className="relative min-h-[20vh] flex flex-col items-center justify-center overflow-hidden py-10">
       {/* Video background */}
       <video
         className="absolute inset-0 -z-20 h-full w-full object-cover brightness-160 contrast-110"
@@ -38,32 +53,14 @@ function WavingFlagHero() {
       <Image
         src="/images/logo-rotondo.png"
         alt="La Repubblica degli Italiani nel Mondo"
-        width={130}
-        height={130}
+        width={100}
+        height={100}
         priority
         className="w-[min(60vw,300px)] h-auto drop-shadow-2xl"
       />
 
-      {/* CTA */}
-      <div className="mt-1 text-center text-white px-4">
-        <p className="max-w-2xl mx-auto text-lg">
-          Rafforziamo il legame tra l&apos;Italia e gli italiani nel mondo.
-        </p>
-        <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/partecipa"
-            className="inline-flex items-center justify-center rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:opacity-90"
-          >
-            Iscriviti ora
-          </Link>
-          <Link
-            href="/chi-siamo"
-            className="inline-flex items-center justify-center rounded-xl ring-2 ring-white/85 text-white px-5 py-3 font-semibold hover:bg-white/10"
-          >
-            Scopri la nostra missione
-          </Link>
-        </div>
-      </div>
+      {/* Testo (senza bottoni) */}
+      <div className="mt-1 text-center text-white px-4" />
     </section>
   );
 }
@@ -459,7 +456,7 @@ function HowItWorks() {
             Apri lo Statuto
           </Link>
           <Link
-            href="/manifesti"
+            href="/manifesto"
             className="inline-flex rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
           >
             Apri il Manifesto
@@ -514,6 +511,38 @@ export default function HomePage() {
   return (
     <main className="min-h-screen">
       <WavingFlagHero />
+
+      {/* LA NOSTRA MISSIONE */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+          <div>
+            <h2 className="text-3xl font-bold">La nostra missione</h2>
+            <div className="mt-3 space-y-4 text-slate-600 leading-relaxed">
+              <p>
+                La Repubblica degli Italiani nel Mondo nasce per unire tutti
+                coloro che, fino ad oggi spettatori di una crescente crisi
+                internazionale, comprendono sia giunto il momento di
+                partecipare alla sfida del cambiamento.
+              </p>
+              <p>
+                L’obiettivo è riunire le teste pensanti del nostro Paese – in
+                Italia e all’estero – per costruire un percorso capace di
+                coniugare presente e futuro e restituire fiducia alle nuove
+                generazioni.
+              </p>
+              <p>
+                Vogliamo essere uno strumento aggregativo e partecipativo: un
+                luogo di sintesi delle idee e delle iniziative che ognuno di voi
+                vorrà proporre.
+              </p>
+            </div>
+          </div>
+          <div>
+            <ResponsiveYouTube id="7qmZoXRg_QY" />
+          </div>
+        </div>
+      </section>
+
       <NewsCarouselSection posts={topPosts} />
       <NextEventTeaser />
       <BookingCTA />
